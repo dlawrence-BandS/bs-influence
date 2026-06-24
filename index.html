@@ -635,7 +635,7 @@
   <div class="tab-panel" id="tab-scores">
     <div class="sh" style="margin-top:0">
       <h2>InfluenScore</h2>
-      <span class="sh-sub">Composite score across ROAS (30%), Conv. Value (25%), Reach (20%), Purchases (15%), Engagement (10%)</span>
+      <span class="sh-sub">Composite score across ROAS (25%), Conv. Value (20%), Paid Reach (15%), Purchases (15%), Engagement (15%), Organic Views (10%)</span>
     </div>
 
     <div class="lb-header">
@@ -1248,28 +1248,28 @@ function renderGA4() {
 // ─────────────────────────────────────
 // INFLUENSCORE ENGINE
 // ─────────────────────────────────────
-const WEIGHTS = { roas:.30, conv_value:.25, reach:.20, purchases:.15, engagement:.10 };
+const WEIGHTS = { roas:.25, conv_value:.20, reach:.15, purchases:.15, engagement:.15, org_views:.10 };
 
 function computeScores() {
   const paid = fPaid(), org = fOrganic(), byCr = paidByCr(paid);
   const allCrs = new Set([...Object.keys(byCr), ...org.map(p=>p.creator)]);
 
-  // Raw metrics per creator
   const raw = {};
   allCrs.forEach(name => {
-    const p = byCr[name]||{};
+    const p   = byCr[name]||{};
     const ops = org.filter(o=>o.creator===name);
     const eng = ops.reduce((s,o)=>s+o.likes+o.comments, 0);
+    const views = ops.reduce((s,o)=>s+(o.impressions||0), 0);
     raw[name] = {
       roas:       p.spend>0 ? p.conv_value/p.spend : 0,
       conv_value: p.conv_value||0,
       reach:      p.reach||0,
       purchases:  p.purchases||0,
       engagement: eng,
+      org_views:  views,
     };
   });
 
-  // Normalise each metric 0–1 against max in set
   const metrics = Object.keys(WEIGHTS);
   const maxes = {};
   metrics.forEach(m => { maxes[m] = Math.max(1, ...Object.values(raw).map(r=>r[m])); });
@@ -1279,15 +1279,21 @@ function computeScores() {
     let score = 0;
     const breakdown = {};
     metrics.forEach(m => {
-      const norm = r[m] / maxes[m];       // 0–1
-      breakdown[m] = +(norm * 10).toFixed(2); // 0–10 per metric
+      const norm = r[m] / maxes[m];
+      breakdown[m] = +(norm * 10).toFixed(2);
       score += norm * WEIGHTS[m];
     });
     scores[name] = {
-      total:     +(score * 10).toFixed(1), // 0–10
+      total:     +(score * 10).toFixed(1),
       breakdown,
       raw:       r,
       hasPaid:   !!byCr[name],
+      handle:    org.find(o=>o.creator===name)?.handle || '',
+    };
+  });
+
+  return scores;
+}
       handle:    org.find(o=>o.creator===name)?.handle || '',
     };
   });
@@ -1310,8 +1316,8 @@ function renderScores() {
     return '#f97316';
   }
 
-  const metricLabels = { roas:'ROAS', conv_value:'Conv. Val', reach:'Reach', purchases:'Purchases', engagement:'Engagement' };
-  const metricColors = { roas:'#b8f000', conv_value:'#8b5cf6', reach:'#06b6d4', purchases:'#ec4899', engagement:'#f59e0b' };
+  const metricLabels = { roas:'ROAS', conv_value:'Conv. Val', reach:'Paid Reach', purchases:'Purchases', engagement:'Engagement', org_views:'Organic Views' };
+  const metricColors = { roas:'#b8f000', conv_value:'#8b5cf6', reach:'#06b6d4', purchases:'#ec4899', engagement:'#f59e0b', org_views:'#10b981' };
 
   // Leaderboard
   document.getElementById('lb-table').innerHTML = ranked.map(([name, s], i) => {
@@ -1333,20 +1339,19 @@ function renderScores() {
   const scoreRingCharts = {};
   document.getElementById('score-grid').innerHTML = ranked.map(([name, s], i) => {
     const col = scoreColor(s.total);
-    const initials = name.split(' ').filter(w=>w[0]).map(w=>w[0]).join('').slice(0,2);
     return `<div class="score-card au">
       <div class="score-card-top">
         <div class="score-ring-wrap">
           <canvas id="ring-${i}" width="90" height="90"></canvas>
           <div class="score-ring-center">
-            <div class="score-num" style="color:${col}">${s.total}</div>
-            <div class="score-label">Score</div>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;line-height:1;color:${col}">${s.total}</span>
+            <span style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(240,237,248,0.42);margin-top:2px">Score</span>
           </div>
         </div>
         <div class="score-creator-info">
           <div class="score-creator-name">${name}</div>
           <div class="score-creator-handle">${s.handle}</div>
-          <span class="score-rank" style="background:${col}">#${i+1} ${i===0?'Top Creator':i===1?'2nd Place':i===2?'3rd Place':''}</span>
+          <span class="score-rank" style="background:${col}">#${i+1}${i===0?' Top Creator':i===1?' 2nd Place':i===2?' 3rd Place':''}</span>
         </div>
       </div>
       <div class="score-bars">
@@ -1386,8 +1391,7 @@ function renderScores() {
             backgroundColor: [metricColors[key]+'cc', 'rgba(255,255,255,0.03)'],
             borderWidth: 0,
             weight: 1,
-          }))
-        ]
+          }))        ]
       },
       options: {
         responsive: false,
