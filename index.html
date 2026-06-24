@@ -635,7 +635,7 @@
   <div class="tab-panel" id="tab-scores">
     <div class="sh" style="margin-top:0">
       <h2>InfluenScore</h2>
-      <span class="sh-sub">Composite score across ROAS (25%), Conv. Value (20%), Paid Reach (15%), Purchases (15%), Engagement (15%), Organic Views (10%)</span>
+      <span class="sh-sub">Paid creators: 70% commercial (ROAS, Conv. Value, Reach, Purchases) + 30% organic · Organic-only creators: scored purely on engagement &amp; views (max 6.0)</span>
     </div>
 
     <div class="lb-header">
@@ -1247,19 +1247,23 @@ function renderGA4() {
 
 // ─────────────────────────────────────
 // INFLUENSCORE ENGINE
+// Two-track scoring:
+// - Paid track (ROAS 35%, Conv Value 30%, Reach 20%, Purchases 15%) — only for creators with paid data
+// - Organic track (Engagement 50%, Organic Views 50%) — for all creators
+// Final score = paid creators get 70% paid + 30% organic blend
+//             = organic-only creators get 100% organic track (scaled fairly)
 // ─────────────────────────────────────
-const WEIGHTS = { roas:.25, conv_value:.20, reach:.15, purchases:.15, engagement:.15, org_views:.10 };
-
 function computeScores() {
   const paid = fPaid(), org = fOrganic(), byCr = paidByCr(paid);
   const allCrs = new Set([...Object.keys(byCr), ...org.map(p=>p.creator)]);
 
+  // Raw metrics
   const raw = {};
   allCrs.forEach(name => {
     const p   = byCr[name]||{};
     const ops = org.filter(o=>o.creator===name);
-    const eng = ops.reduce((s,o)=>s+o.likes+o.comments, 0);
-    const views = ops.reduce((s,o)=>s+(o.impressions||0), 0);
+    const eng  = ops.reduce((s,o)=>s+o.likes+o.comments, 0);
+    const views= ops.reduce((s,o)=>s+(o.impressions||0), 0);
     raw[name] = {
       roas:       p.spend>0 ? p.conv_value/p.spend : 0,
       conv_value: p.conv_value||0,
@@ -1267,28 +1271,66 @@ function computeScores() {
       purchases:  p.purchases||0,
       engagement: eng,
       org_views:  views,
+      hasPaid:    !!byCr[name],
     };
   });
 
-  const metrics = Object.keys(WEIGHTS);
-  const maxes = {};
-  metrics.forEach(m => { maxes[m] = Math.max(1, ...Object.values(raw).map(r=>r[m])); });
+  const vals = Object.values(raw);
+
+  // Normalise helper
+  const norm = (val, arr) => {
+    const max = Math.max(1, ...arr);
+    return val / max;
+  };
+
+  // Paid metric maxes (only among paid creators)
+  const paidVals = vals.filter(r=>r.hasPaid);
+  const maxRoas  = Math.max(1, ...paidVals.map(r=>r.roas));
+  const maxConv  = Math.max(1, ...paidVals.map(r=>r.conv_value));
+  const maxReach = Math.max(1, ...paidVals.map(r=>r.reach));
+  const maxPurch = Math.max(1, ...paidVals.map(r=>r.purchases));
+
+  // Organic metric maxes (all creators)
+  const maxEng   = Math.max(1, ...vals.map(r=>r.engagement));
+  const maxViews = Math.max(1, ...vals.map(r=>r.org_views));
 
   const scores = {};
   Object.entries(raw).forEach(([name, r]) => {
-    let score = 0;
-    const breakdown = {};
-    metrics.forEach(m => {
-      const norm = r[m] / maxes[m];
-      breakdown[m] = +(norm * 10).toFixed(2);
-      score += norm * WEIGHTS[m];
-    });
+    // Paid sub-score (0–10)
+    const paidScore = r.hasPaid ? (
+      (r.roas/maxRoas)       * 0.35 +
+      (r.conv_value/maxConv) * 0.30 +
+      (r.reach/maxReach)     * 0.20 +
+      (r.purchases/maxPurch) * 0.15
+    ) * 10 : 0;
+
+    // Organic sub-score (0–10)
+    const orgScore = (
+      (r.engagement/maxEng)   * 0.55 +
+      (r.org_views/maxViews)  * 0.45
+    ) * 10;
+
+    // Blend: paid creators 70% paid + 30% organic
+    //        organic-only  0% paid  + 100% organic (but cap at 6 to keep fair)
+    const total = r.hasPaid
+      ? (paidScore * 0.70) + (orgScore * 0.30)
+      : Math.min(6, orgScore);
+
     scores[name] = {
-      total:     +(score * 10).toFixed(1),
-      breakdown,
-      raw:       r,
-      hasPaid:   !!byCr[name],
-      handle:    org.find(o=>o.creator===name)?.handle || '',
+      total:      +(total).toFixed(1),
+      paidScore:  +paidScore.toFixed(2),
+      orgScore:   +orgScore.toFixed(2),
+      breakdown: {
+        roas:       r.hasPaid ? +(r.roas/maxRoas*10).toFixed(2)       : 0,
+        conv_value: r.hasPaid ? +(r.conv_value/maxConv*10).toFixed(2) : 0,
+        reach:      r.hasPaid ? +(r.reach/maxReach*10).toFixed(2)     : 0,
+        purchases:  r.hasPaid ? +(r.purchases/maxPurch*10).toFixed(2) : 0,
+        engagement: +(r.engagement/maxEng*10).toFixed(2),
+        org_views:  +(r.org_views/maxViews*10).toFixed(2),
+      },
+      raw,
+      hasPaid:    r.hasPaid,
+      handle:     org.find(o=>o.creator===name)?.handle || '',
     };
   });
 
@@ -1312,7 +1354,6 @@ function renderScores() {
 
   const metricLabels = { roas:'ROAS', conv_value:'Conv. Val', reach:'Paid Reach', purchases:'Purchases', engagement:'Engagement', org_views:'Organic Views' };
   const metricColors = { roas:'#b8f000', conv_value:'#8b5cf6', reach:'#06b6d4', purchases:'#ec4899', engagement:'#f59e0b', org_views:'#10b981' };
-
   // Leaderboard
   document.getElementById('lb-table').innerHTML = ranked.map(([name, s], i) => {
     const rankClass = i===0?'r1':i===1?'r2':i===2?'r3':'';
@@ -1338,14 +1379,19 @@ function renderScores() {
         <div class="score-ring-wrap">
           <canvas id="ring-${i}" width="90" height="90"></canvas>
           <div class="score-ring-center">
-            <span style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;line-height:1;color:${col}">${s.total}</span>
-            <span style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(240,237,248,0.42);margin-top:2px">Score</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;line-height:1;color:${col}">${s.total}</span>
+            <span style="font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(240,237,248,0.42);margin-top:2px">Score</span>
           </div>
         </div>
         <div class="score-creator-info">
           <div class="score-creator-name">${name}</div>
           <div class="score-creator-handle">${s.handle}</div>
           <span class="score-rank" style="background:${col}">#${i+1}${i===0?' Top Creator':i===1?' 2nd Place':i===2?' 3rd Place':''}</span>
+          <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+            ${s.hasPaid ? `<span style="font-size:10px;padding:2px 7px;border-radius:5px;background:rgba(184,240,0,.12);color:#b8f000;border:1px solid rgba(184,240,0,.2)">Paid ${s.paidScore.toFixed(1)}</span>` : ''}
+            <span style="font-size:10px;padding:2px 7px;border-radius:5px;background:rgba(139,92,246,.12);color:#8b5cf6;border:1px solid rgba(139,92,246,.2)">Organic ${s.orgScore.toFixed(1)}</span>
+            ${!s.hasPaid ? `<span style="font-size:10px;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.07);color:rgba(240,237,248,.42)">No paid data</span>` : ''}
+          </div>
         </div>
       </div>
       <div class="score-bars">
@@ -1459,13 +1505,12 @@ function toggleCreator(name) {
 }
 
 function buildCreatorButtons() {
-  // Build from both paid and organic creators
-  const paidNames = [...new Set(D.paid.map(r => r.creator_name))];
-  const orgNames  = [...new Set(D.organic.map(r => r.creator))];
+  // Valid creator names — must have a proper name (not single words like 'gifted', 'utm' etc)
+  const paidNames = [...new Set(D.paid.map(r=>r.creator_name).filter(n=>n && n.length>3))];
+  const orgNames  = [...new Set(D.organic.map(r=>r.creator).filter(n=>n && n.length>3))];
   const all = [...new Set([...paidNames, ...orgNames])].sort();
   const sel = document.getElementById('creator-select');
   if (!sel) return;
-  // Keep the "All creators" option, add the rest
   sel.innerHTML = '<option value="all">All creators</option>' +
     all.map(name => `<option value="${name}">${name}</option>`).join('');
   sel.value = state.creator;
