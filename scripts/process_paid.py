@@ -28,6 +28,7 @@ CREATOR_MAP = {
     'Kates Georgian Home PA': "Kate's Georgian Home",
     'behindnumberdeux':     'Nisha (Behind Numéro Deux)',
     'hectorshouse PA':      "Jade (Hector's House)",
+    'hectorshouse':         "Jade (Hector's House)",
     'imogen PA':            'Imogen (MonkeyMews)',
     'imogen':               'Imogen (MonkeyMews)',
 }
