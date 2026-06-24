@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-24T09:18:44.354240Z",
+  "updated_at": "2026-06-24T09:21:30.958628Z",
   "lookback_days": 180,
   "rows": [
     {
@@ -428,17 +428,17 @@
     },
     {
       "date": "2026-05-01",
-      "creator": "instagram",
-      "campaign": "houseofhetheringtons",
-      "sessions": 9,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 7,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-01",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 7,
+      "creator": "instagram",
+      "campaign": "houseofhetheringtons",
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
