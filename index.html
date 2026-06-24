@@ -421,7 +421,7 @@
 
   .score-ring-wrap {
     position: relative; flex-shrink: 0;
-    width: 90px; height: 90px;
+    width: 110px; height: 110px;
   }
   .score-ring-wrap canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
   .score-ring-center {
@@ -429,12 +429,12 @@
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     pointer-events: none; z-index: 2;
-    width: 90px; height: 90px;
+    width: 110px; height: 110px;
     overflow: hidden;
   }
   .score-num {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px; font-weight: 700; line-height: 1;
+    font-size: 20px; font-weight: 700; line-height: 1;
     color: var(--neon);
     background: none !important;
     border: none !important;
@@ -443,9 +443,9 @@
     display: block !important;
   }
   .score-label {
-    font-size: 7px; font-weight: 600;
+    font-size: 8px; font-weight: 600;
     text-transform: uppercase; letter-spacing: .08em;
-    color: var(--muted); margin-top: 1px;
+    color: var(--muted); margin-top: 2px;
   }
 
   .score-creator-info { flex: 1; min-width: 0; }
@@ -640,6 +640,10 @@
       <span class="sh-sub">Paid creators: 70% commercial (ROAS, Conv. Value, Reach, Purchases) + 30% organic · Organic-only creators: scored purely on engagement &amp; views (max 6.0)</span>
     </div>
 
+    <div class="sh"><h2>Creator Profiles</h2><span class="sh-sub">Breakdown by metric</span></div>
+    <div class="score-grid" id="score-grid"></div>
+
+    <div class="sh"><h2>Leaderboard</h2><span class="sh-sub">All creators ranked</span></div>
     <div class="lb-header">
       <span>#</span><span>Creator</span>
       <span>Score</span><span>ROAS</span>
@@ -647,9 +651,6 @@
       <span>Purchases</span><span>Engagement</span>
     </div>
     <div class="leaderboard" id="lb-table"></div>
-
-    <div class="sh"><h2>Creator Profiles</h2><span class="sh-sub">Breakdown by metric</span></div>
-    <div class="score-grid" id="score-grid"></div>
   </div>
 
   <!-- PAID -->
@@ -1380,10 +1381,10 @@ function renderScores() {
     return `<div class="score-card au">
       <div class="score-card-top">
         <div class="score-ring-wrap">
-          <canvas id="ring-${i}" width="90" height="90"></canvas>
+          <canvas id="ring-${i}" width="110" height="110"></canvas>
           <div class="score-ring-center">
-            <span style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;line-height:1;color:${col};display:block;text-align:center">${s.total}</span>
-            <span style="font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(240,237,248,0.35);margin-top:1px;display:block;text-align:center">score</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;line-height:1;color:${col};display:block;text-align:center">${s.total}</span>
+            <span style="font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(240,237,248,0.35);margin-top:2px;display:block;text-align:center">score</span>
           </div>
         </div>
         <div class="score-creator-info">
