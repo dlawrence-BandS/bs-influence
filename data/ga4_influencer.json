@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-24T08:50:57.835216Z",
+  "updated_at": "2026-06-24T08:51:17.717092Z",
   "lookback_days": 180,
   "rows": [
     {
@@ -324,17 +324,17 @@
     },
     {
       "date": "2026-05-13",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 2,
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-13",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 1,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
       "transactions": 0,
       "revenue": 0.0
     },
