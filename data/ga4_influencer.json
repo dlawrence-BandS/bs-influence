@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-24T09:21:30.958628Z",
+  "updated_at": "2026-06-24T09:24:36.759057Z",
   "lookback_days": 180,
   "rows": [
     {
@@ -181,16 +181,16 @@
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 4,
+      "campaign": "amelialucyhome",
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "amelialucyhome",
-      "sessions": 1,
+      "campaign": "life_at_the_lodge",
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
