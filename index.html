@@ -423,17 +423,22 @@
     position: relative; flex-shrink: 0;
     width: 90px; height: 90px;
   }
-  .score-ring-wrap canvas { position: absolute; top: 0; left: 0; }
+  .score-ring-wrap canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
   .score-ring-center {
     position: absolute; inset: 0;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    pointer-events: none;
+    pointer-events: none; z-index: 2;
   }
   .score-num {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 22px; font-weight: 700; line-height: 1;
     color: var(--neon);
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    display: block !important;
   }
   .score-label {
     font-size: 9px; font-weight: 600;
@@ -575,8 +580,17 @@
   <button class="fbtn" data-period="30">Last 30 days</button>
   <div class="fdiv"></div>
   <span class="flabel">Creator</span>
-  <button class="fbtn active" data-creator="all">All</button>
-  <span id="creator-btns"></span>
+  <select id="creator-select" onchange="selectCreator(this.value)" style="
+    background:var(--surface); border:1px solid var(--border); color:var(--text);
+    font-family:'Inter',sans-serif; font-size:12px; font-weight:500;
+    padding:5px 28px 5px 12px; border-radius:20px; cursor:pointer;
+    outline:none; appearance:none; -webkit-appearance:none;
+    background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22 viewBox=%220 0 10 6%22><path d=%22M0 0l5 6 5-6z%22 fill=%22rgba(240,237,248,0.4)%22/></svg>');
+    background-repeat:no-repeat; background-position:right 10px center;
+    transition:border-color .17s; min-width:160px;
+  ">
+    <option value="all">All creators</option>
+  </select>
 </div>
 
 <main>
@@ -1434,12 +1448,29 @@ document.getElementById('org-table').querySelectorAll('thead th[data-sort]').for
   renderOrganic();
 }));
 
+function selectCreator(val) {
+  state.creator = val;
+  render();
+}
+
+function toggleCreator(name) {
+  state.creator = state.creator === name ? 'all' : name;
+  const sel = document.getElementById('creator-select');
+  if (sel) sel.value = state.creator;
+  render();
+}
+
 function buildCreatorButtons() {
-  const names=[...new Set(D.paid.map(r=>r.creator_name))].sort();
-  const span=document.getElementById('creator-btns');
-  span.innerHTML=names.map(name=>
-    `<button class="fbtn" data-creator="${name}" onclick="toggleCreator(${JSON.stringify(name)})">${shortName(name)}</button>`
-  ).join('');
+  // Build from both paid and organic creators
+  const paidNames = [...new Set(D.paid.map(r => r.creator_name))];
+  const orgNames  = [...new Set(D.organic.map(r => r.creator))];
+  const all = [...new Set([...paidNames, ...orgNames])].sort();
+  const sel = document.getElementById('creator-select');
+  if (!sel) return;
+  // Keep the "All creators" option, add the rest
+  sel.innerHTML = '<option value="all">All creators</option>' +
+    all.map(name => `<option value="${name}">${name}</option>`).join('');
+  sel.value = state.creator;
 }
 
 // ─────────────────────────────────────
