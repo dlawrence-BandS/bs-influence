@@ -1,0 +1,526 @@
+{
+  "updated_at": "2026-06-24T08:27:53.058003Z",
+  "lookback_days": 180,
+  "rows": [
+    {
+      "date": "2026-06-23",
+      "creator": "social",
+      "campaign": "my.lymingtonhome",
+      "sessions": 5,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-23",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 0,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-22",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-21",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-19",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-18",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-17",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 5,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-16",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-14",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 0,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-13",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-12",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-11",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-10",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 29,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-09",
+      "creator": "instagram",
+      "campaign": "amelialucyhome",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-08",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-07",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-06",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-05",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-04",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-02",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-01",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-31",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-30",
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 4,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-30",
+      "creator": "instagram",
+      "campaign": "amelialucyhome",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-28",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-27",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-26",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-25",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-24",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-23",
+      "creator": "social",
+      "campaign": "life_at_the_lodge",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-22",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-21",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-20",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-19",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-18",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-17",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 0,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-16",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-16",
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 9,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-15",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-14",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-13",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-13",
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-12",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-11",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-10",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 5,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-09",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 5,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-08",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-07",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 5,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-06",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-05",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-04",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 5,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-03",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 6,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-02",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 5,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-01",
+      "creator": "instagram",
+      "campaign": "houseofhetheringtons",
+      "sessions": 9,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-05-01",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 7,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-04-30",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 9,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-04-29",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 279,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-04-28",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-04-25",
+      "creator": "instagram",
+      "campaign": "houseofhetheringtons",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-04-20",
+      "creator": "social",
+      "campaign": "katesgeorgianhome",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-04-19",
+      "creator": "social",
+      "campaign": "katesgeorgianhome",
+      "sessions": 9,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-04-11",
+      "creator": "instagram",
+      "campaign": "amelialucyhome",
+      "sessions": 64,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-04-10",
+      "creator": "instagram",
+      "campaign": "amelialucyhome",
+      "sessions": 154,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-04-09",
+      "creator": "instagram",
+      "campaign": "amelialucyhome",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-04-02",
+      "creator": "instagram",
+      "campaign": "amelialucyhome",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    }
+  ]
+}

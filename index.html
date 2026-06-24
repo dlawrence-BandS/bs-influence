@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B&S Influence — Social Performance</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap');
+
+  :root {
+    --bg:#0e0e10; --surface:#16161a; --surface2:#1e1e24;
+    --border:rgba(255,255,255,0.07);
+    --gold:#c9a84c; --gold-pale:rgba(201,168,76,0.12); --gold-glow:rgba(201,168,76,0.22);
+    --text:#f0ede8; --muted:rgba(240,237,232,0.42);
+    --green:#7eb8a4; --green-pale:rgba(126,184,164,0.14);
+    --red:#e07070;
+    --radius:12px; --radius-lg:18px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+
+  /* ── HEADER ── */
+  header{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,16,0.95);backdrop-filter:blur(14px);z-index:100}
+  .logo{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:.02em}
+  .logo em{color:var(--gold);font-style:normal}
+  .header-right{display:flex;align-items:center;gap:14px}
+  .freshness{font-size:12px;color:var(--muted)}
+  .freshness strong{color:var(--text)}
+  .pill{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;background:var(--gold-pale);color:var(--gold);border:1px solid rgba(201,168,76,.28)}
+
+  /* ── TABS ── */
+  .tabs{display:flex;padding:0 40px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:65px;z-index:90}
+  .tab{font-size:13px;font-weight:500;padding:13px 18px;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .18s;white-space:nowrap}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+  /* ── FILTERS ── */
+  .filters{display:flex;align-items:center;gap:9px;padding:12px 40px;border-bottom:1px solid var(--border);background:rgba(14,14,16,0.8);overflow-x:auto;flex-wrap:nowrap}
+  .flabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-right:2px;white-space:nowrap;flex-shrink:0}
+  .fbtn{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;transition:all .17s;white-space:nowrap;flex-shrink:0}
+  .fbtn:hover{color:var(--text);border-color:rgba(255,255,255,.18)}
+  .fbtn.active{background:var(--gold-pale);border-color:rgba(201,168,76,.38);color:var(--gold)}
+  .fdiv{width:1px;height:16px;background:var(--border);margin:0 2px;flex-shrink:0}
+
+  /* ── MAIN ── */
+  main{padding:28px 40px;max-width:1440px;margin:0 auto}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+
+  /* ── SECTION HEADER ── */
+  .sh{display:flex;align-items:baseline;gap:10px;margin-bottom:16px;margin-top:32px}
+  .sh:first-child{margin-top:0}
+  .sh h2{font-family:'DM Serif Display',serif;font-size:21px}
+  .sh-sub{font-size:13px;color:var(--muted)}
+
+  /* ── KPIs ── */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:17px 19px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+  .kpi:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.13)}
+  .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);opacity:0;transition:opacity .2s}
+  .kpi:hover::before,.kpi.hi::before{opacity:1}
+  .kpi-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:5px}
+  .kpi-val{font-family:'DM Serif Display',serif;font-size:28px;line-height:1;color:var(--text);margin-bottom:3px}
+  .kpi-sub{font-size:11px;color:var(--muted)}
+
+  /* ── CHART CARDS ── */
+  .g2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+  .g2e{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .cc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+  .cc-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:2px}
+  .cc-head{font-family:'DM Serif Display',serif;font-size:16px;color:var(--text);margin-bottom:16px}
+  .cw{position:relative}
+
+  /* ── CREATOR CARDS ── */
+  .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:24px}
+  .ccard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer;transition:all .22s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden}
+  .ccard::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top left,var(--gold-glow),transparent 60%);opacity:0;transition:opacity .28s;pointer-events:none}
+  .ccard:hover{transform:translateY(-3px) scale(1.01);border-color:rgba(201,168,76,.28);box-shadow:0 10px 35px rgba(0,0,0,.38)}
+  .ccard:hover::after{opacity:1}
+  .ccard.sel{border-color:var(--gold);background:var(--surface2)}
+  .ctop{display:flex;align-items:center;gap:11px;margin-bottom:13px;position:relative;z-index:1}
+  .cav{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:16px;color:#0e0e10;flex-shrink:0;font-style:italic}
+  .cinfo{flex:1;min-width:0}
+  .cname{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chandle{font-size:11px;color:var(--muted)}
+  .ctier{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;padding:2px 7px;border-radius:8px;flex-shrink:0}
+  .t-Macro{background:rgba(201,168,76,.14);color:var(--gold)}
+  .t-Mid{background:rgba(126,184,164,.14);color:var(--green)}
+  .t-Micro{background:rgba(255,255,255,.07);color:var(--muted)}
+  .cstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;position:relative;z-index:1}
+  .csm-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:1px}
+  .csm-val{font-family:'DM Serif Display',serif;font-size:17px;line-height:1;color:var(--text)}
+  .ctags{display:flex;gap:5px;margin-top:11px;flex-wrap:wrap;position:relative;z-index:1}
+  .tag{font-size:10px;padding:2px 7px;border-radius:5px;background:var(--surface2);border:1px solid var(--border);color:var(--muted)}
+  .tag-p{background:var(--gold-pale);border-color:rgba(201,168,76,.2);color:var(--gold)}
+  .tag-o{background:var(--green-pale);border-color:rgba(126,184,164,.2);color:var(--green)}
+
+  /* ── TABLES ── */
+  .tw{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:24px}
+  table{width:100%;border-collapse:collapse}
+  thead th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:11px 13px;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;user-select:none}
+  thead th:hover{color:var(--text)}
+  thead th.sorted{color:var(--gold)}
+  tbody tr{border-bottom:1px solid var(--border);transition:background .13s}
+  tbody tr:last-child{border-bottom:none}
+  tbody tr:hover{background:rgba(255,255,255,.025)}
+  tbody td{padding:10px 13px;font-size:13px;color:var(--text);vertical-align:middle}
+  .td-m{color:var(--muted)}
+
+  /* type badges */
+  .tbadge{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 6px;border-radius:4px;letter-spacing:.07em}
+  .tb-Reel{background:rgba(139,92,246,.15);color:#a78bfa}
+  .tb-Carousel{background:rgba(59,130,246,.15);color:#93c5fd}
+  .tb-Static{background:rgba(255,255,255,.07);color:var(--muted)}
+
+  /* editable product field */
+  .prod-input{background:transparent;border:none;border-bottom:1px dashed rgba(255,255,255,.15);color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:2px 4px;width:140px;outline:none;transition:border-color .2s}
+  .prod-input:focus{border-bottom-color:var(--gold);background:rgba(201,168,76,.06)}
+  .prod-input::placeholder{color:var(--muted);font-size:11px}
+  .save-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-left:6px;opacity:0;transition:opacity .3s;vertical-align:middle}
+  .save-dot.show{opacity:1}
+
+  /* reach note */
+  .reach-note{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
+  .reach-na{color:rgba(240,237,232,.25);font-size:12px}
+
+  /* info box */
+  .info-box{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--radius);padding:13px 17px;margin-bottom:18px;font-size:13px;color:var(--muted);line-height:1.7}
+  .info-box strong{color:var(--text)}
+  .info-box code{background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;font-size:12px}
+
+  /* empty */
+  .empty{text-align:center;padding:40px;color:var(--muted)}
+  .empty-icon{font-size:34px;margin-bottom:10px;display:block}
+
+  /* platform dot */
+  .pldot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
+  .pl-Instagram{background:#e1306c}
+
+  /* responsive */
+  @media(max-width:900px){
+    header,.tabs,.filters{padding-left:16px;padding-right:16px}
+    main{padding:16px}
+    .g2,.g3,.g2e{grid-template-columns:1fr}
+    .kpis{grid-template-columns:repeat(2,1fr)}
+  }
+
+  /* animate */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .au{animation:fadeUp .32s ease both}
+  .au:nth-child(1){animation-delay:.04s}.au:nth-child(2){animation-delay:.08s}
+  .au:nth-child(3){animation-delay:.12s}.au:nth-child(4){animation-delay:.16s}
+  .au:nth-child(5){animation-delay:.20s}.au:nth-child(6){animation-delay:.24s}
+
+  ::-webkit-scrollbar{width:5px;height:5px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">B&amp;S <em>Influence</em></div>
+  <div class="header-right">
+    <span class="freshness">Nov 2025 – <strong>Jun 2026</strong></span>
+    <span class="pill" id="hdr-pill">Loading…</span>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="paid">Paid Ads</div>
+  <div class="tab" data-tab="organic">Organic / Gifted</div>
+  <div class="tab" data-tab="ga4">GA4 / UTM</div>
+</div>
+
+<div class="filters">
+  <span class="flabel">Period</span>
+  <button class="fbtn active" data-period="all">All time</button>
+  <button class="fbtn" data-period="90">Last 90 days</button>
+  <button class="fbtn" data-period="30">Last 30 days</button>
+  <div class="fdiv"></div>
+  <span class="flabel">Creator</span>
+  <button class="fbtn active" data-creator="all">All</button>
+  <span id="creator-btns"></span>
+</div>
+
+<main>
+
+  <!-- ══ OVERVIEW ══ -->
+  <div class="tab-panel active" id="tab-overview">
+    <div class="kpis" id="kpis-ov"></div>
+
+    <div class="g2">
+      <div class="cc">
+        <div class="cc-title">Paid — weekly reach by creator</div>
+        <div class="cc-head">Reach Over Time</div>
+        <div class="cw" style="height:210px"><canvas id="ch-ov-timeline"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="cc-title">Revenue attribution</div>
+        <div class="cc-head">Conv. Value Split</div>
+        <div class="cw" style="height:210px"><canvas id="ch-ov-donut"></canvas></div>
+      </div>
+    </div>
+
+    <div class="g3">
+      <div class="cc">
+        <div class="cc-title">Paid performance</div>
+        <div class="cc-head">ROAS by Creator</div>
+        <div class="cw" style="height:175px"><canvas id="ch-ov-roas"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="cc-title">Spend vs. revenue</div>
+        <div class="cc-head">Efficiency Scatter</div>
+        <div class="cw" style="height:175px"><canvas id="ch-ov-scatter"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="cc-title">Organic engagement</div>
+        <div class="cc-head">Likes + Comments</div>
+        <div class="cw" style="height:175px"><canvas id="ch-ov-orgeng"></canvas></div>
+      </div>
+    </div>
+
+    <div class="sh"><h2>Creators</h2><span class="sh-sub" id="cr-filter-label">Click a card to filter all views</span></div>
+    <div class="cgrid" id="creator-grid"></div>
+  </div>
+
+  <!-- ══ PAID ADS ══ -->
+  <div class="tab-panel" id="tab-paid">
+    <div class="kpis" id="kpis-paid"></div>
+
+    <div class="g2e">
+      <div class="cc">
+        <div class="cc-title">Daily spend</div>
+        <div class="cc-head">Ad Spend Over Time</div>
+        <div class="cw" style="height:200px"><canvas id="ch-paid-spend"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="cc-title">Purchases by creator</div>
+        <div class="cc-head">Conversions</div>
+        <div class="cw" style="height:200px"><canvas id="ch-paid-purch"></canvas></div>
+      </div>
+    </div>
+
+    <div class="sh"><h2>Daily Breakdown</h2><span class="sh-sub" id="paid-lbl"></span></div>
+    <div class="tw">
+      <table id="paid-table">
+        <thead><tr>
+          <th data-sort="date" class="sorted">Date ↓</th>
+          <th>Creator</th>
+          <th data-sort="reach">Reach</th>
+          <th data-sort="clicks">Clicks</th>
+          <th data-sort="purchases">Purchases</th>
+          <th data-sort="conversion_value">Conv. Value</th>
+          <th data-sort="spend">Spend</th>
+          <th data-sort="roas">ROAS</th>
+        </tr></thead>
+        <tbody id="paid-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ ORGANIC ══ -->
+  <div class="tab-panel" id="tab-organic">
+    <div class="kpis" id="kpis-org"></div>
+
+    <div class="g2e">
+      <div class="cc">
+        <div class="cc-title">Posts over time</div>
+        <div class="cc-head">Monthly Activity</div>
+        <div class="cw" style="height:200px"><canvas id="ch-org-time"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="cc-title">Engagement by content type</div>
+        <div class="cc-head">Likes + Comments</div>
+        <div class="cw" style="height:200px"><canvas id="ch-org-type"></canvas></div>
+      </div>
+    </div>
+
+    <div class="sh">
+      <h2>Posts</h2>
+      <span class="sh-sub" id="org-lbl"></span>
+      <span class="save-dot" id="save-dot"></span>
+      <span style="font-size:11px;color:var(--muted);margin-left:4px" id="save-label"></span>
+    </div>
+    <div class="tw">
+      <table id="org-table">
+        <thead><tr>
+          <th data-sort="date" class="sorted">Date ↓</th>
+          <th>Creator</th>
+          <th>Handle</th>
+          <th>Type</th>
+          <th data-sort="reach">Reach</th>
+          <th data-sort="impressions">Views</th>
+          <th data-sort="likes">Likes</th>
+          <th data-sort="comments">Comments</th>
+          <th>Product tagged</th>
+          <th>Post</th>
+        </tr></thead>
+        <tbody id="org-tbody"></tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:-16px;margin-bottom:24px">
+      ⚠ Reach is only available where Meta shared it for third-party accounts (3 of 30 posts). Views (impressions) are more complete.
+      Product tags are editable — changes save automatically to your browser.
+    </p>
+  </div>
+
+  <!-- ══ GA4 ══ -->
+  <div class="tab-panel" id="tab-ga4">
+    <div class="info-box">
+      <strong>How to populate:</strong> Run <code>python scripts/fetch_ga4_influencer.py</code> to pull <code>utm_medium=influencer</code> sessions &amp; revenue from BigQuery into <code>data/ga4_influencer.json</code>. Commit the file — dashboard picks it up on next load. The GitHub Action runs this automatically every Monday.
+    </div>
+
+    <div class="kpis" id="kpis-ga4"></div>
+
+    <div class="g2e">
+      <div class="cc">
+        <div class="cc-title">Weekly sessions</div>
+        <div class="cc-head">Traffic Over Time</div>
+        <div class="cw" style="height:200px"><canvas id="ch-ga4-sess"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="cc-title">Revenue by creator</div>
+        <div class="cc-head">UTM-Attributed</div>
+        <div class="cw" style="height:200px"><canvas id="ch-ga4-rev"></canvas></div>
+      </div>
+    </div>
+
+    <div class="sh"><h2>Creator Breakdown</h2><span class="sh-sub">utm_medium=influencer</span></div>
+    <div class="tw">
+      <table>
+        <thead><tr>
+          <th>Creator (utm_source)</th>
+          <th>Sessions</th>
+          <th>Transactions</th>
+          <th>Revenue</th>
+          <th>Conv. Rate</th>
+        </tr></thead>
+        <tbody id="ga4-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ─────────────────────────────────────
+// STATE
+// ─────────────────────────────────────
+let D = { paid: [], organic: [], ga4: [] };
+let charts = {};
+let state = { period: 'all', creator: 'all', activeTab: 'overview' };
+let paidSort = { col: 'date', dir: -1 };
+let orgSort  = { col: 'date', dir: -1 };
+
+// Product overrides — persisted in localStorage
+function loadProducts() {
+  try { return JSON.parse(localStorage.getItem('bs_influence_products') || '{}'); }
+  catch(e) { return {}; }
+}
+function saveProducts(map) {
+  try { localStorage.setItem('bs_influence_products', JSON.stringify(map)); } catch(e){}
+}
+let productMap = loadProducts();
+
+// ─────────────────────────────────────
+// COLOURS
+// ─────────────────────────────────────
+const PALETTE = ['#c9a84c','#7eb8a4','#9b7fd4','#e07070','#6baed6','#fd8d3c','#a0c4ff','#ffadad','#caffbf'];
+const _cmap = {};
+let _ci = 0;
+function cc(name) {
+  if (!_cmap[name]) _cmap[name] = PALETTE[_ci++ % PALETTE.length];
+  return _cmap[name];
+}
+
+// ─────────────────────────────────────
+// LOAD DATA
+// ─────────────────────────────────────
+async function loadAll() {
+  try {
+    const [org, paid] = await Promise.all([
+      fetch('data/organic_posts.json').then(r => r.json()),
+      fetch('data/paid_ads.json').then(r => r.json()),
+    ]);
+    D.organic = org;
+    D.paid    = paid.map(r => ({ ...r, roas: r.spend > 0 ? r.conversion_value / r.spend : 0 }));
+  } catch(e) { console.error('Data load failed', e); }
+
+  try {
+    const ga4 = await fetch('data/ga4_influencer.json').then(r => r.json());
+    D.ga4 = ga4.rows || [];
+  } catch(e) { D.ga4 = []; }
+
+  buildCreatorButtons();
+  render();
+}
+
+// ─────────────────────────────────────
+// FILTERS
+// ─────────────────────────────────────
+function inPeriod(d) {
+  if (state.period === 'all') return true;
+  const cut = new Date(); cut.setDate(cut.getDate() - +state.period);
+  return new Date(d) >= cut;
+}
+function fPaid()    { return D.paid.filter(r => inPeriod(r.date) && (state.creator==='all' || r.creator_name===state.creator)); }
+function fOrganic() { return D.organic.filter(r => inPeriod(r.date) && (state.creator==='all' || r.creator===state.creator)); }
+
+// ─────────────────────────────────────
+// AGGREGATORS
+// ─────────────────────────────────────
+function paidByCr(rows) {
+  const m = {};
+  rows.forEach(r => {
+    if (!m[r.creator_name]) m[r.creator_name] = { reach:0, clicks:0, purchases:0, conv_value:0, spend:0 };
+    m[r.creator_name].reach      += r.reach||0;
+    m[r.creator_name].clicks     += r.clicks||0;
+    m[r.creator_name].purchases  += r.purchases||0;
+    m[r.creator_name].conv_value += r.conversion_value||0;
+    m[r.creator_name].spend      += r.spend||0;
+  });
+  return m;
+}
+
+// ─────────────────────────────────────
+// KPIs
+// ─────────────────────────────────────
+function mkKPIs(id, items) {
+  document.getElementById(id).innerHTML = items.map(k =>
+    `<div class="kpi au ${k.hi?'hi':''}">
+      <div class="kpi-lbl">${k.label}</div>
+      <div class="kpi-val">${k.value}</div>
+      <div class="kpi-sub">${k.sub||''}</div>
+    </div>`
+  ).join('');
+}
+
+// ─────────────────────────────────────
+// CHART HELPERS
+// ─────────────────────────────────────
+function dc(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+const TX = { color:'rgba(240,237,232,0.38)', font:{ family:'DM Sans', size:11 } };
+const GR = { color:'rgba(255,255,255,0.04)' };
+const LG = { labels:{ color:'rgba(240,237,232,0.48)', font:{ family:'DM Sans', size:11 }, boxWidth:9, boxHeight:9 } };
+
+// ─────────────────────────────────────
+// OVERVIEW
+// ─────────────────────────────────────
+function renderOverview() {
+  const paid = fPaid();
+  const org  = fOrganic();
+  const byCr = paidByCr(paid);
+
+  const spend   = Object.values(byCr).reduce((s,c)=>s+c.spend,0);
+  const rev     = Object.values(byCr).reduce((s,c)=>s+c.conv_value,0);
+  const reach   = Object.values(byCr).reduce((s,c)=>s+c.reach,0);
+  const purch   = Object.values(byCr).reduce((s,c)=>s+c.purchases,0);
+  const roas    = spend > 0 ? rev/spend : 0;
+  const orgEng  = org.reduce((s,p)=>s+p.likes+p.comments,0);
+
+  document.getElementById('hdr-pill').textContent =
+    `${Object.keys(byCr).length} creators · ${org.length} organic posts`;
+
+  mkKPIs('kpis-ov', [
+    { label:'Paid Reach',     value: fN(reach),         sub: `${Object.keys(byCr).length} creators` },
+    { label:'Total Spend',    value: fM(spend),         sub: '' },
+    { label:'Conv. Value',    value: fM(rev),           sub: 'Meta purchases' },
+    { label:'ROAS',           value: roas.toFixed(1)+'x', sub: 'return on ad spend', hi: roas > 20 },
+    { label:'Purchases',      value: fN(purch),         sub: '' },
+    { label:'Organic Posts',  value: org.length,        sub: fN(orgEng)+' engagements' },
+  ]);
+
+  // Timeline — weekly reach per creator
+  dc('ov-timeline');
+  const weeks = {};
+  paid.forEach(r => {
+    const mon = getMonday(r.date);
+    if (!weeks[mon]) weeks[mon] = {};
+    weeks[mon][r.creator_name] = (weeks[mon][r.creator_name]||0) + (r.reach||0);
+  });
+  const wks = Object.keys(weeks).sort();
+  const topCr = Object.entries(byCr).sort((a,b)=>b[1].reach-a[1].reach).slice(0,5).map(([n])=>n);
+  charts['ov-timeline'] = new Chart(el('ch-ov-timeline'), {
+    type:'line',
+    data:{ labels: wks.map(w=>fDateShort(w)),
+      datasets: topCr.map(cr=>({
+        label: shortName(cr),
+        data: wks.map(w=>(weeks[w]||{})[cr]||0),
+        borderColor: cc(cr), backgroundColor:'transparent',
+        borderWidth:2, pointRadius:2, tension:.4
+      }))
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:LG },
+      scales:{ x:{ ticks:{...TX,maxRotation:40,maxTicksLimit:10}, grid:GR },
+               y:{ ticks:{...TX,callback:v=>fN(v)}, grid:GR } }
+    }
+  });
+
+  // Revenue donut
+  dc('ov-donut');
+  const crE = Object.entries(byCr).sort((a,b)=>b[1].conv_value-a[1].conv_value);
+  charts['ov-donut'] = new Chart(el('ch-ov-donut'), {
+    type:'doughnut',
+    data:{ labels: crE.map(([n])=>shortName(n)),
+      datasets:[{ data: crE.map(([,v])=>v.conv_value),
+        backgroundColor: crE.map(([n])=>cc(n)+'bb'),
+        borderColor: crE.map(([n])=>cc(n)),
+        borderWidth:1.5, hoverOffset:5 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{ legend:LG, tooltip:{ callbacks:{ label:ctx=>` ${ctx.label}: ${fM(ctx.raw)}` } } }
+    }
+  });
+
+  // ROAS bar
+  dc('ov-roas');
+  const roasData = Object.entries(byCr)
+    .filter(([,v])=>v.spend>0)
+    .map(([n,v])=>({ n, roas: v.conv_value/v.spend }))
+    .sort((a,b)=>b.roas-a.roas);
+  charts['ov-roas'] = new Chart(el('ch-ov-roas'), {
+    type:'bar',
+    data:{ labels: roasData.map(c=>shortName(c.n)),
+      datasets:[{ data: roasData.map(c=>+c.roas.toFixed(2)),
+        backgroundColor: roasData.map(c=>cc(c.n)+'55'),
+        borderColor: roasData.map(c=>cc(c.n)),
+        borderWidth:1.5, borderRadius:4 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{ x:{ ticks:{...TX,maxRotation:30}, grid:{display:false} },
+               y:{ ticks:{...TX,callback:v=>v+'x'}, grid:GR } }
+    }
+  });
+
+  // Scatter spend vs rev
+  dc('ov-scatter');
+  const scData = Object.entries(byCr).filter(([,v])=>v.spend>0).map(([n,v])=>({
+    x: v.spend, y: v.conv_value, label: shortName(n), col: cc(n)
+  }));
+  charts['ov-scatter'] = new Chart(el('ch-ov-scatter'), {
+    type:'scatter',
+    data:{ datasets: scData.map(d=>({
+      label: d.label,
+      data:[{ x:d.x, y:d.y }],
+      backgroundColor: d.col+'99', borderColor: d.col,
+      pointRadius:7, pointHoverRadius:9
+    }))},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:LG, tooltip:{ callbacks:{
+        label: ctx=>`${ctx.dataset.label}: ${fM(ctx.parsed.x)} → ${fM(ctx.parsed.y)}`
+      }}},
+      scales:{ x:{ ticks:{...TX,callback:v=>fM(v)}, grid:GR },
+               y:{ ticks:{...TX,callback:v=>fM(v)}, grid:GR } }
+    }
+  });
+
+  // Organic engagement bar
+  dc('ov-orgeng');
+  const orgByCr = {};
+  org.forEach(p => { orgByCr[p.creator] = (orgByCr[p.creator]||0) + p.likes + p.comments; });
+  const orgE = Object.entries(orgByCr).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  charts['ov-orgeng'] = new Chart(el('ch-ov-orgeng'), {
+    type:'bar',
+    data:{ labels: orgE.map(([n])=>shortName(n)),
+      datasets:[{ data: orgE.map(([,v])=>v), indexAxis:'y',
+        backgroundColor: orgE.map(([n])=>cc(n)+'55'),
+        borderColor: orgE.map(([n])=>cc(n)),
+        borderWidth:1.5, borderRadius:3 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{display:false} },
+      scales:{ x:{ ticks:{...TX,callback:v=>fN(v)}, grid:GR },
+               y:{ ticks:TX, grid:{display:false} } }
+    }
+  });
+
+  renderCreatorGrid();
+}
+
+// ─────────────────────────────────────
+// CREATOR GRID
+// ─────────────────────────────────────
+function renderCreatorGrid() {
+  const paid    = fPaid();
+  const org     = fOrganic();
+  const byCr    = paidByCr(paid);
+  const allCrs  = new Set([...Object.keys(byCr), ...org.map(p=>p.creator)]);
+
+  const creators = [...allCrs].map(name => {
+    const p   = byCr[name] || {};
+    const ops = org.filter(o=>o.creator===name);
+    const orgEng = ops.reduce((s,o)=>s+o.likes+o.comments,0);
+    return { name, p, ops, orgEng, hasPaid:!!byCr[name], hasOrg:ops.length>0 };
+  }).sort((a,b)=>(b.p.reach||0)-(a.p.reach||0));
+
+  document.getElementById('creator-grid').innerHTML = creators.map(c => {
+    const initials = c.name.split(' ').filter(w=>w[0]).map(w=>w[0]).join('').slice(0,2);
+    const col    = cc(c.name);
+    const roas   = c.p.spend > 0 ? (c.p.conv_value/c.p.spend).toFixed(1)+'x' : '—';
+    const tier   = c.p.reach > 300000 ? 'Macro' : c.p.reach > 80000 ? 'Mid' : 'Micro';
+    const isSel  = state.creator === c.name;
+    const handle = c.ops[0]?.handle || '';
+    return `<div class="ccard au ${isSel?'sel':''}" onclick="toggleCreator(${JSON.stringify(c.name)})">
+      <div class="ctop">
+        <div class="cav" style="background:${col}">${initials}</div>
+        <div class="cinfo"><div class="cname">${c.name}</div><div class="chandle">${handle}</div></div>
+        <span class="ctier t-${tier}">${tier}</span>
+      </div>
+      <div class="cstats">
+        <div><div class="csm-lbl">Reach</div><div class="csm-val">${fN(c.p.reach||0)}</div></div>
+        <div><div class="csm-lbl">Conv. Val</div><div class="csm-val">${fM(c.p.conv_value||0)}</div></div>
+        <div><div class="csm-lbl">ROAS</div><div class="csm-val">${roas}</div></div>
+      </div>
+      <div class="ctags">
+        ${c.hasPaid ? '<span class="tag tag-p">Paid</span>' : ''}
+        ${c.hasOrg  ? `<span class="tag tag-o">${c.ops.length} post${c.ops.length!==1?'s':''}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('') || '<div class="empty"><span class="empty-icon">👤</span>No creators in period</div>';
+}
+
+// ─────────────────────────────────────
+// PAID TAB
+// ─────────────────────────────────────
+function renderPaid() {
+  const rows = fPaid();
+  const byCr = paidByCr(rows);
+
+  const spend = rows.reduce((s,r)=>s+r.spend,0);
+  const rev   = rows.reduce((s,r)=>s+r.conversion_value,0);
+  const purch = rows.reduce((s,r)=>s+r.purchases,0);
+  const reach = rows.reduce((s,r)=>s+(r.reach||0),0);
+  const roas  = spend > 0 ? rev/spend : 0;
+
+  mkKPIs('kpis-paid', [
+    { label:'Spend',          value: fM(spend),       sub: '' },
+    { label:'Reach',          value: fN(reach),       sub: '' },
+    { label:'Purchases',      value: fN(purch),       sub: '' },
+    { label:'Conv. Value',    value: fM(rev),         sub: '' },
+    { label:'ROAS',           value: roas.toFixed(1)+'x', sub: '', hi: roas > 20 },
+    { label:'Creators',       value: Object.keys(byCr).length, sub: '' },
+  ]);
+
+  // Daily spend
+  dc('paid-spend');
+  const byDate = {};
+  rows.forEach(r => { byDate[r.date] = (byDate[r.date]||0)+r.spend; });
+  const dates = Object.keys(byDate).sort();
+  charts['paid-spend'] = new Chart(el('ch-paid-spend'), {
+    type:'line',
+    data:{ labels: dates.map(d=>fDateShort(d)),
+      datasets:[{ data: dates.map(d=>byDate[d]),
+        borderColor:'#c9a84c', backgroundColor:'rgba(201,168,76,0.07)',
+        fill:true, borderWidth:2, pointRadius:1, tension:.4 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{ x:{ ticks:{...TX,maxRotation:45,maxTicksLimit:14}, grid:GR },
+               y:{ ticks:{...TX,callback:v=>'£'+v.toFixed(0)}, grid:GR } }
+    }
+  });
+
+  // Purchases bar
+  dc('paid-purch');
+  const pS = Object.entries(byCr).sort((a,b)=>b[1].purchases-a[1].purchases);
+  charts['paid-purch'] = new Chart(el('ch-paid-purch'), {
+    type:'bar',
+    data:{ labels: pS.map(([n])=>shortName(n)),
+      datasets:[{ data: pS.map(([,v])=>v.purchases),
+        backgroundColor: pS.map(([n])=>cc(n)+'55'),
+        borderColor: pS.map(([n])=>cc(n)),
+        borderWidth:1.5, borderRadius:4 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{ x:{ ticks:{...TX,maxRotation:28}, grid:{display:false} },
+               y:{ ticks:TX, grid:GR } }
+    }
+  });
+
+  // Table
+  const sorted = [...rows].sort((a,b) => {
+    const av=a[paidSort.col], bv=b[paidSort.col];
+    return typeof av==='string' ? paidSort.dir*av.localeCompare(bv) : paidSort.dir*(av-bv);
+  });
+  document.getElementById('paid-lbl').textContent = `${sorted.length} daily rows`;
+  document.getElementById('paid-tbody').innerHTML = sorted.map(r => {
+    const roas = r.spend>0 ? (r.conversion_value/r.spend).toFixed(1)+'x' : '—';
+    return `<tr>
+      <td class="td-m">${fDate(r.date)}</td>
+      <td>${r.creator_name}</td>
+      <td>${fN(r.reach||0)}</td>
+      <td>${fN(r.clicks||0)}</td>
+      <td>${r.purchases>0 ? r.purchases : '<span class="td-m">—</span>'}</td>
+      <td>${r.conversion_value>0 ? fM(r.conversion_value) : '<span class="td-m">—</span>'}</td>
+      <td>£${r.spend.toFixed(2)}</td>
+      <td><strong style="color:${r.roas>20?'var(--green)':r.roas>10?'var(--gold)':'var(--text)'}">${roas}</strong></td>
+    </tr>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────
+// ORGANIC TAB
+// ─────────────────────────────────────
+function renderOrganic() {
+  const posts = fOrganic();
+
+  const knownReach   = posts.filter(p=>p.reach>0);
+  const totalReach   = knownReach.reduce((s,p)=>s+p.reach,0);
+  const totalViews   = posts.reduce((s,p)=>s+(p.impressions||0),0);
+  const totalLikes   = posts.reduce((s,p)=>s+p.likes,0);
+  const totalComments= posts.reduce((s,p)=>s+p.comments,0);
+  const uniqueCrs    = new Set(posts.map(p=>p.creator)).size;
+
+  mkKPIs('kpis-org', [
+    { label:'Posts',          value: posts.length,        sub: `${uniqueCrs} creators` },
+    { label:'Reach (partial)',value: fN(totalReach),      sub: `${knownReach.length} of ${posts.length} posts` },
+    { label:'Total Views',    value: fN(totalViews),      sub: 'impressions' },
+    { label:'Likes',          value: fN(totalLikes),      sub: '' },
+    { label:'Comments',       value: fN(totalComments),   sub: '' },
+    { label:'Avg Likes',      value: fN(posts.length>0?(totalLikes/posts.length).toFixed(0):0), sub: 'per post' },
+  ]);
+
+  // Monthly bar
+  dc('org-time');
+  const byMonth = {};
+  posts.forEach(p => { const m=p.date.slice(0,7); byMonth[m]=(byMonth[m]||0)+1; });
+  const months = Object.keys(byMonth).sort();
+  charts['org-time'] = new Chart(el('ch-org-time'), {
+    type:'bar',
+    data:{ labels: months.map(m=>new Date(m+'-01').toLocaleDateString('en-GB',{month:'short',year:'2-digit'})),
+      datasets:[{ data: months.map(m=>byMonth[m]),
+        backgroundColor:'rgba(126,184,164,0.3)', borderColor:'#7eb8a4',
+        borderWidth:1.5, borderRadius:4 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{ x:{ ticks:TX, grid:{display:false} }, y:{ ticks:{...TX,stepSize:1}, grid:GR } }
+    }
+  });
+
+  // Engagement by type
+  dc('org-type');
+  const tmap = {};
+  posts.forEach(p => {
+    tmap[p.content_type] = tmap[p.content_type]||{likes:0,comments:0};
+    tmap[p.content_type].likes    += p.likes;
+    tmap[p.content_type].comments += p.comments;
+  });
+  const tcols = { Reel:'#a78bfa', Carousel:'#93c5fd', Static:'#7eb8a4' };
+  const types = Object.keys(tmap);
+  charts['org-type'] = new Chart(el('ch-org-type'), {
+    type:'bar',
+    data:{ labels: types,
+      datasets:[
+        { label:'Likes',    data: types.map(t=>tmap[t].likes),    backgroundColor: types.map(t=>(tcols[t]||'#aaa')+'55'), borderColor:types.map(t=>tcols[t]||'#aaa'), borderWidth:1.5, borderRadius:3 },
+        { label:'Comments', data: types.map(t=>tmap[t].comments), backgroundColor:'rgba(255,255,255,.08)', borderColor:'rgba(255,255,255,.2)', borderWidth:1 }
+      ]
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:LG },
+      scales:{ x:{ stacked:true, ticks:TX, grid:{display:false} }, y:{ stacked:true, ticks:TX, grid:GR } }
+    }
+  });
+
+  // Table
+  const sorted = [...posts].sort((a,b) => {
+    const av=a[orgSort.col]||0, bv=b[orgSort.col]||0;
+    return typeof av==='string' ? orgSort.dir*av.localeCompare(bv) : orgSort.dir*(av-bv);
+  });
+  document.getElementById('org-lbl').textContent = `${sorted.length} post${sorted.length!==1?'s':''}`;
+
+  document.getElementById('org-tbody').innerHTML = sorted.map(p => {
+    const prodVal  = productMap[p.id] !== undefined ? productMap[p.id] : (p.product||'');
+    const reachStr = p.reach > 0
+      ? fN(p.reach)
+      : `<span class="reach-na" title="Not available from Meta for third-party accounts">—</span>`;
+    return `<tr>
+      <td class="td-m">${fDate(p.date)}</td>
+      <td>${p.creator}</td>
+      <td class="td-m" style="font-size:11px">${p.handle}</td>
+      <td><span class="tbadge tb-${p.content_type}">${p.content_type}</span></td>
+      <td>${reachStr}</td>
+      <td>${p.impressions>0 ? fN(p.impressions) : '<span class="reach-na">—</span>'}</td>
+      <td>${fN(p.likes)}</td>
+      <td>${fN(p.comments)}</td>
+      <td>
+        <input class="prod-input" data-id="${p.id}"
+          value="${prodVal.replace(/"/g,'&quot;')}"
+          placeholder="e.g. Farley Sofa" />
+      </td>
+      <td>${p.permalink ? `<a href="${p.permalink}" target="_blank" style="color:var(--gold);font-size:13px;text-decoration:none">↗</a>` : '<span class="td-m">—</span>'}</td>
+    </tr>`;
+  }).join('');
+
+  // Attach product input listeners
+  document.querySelectorAll('.prod-input').forEach(input => {
+    input.addEventListener('input', () => {
+      const id = +input.dataset.id;
+      productMap[id] = input.value;
+      saveProducts(productMap);
+      // Flash save indicator
+      const dot   = document.getElementById('save-dot');
+      const label = document.getElementById('save-label');
+      dot.classList.add('show');
+      label.textContent = 'Saved';
+      clearTimeout(input._saveTimer);
+      input._saveTimer = setTimeout(() => { dot.classList.remove('show'); label.textContent=''; }, 2000);
+    });
+  });
+}
+
+// ─────────────────────────────────────
+// GA4 TAB
+// ─────────────────────────────────────
+function renderGA4() {
+  const ga4 = D.ga4.filter(r => inPeriod(r.date) && (state.creator==='all' || r.creator===state.creator));
+
+  if (!ga4.length) {
+    mkKPIs('kpis-ga4', [{ label:'Status', value:'No data', sub:'Run BigQuery script first' }]);
+    document.getElementById('ga4-tbody').innerHTML =
+      '<tr><td colspan="5"><div class="empty"><span class="empty-icon">🔄</span>Run <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px">python scripts/fetch_ga4_influencer.py</code> to populate</div></td></tr>';
+    return;
+  }
+
+  const totSess  = ga4.reduce((s,r)=>s+r.sessions,0);
+  const totTrans = ga4.reduce((s,r)=>s+r.transactions,0);
+  const totRev   = ga4.reduce((s,r)=>s+r.revenue,0);
+  const cvr      = totSess>0 ? (totTrans/totSess*100).toFixed(2) : 0;
+
+  mkKPIs('kpis-ga4', [
+    { label:'Sessions',     value: fN(totSess),   sub: 'utm_medium=influencer' },
+    { label:'Transactions', value: fN(totTrans),  sub: '' },
+    { label:'Revenue',      value: fM(totRev),    sub: 'GA4 attributed' },
+    { label:'Conv. Rate',   value: cvr+'%',       sub: '' },
+  ]);
+
+  dc('ga4-sess');
+  const byWk = {};
+  ga4.forEach(r => {
+    const w = getMonday(r.date);
+    if (!byWk[w]) byWk[w]={sessions:0};
+    byWk[w].sessions += r.sessions;
+  });
+  const wks = Object.keys(byWk).sort().slice(-20);
+  charts['ga4-sess'] = new Chart(el('ch-ga4-sess'), {
+    type:'line',
+    data:{ labels: wks.map(w=>fDateShort(w)),
+      datasets:[{ data: wks.map(w=>byWk[w].sessions),
+        borderColor:'#c9a84c', backgroundColor:'rgba(201,168,76,0.07)', fill:true,
+        borderWidth:2, pointRadius:2, tension:.4 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{ x:{ ticks:{...TX,maxRotation:45}, grid:GR }, y:{ ticks:TX, grid:GR } }
+    }
+  });
+
+  dc('ga4-rev');
+  const byCr = {};
+  ga4.forEach(r => { byCr[r.creator] = (byCr[r.creator]||0)+r.revenue; });
+  const crE = Object.entries(byCr).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  charts['ga4-rev'] = new Chart(el('ch-ga4-rev'), {
+    type:'bar',
+    data:{ labels: crE.map(([n])=>n), datasets:[{
+      data: crE.map(([,v])=>v),
+      backgroundColor: crE.map(([n])=>cc(n)+'55'),
+      borderColor: crE.map(([n])=>cc(n)),
+      borderWidth:1.5, borderRadius:4
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{display:false} },
+      scales:{ x:{ ticks:{...TX,callback:v=>fM(v)}, grid:GR }, y:{ ticks:TX, grid:{display:false} } }
+    }
+  });
+
+  const crTable = Object.entries(
+    ga4.reduce((m,r)=>{
+      if(!m[r.creator]) m[r.creator]={sessions:0,transactions:0,revenue:0};
+      m[r.creator].sessions    += r.sessions;
+      m[r.creator].transactions += r.transactions;
+      m[r.creator].revenue     += r.revenue;
+      return m;
+    },{})
+  ).sort((a,b)=>b[1].revenue-a[1].revenue);
+
+  document.getElementById('ga4-tbody').innerHTML = crTable.map(([cr,v])=>`
+    <tr>
+      <td>${cr}</td>
+      <td>${fN(v.sessions)}</td>
+      <td>${fN(v.transactions)}</td>
+      <td>${fM(v.revenue)}</td>
+      <td>${v.sessions>0?(v.transactions/v.sessions*100).toFixed(2)+'%':'—'}</td>
+    </tr>`).join('');
+}
+
+// ─────────────────────────────────────
+// RENDER ROUTER
+// ─────────────────────────────────────
+function render() {
+  const t = state.activeTab;
+  if (t==='overview') renderOverview();
+  if (t==='paid')     renderPaid();
+  if (t==='organic')  renderOrganic();
+  if (t==='ga4')      renderGA4();
+}
+
+// ─────────────────────────────────────
+// INTERACTIONS
+// ─────────────────────────────────────
+function toggleCreator(name) {
+  state.creator = state.creator === name ? 'all' : name;
+  document.querySelectorAll('[data-creator]').forEach(b =>
+    b.classList.toggle('active', b.dataset.creator===state.creator || (state.creator==='all'&&b.dataset.creator==='all'))
+  );
+  render();
+}
+
+document.querySelectorAll('.fbtn[data-period]').forEach(btn =>
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.fbtn[data-period]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    state.period = btn.dataset.period;
+    render();
+  })
+);
+
+document.querySelectorAll('.tab').forEach(tab =>
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    state.activeTab = tab.dataset.tab;
+    document.getElementById('tab-'+state.activeTab).classList.add('active');
+    render();
+  })
+);
+
+// Paid table sort
+document.getElementById('paid-table').querySelectorAll('thead th[data-sort]').forEach(th =>
+  th.addEventListener('click', () => {
+    document.getElementById('paid-table').querySelectorAll('thead th').forEach(t=>t.classList.remove('sorted'));
+    th.classList.add('sorted');
+    if (paidSort.col===th.dataset.sort) paidSort.dir*=-1;
+    else { paidSort.col=th.dataset.sort; paidSort.dir=-1; }
+    renderPaid();
+  })
+);
+
+// Organic table sort
+document.getElementById('org-table').querySelectorAll('thead th[data-sort]').forEach(th =>
+  th.addEventListener('click', () => {
+    document.getElementById('org-table').querySelectorAll('thead th').forEach(t=>t.classList.remove('sorted'));
+    th.classList.add('sorted');
+    if (orgSort.col===th.dataset.sort) orgSort.dir*=-1;
+    else { orgSort.col=th.dataset.sort; orgSort.dir=-1; }
+    renderOrganic();
+  })
+);
+
+function buildCreatorButtons() {
+  const names = [...new Set(D.paid.map(r=>r.creator_name))].sort();
+  const span = document.getElementById('creator-btns');
+  span.innerHTML = names.map(name =>
+    `<button class="fbtn" data-creator="${name}" onclick="toggleCreator(${JSON.stringify(name)})">${shortName(name)}</button>`
+  ).join('');
+}
+
+// ─────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────
+function el(id) { return document.getElementById(id).getContext('2d'); }
+
+function fN(n) {
+  n=+n; if(!n) return '0';
+  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if(n>=1e3) return (n/1e3).toFixed(1)+'K';
+  return Math.round(n).toString();
+}
+function fM(n) {
+  return '£'+(+n).toLocaleString('en-GB',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+function fDate(d) {
+  return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+}
+function fDateShort(d) {
+  return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+}
+function getMonday(dateStr) {
+  const d = new Date(dateStr); const day = d.getDay();
+  const diff = d.getDate() - day + (day===0?-6:1);
+  return new Date(new Date(dateStr).setDate(diff)).toISOString().slice(0,10);
+}
+function shortName(name) {
+  if (name.includes('(')) return name.split('(')[0].trim()+' ('+name.replace(/.*\(/,'').replace(')','').split(' ')[0]+')';
+  return name.split(' ').slice(0,2).join(' ');
+}
+
+// ─────────────────────────────────────
+// INIT
+// ─────────────────────────────────────
+loadAll();
+</script>
+</body>
+</html>
