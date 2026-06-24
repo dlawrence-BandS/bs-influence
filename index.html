@@ -6,171 +6,563 @@
 <title>B&S Influence — Social Performance</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
   :root {
-    --bg:#0e0e10; --surface:#16161a; --surface2:#1e1e24;
-    --border:rgba(255,255,255,0.07);
-    --gold:#c9a84c; --gold-pale:rgba(201,168,76,0.12); --gold-glow:rgba(201,168,76,0.22);
-    --text:#f0ede8; --muted:rgba(240,237,232,0.42);
-    --green:#7eb8a4; --green-pale:rgba(126,184,164,0.14);
-    --red:#e07070;
-    --radius:12px; --radius-lg:18px;
+    --bg:         #0d0a1a;
+    --bg2:        #130f24;
+    --surface:    #1a1530;
+    --surface2:   #221d3a;
+    --border:     rgba(255,255,255,0.08);
+    --border2:    rgba(255,255,255,0.14);
+    --neon:       #b8f000;
+    --neon2:      #7fff00;
+    --neon-pale:  rgba(184,240,0,0.1);
+    --neon-glow:  rgba(184,240,0,0.2);
+    --purple:     #8b5cf6;
+    --purple-pale:rgba(139,92,246,0.15);
+    --pink:       #ec4899;
+    --text:       #f0edf8;
+    --muted:      rgba(240,237,248,0.42);
+    --radius:     10px;
+    --radius-lg:  16px;
   }
+
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
 
   /* ── HEADER ── */
-  header{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,16,0.95);backdrop-filter:blur(14px);z-index:100}
-  .logo{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:.02em}
-  .logo em{color:var(--gold);font-style:normal}
-  .header-right{display:flex;align-items:center;gap:14px}
-  .freshness{font-size:12px;color:var(--muted)}
-  .freshness strong{color:var(--text)}
-  .pill{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;background:var(--gold-pale);color:var(--gold);border:1px solid rgba(201,168,76,.28)}
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(13,10,26,0.96);
+    backdrop-filter: blur(16px);
+    z-index: 100;
+  }
+
+  .logo-wrap { display: flex; align-items: center; gap: 16px; }
+
+  .logo-svg { height: 28px; width: auto; }
+  .logo-svg path { fill: #ffffff !important; }
+
+  .logo-divider {
+    width: 1px; height: 24px;
+    background: var(--border2);
+  }
+
+  .logo-sub {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--neon);
+  }
+
+  .header-right { display: flex; align-items: center; gap: 12px; }
+
+  .hdr-stat {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 5px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+  }
+  .hdr-stat strong { color: var(--text); }
+
+  .pill {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 5px 13px;
+    border-radius: 20px;
+    background: var(--neon-pale);
+    color: var(--neon);
+    border: 1px solid rgba(184,240,0,.3);
+  }
 
   /* ── TABS ── */
-  .tabs{display:flex;padding:0 40px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:65px;z-index:90}
-  .tab{font-size:13px;font-weight:500;padding:13px 18px;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .18s;white-space:nowrap}
-  .tab:hover{color:var(--text)}
-  .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+  .tabs {
+    display: flex;
+    padding: 0 40px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    position: sticky;
+    top: 61px;
+    z-index: 90;
+  }
+
+  .tab {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 13px 18px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    transition: all .18s;
+    white-space: nowrap;
+    letter-spacing: .02em;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--neon); border-bottom-color: var(--neon); }
 
   /* ── FILTERS ── */
-  .filters{display:flex;align-items:center;gap:9px;padding:12px 40px;border-bottom:1px solid var(--border);background:rgba(14,14,16,0.8);overflow-x:auto;flex-wrap:nowrap}
-  .flabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-right:2px;white-space:nowrap;flex-shrink:0}
-  .fbtn{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;transition:all .17s;white-space:nowrap;flex-shrink:0}
-  .fbtn:hover{color:var(--text);border-color:rgba(255,255,255,.18)}
-  .fbtn.active{background:var(--gold-pale);border-color:rgba(201,168,76,.38);color:var(--gold)}
-  .fdiv{width:1px;height:16px;background:var(--border);margin:0 2px;flex-shrink:0}
+  .filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 40px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,10,26,.85);
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .flabel {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--muted);
+    margin-right: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .fbtn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .16s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .fbtn:hover { color: var(--text); border-color: var(--border2); }
+  .fbtn.active {
+    background: var(--neon-pale);
+    border-color: rgba(184,240,0,.4);
+    color: var(--neon);
+  }
+  .fdiv { width:1px; height:16px; background:var(--border); margin:0 2px; flex-shrink:0; }
 
   /* ── MAIN ── */
-  main{padding:28px 40px;max-width:1440px;margin:0 auto}
-  .tab-panel{display:none}
-  .tab-panel.active{display:block}
+  main { padding: 28px 40px; max-width: 1440px; margin: 0 auto; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
 
   /* ── SECTION HEADER ── */
-  .sh{display:flex;align-items:baseline;gap:10px;margin-bottom:16px;margin-top:32px}
-  .sh:first-child{margin-top:0}
-  .sh h2{font-family:'DM Serif Display',serif;font-size:21px}
-  .sh-sub{font-size:13px;color:var(--muted)}
+  .sh { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; margin-top: 32px; }
+  .sh:first-child { margin-top: 0; }
+  .sh h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -.01em;
+  }
+  .sh-sub { font-size: 12px; color: var(--muted); }
 
   /* ── KPIs ── */
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
-  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:17px 19px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
-  .kpi:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.13)}
-  .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);opacity:0;transition:opacity .2s}
-  .kpi:hover::before,.kpi.hi::before{opacity:1}
-  .kpi-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:5px}
-  .kpi-val{font-family:'DM Serif Display',serif;font-size:28px;line-height:1;color:var(--text);margin-bottom:3px}
-  .kpi-sub{font-size:11px;color:var(--muted)}
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit,minmax(155px,1fr)); gap: 12px; margin-bottom: 24px; }
+
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s, border-color .2s;
+  }
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon), var(--purple));
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .kpi:hover { transform: translateY(-2px); border-color: var(--border2); }
+  .kpi:hover::before, .kpi.hi::before { opacity: 1; }
+
+  .kpi-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .kpi-val {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 3px;
+    letter-spacing: -.02em;
+  }
+  .kpi.hi .kpi-val { color: var(--neon); }
+  .kpi-sub { font-size: 11px; color: var(--muted); }
 
   /* ── CHART CARDS ── */
-  .g2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
-  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
-  .g2e{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-  .cc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
-  .cc-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:2px}
-  .cc-head{font-family:'DM Serif Display',serif;font-size:16px;color:var(--text);margin-bottom:16px}
-  .cw{position:relative}
+  .g2  { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .g3  { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .g2e { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+  .cc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cc::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(184,240,0,.2), transparent);
+  }
+
+  .cc-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .cc-head {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
 
   /* ── CREATOR CARDS ── */
-  .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:24px}
-  .ccard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer;transition:all .22s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden}
-  .ccard::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top left,var(--gold-glow),transparent 60%);opacity:0;transition:opacity .28s;pointer-events:none}
-  .ccard:hover{transform:translateY(-3px) scale(1.01);border-color:rgba(201,168,76,.28);box-shadow:0 10px 35px rgba(0,0,0,.38)}
-  .ccard:hover::after{opacity:1}
-  .ccard.sel{border-color:var(--gold);background:var(--surface2)}
-  .ctop{display:flex;align-items:center;gap:11px;margin-bottom:13px;position:relative;z-index:1}
-  .cav{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:16px;color:#0e0e10;flex-shrink:0;font-style:italic}
-  .cinfo{flex:1;min-width:0}
-  .cname{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .chandle{font-size:11px;color:var(--muted)}
-  .ctier{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;padding:2px 7px;border-radius:8px;flex-shrink:0}
-  .t-Macro{background:rgba(201,168,76,.14);color:var(--gold)}
-  .t-Mid{background:rgba(126,184,164,.14);color:var(--green)}
-  .t-Micro{background:rgba(255,255,255,.07);color:var(--muted)}
-  .cstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;position:relative;z-index:1}
-  .csm-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:1px}
-  .csm-val{font-family:'DM Serif Display',serif;font-size:17px;line-height:1;color:var(--text)}
-  .ctags{display:flex;gap:5px;margin-top:11px;flex-wrap:wrap;position:relative;z-index:1}
-  .tag{font-size:10px;padding:2px 7px;border-radius:5px;background:var(--surface2);border:1px solid var(--border);color:var(--muted)}
-  .tag-p{background:var(--gold-pale);border-color:rgba(201,168,76,.2);color:var(--gold)}
-  .tag-o{background:var(--green-pale);border-color:rgba(126,184,164,.2);color:var(--green)}
+  .cgrid { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 12px; margin-bottom: 24px; }
+
+  .ccard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    cursor: pointer;
+    transition: all .22s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+    overflow: hidden;
+  }
+  .ccard::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top left, var(--neon-glow), transparent 65%);
+    opacity: 0;
+    transition: opacity .28s;
+    pointer-events: none;
+  }
+  .ccard:hover { transform: translateY(-3px) scale(1.01); border-color: rgba(184,240,0,.25); box-shadow: 0 8px 32px rgba(0,0,0,.4), 0 0 0 1px rgba(184,240,0,.1); }
+  .ccard:hover::before { opacity: 1; }
+  .ccard.sel { border-color: var(--neon); background: var(--surface2); }
+
+  .ctop { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; position: relative; z-index: 1; }
+  .cav {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 700;
+    color: #0d0a1a; flex-shrink: 0;
+  }
+  .cinfo { flex: 1; min-width: 0; }
+  .cname { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chandle { font-size: 11px; color: var(--muted); }
+  .ctier {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .09em; padding: 2px 7px; border-radius: 8px; flex-shrink: 0;
+  }
+  .t-Macro { background: rgba(184,240,0,.14); color: var(--neon); }
+  .t-Mid   { background: rgba(139,92,246,.14); color: var(--purple); }
+  .t-Micro { background: rgba(255,255,255,.07); color: var(--muted); }
+
+  .cstats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; position: relative; z-index: 1; }
+  .csm-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 1px; }
+  .csm-val { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; line-height: 1; color: var(--text); }
+
+  .ctags { display: flex; gap: 5px; margin-top: 11px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .tag { font-size: 10px; padding: 2px 7px; border-radius: 5px; background: var(--surface2); border: 1px solid var(--border); color: var(--muted); }
+  .tag-p { background: var(--neon-pale); border-color: rgba(184,240,0,.2); color: var(--neon); }
+  .tag-o { background: var(--purple-pale); border-color: rgba(139,92,246,.2); color: var(--purple); }
 
   /* ── TABLES ── */
-  .tw{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:24px}
-  table{width:100%;border-collapse:collapse}
-  thead th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:11px 13px;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;user-select:none}
-  thead th:hover{color:var(--text)}
-  thead th.sorted{color:var(--gold)}
-  tbody tr{border-bottom:1px solid var(--border);transition:background .13s}
-  tbody tr:last-child{border-bottom:none}
-  tbody tr:hover{background:rgba(255,255,255,.025)}
-  tbody td{padding:10px 13px;font-size:13px;color:var(--text);vertical-align:middle}
-  .td-m{color:var(--muted)}
+  .tw { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 24px; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--muted);
+    padding: 11px 13px; text-align: left;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer; white-space: nowrap; user-select: none;
+    background: var(--bg2);
+  }
+  thead th:hover { color: var(--text); }
+  thead th.sorted { color: var(--neon); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background .13s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(184,240,0,.03); }
+  tbody td { padding: 10px 13px; font-size: 13px; color: var(--text); vertical-align: middle; }
+  .td-m { color: var(--muted); }
 
-  /* type badges */
-  .tbadge{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 6px;border-radius:4px;letter-spacing:.07em}
-  .tb-Reel{background:rgba(139,92,246,.15);color:#a78bfa}
-  .tb-Carousel{background:rgba(59,130,246,.15);color:#93c5fd}
-  .tb-Static{background:rgba(255,255,255,.07);color:var(--muted)}
+  .tbadge { font-size: 9px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; letter-spacing: .07em; }
+  .tb-Reel     { background: rgba(139,92,246,.2); color: #a78bfa; }
+  .tb-Carousel { background: rgba(59,130,246,.2); color: #93c5fd; }
+  .tb-Static   { background: rgba(255,255,255,.07); color: var(--muted); }
 
-  /* editable product field */
-  .prod-input{background:transparent;border:none;border-bottom:1px dashed rgba(255,255,255,.15);color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:2px 4px;width:140px;outline:none;transition:border-color .2s}
-  .prod-input:focus{border-bottom-color:var(--gold);background:rgba(201,168,76,.06)}
-  .prod-input::placeholder{color:var(--muted);font-size:11px}
-  .save-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-left:6px;opacity:0;transition:opacity .3s;vertical-align:middle}
-  .save-dot.show{opacity:1}
+  /* product input */
+  .prod-input {
+    background: transparent; border: none;
+    border-bottom: 1px dashed rgba(184,240,0,.2);
+    color: var(--text); font-family: 'Inter', sans-serif;
+    font-size: 12px; padding: 2px 4px; width: 140px;
+    outline: none; transition: border-color .2s;
+  }
+  .prod-input:focus { border-bottom-color: var(--neon); background: rgba(184,240,0,.05); }
+  .prod-input::placeholder { color: var(--muted); font-size: 11px; }
 
-  /* reach note */
-  .reach-note{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
-  .reach-na{color:rgba(240,237,232,.25);font-size:12px}
+  .save-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--neon); margin-left: 6px; opacity: 0; transition: opacity .3s; vertical-align: middle; }
+  .save-dot.show { opacity: 1; }
 
   /* info box */
-  .info-box{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--radius);padding:13px 17px;margin-bottom:18px;font-size:13px;color:var(--muted);line-height:1.7}
-  .info-box strong{color:var(--text)}
-  .info-box code{background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;font-size:12px}
+  .info-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--neon);
+    border-radius: var(--radius);
+    padding: 13px 17px; margin-bottom: 18px;
+    font-size: 13px; color: var(--muted); line-height: 1.7;
+  }
+  .info-box strong { color: var(--text); }
+  .info-box code { background: rgba(255,255,255,.07); padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+
+  /* reach note */
+  .reach-na { color: rgba(240,237,248,.2); font-size: 12px; }
 
   /* empty */
-  .empty{text-align:center;padding:40px;color:var(--muted)}
-  .empty-icon{font-size:34px;margin-bottom:10px;display:block}
-
-  /* platform dot */
-  .pldot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
-  .pl-Instagram{background:#e1306c}
+  .empty { text-align: center; padding: 40px; color: var(--muted); }
+  .empty-icon { font-size: 34px; margin-bottom: 10px; display: block; }
 
   /* responsive */
-  @media(max-width:900px){
-    header,.tabs,.filters{padding-left:16px;padding-right:16px}
-    main{padding:16px}
-    .g2,.g3,.g2e{grid-template-columns:1fr}
-    .kpis{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:900px) {
+    header,.tabs,.filters { padding-left:16px; padding-right:16px; }
+    main { padding: 16px; }
+    .g2,.g3,.g2e { grid-template-columns: 1fr; }
+    .kpis { grid-template-columns: repeat(2,1fr); }
   }
 
   /* animate */
-  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  .au{animation:fadeUp .32s ease both}
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .au { animation: fadeUp .3s ease both; }
   .au:nth-child(1){animation-delay:.04s}.au:nth-child(2){animation-delay:.08s}
   .au:nth-child(3){animation-delay:.12s}.au:nth-child(4){animation-delay:.16s}
   .au:nth-child(5){animation-delay:.20s}.au:nth-child(6){animation-delay:.24s}
 
-  ::-webkit-scrollbar{width:5px;height:5px}
-  ::-webkit-scrollbar-track{background:var(--bg)}
-  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: rgba(184,240,0,.15); border-radius: 3px; }
+
+  /* ── INFLUENSCORE ── */
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 16px; margin-bottom: 28px; }
+
+  .score-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: transform .2s, border-color .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .score-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at top right, rgba(184,240,0,.06), transparent 60%);
+    pointer-events: none;
+  }
+  .score-card:hover { transform: translateY(-2px); border-color: rgba(184,240,0,.2); }
+
+  .score-card-top {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .score-ring-wrap {
+    position: relative; flex-shrink: 0;
+    width: 90px; height: 90px;
+  }
+  .score-ring-wrap canvas { position: absolute; top: 0; left: 0; }
+  .score-ring-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .score-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 700; line-height: 1;
+    color: var(--neon);
+  }
+  .score-label {
+    font-size: 9px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: var(--muted); margin-top: 2px;
+  }
+
+  .score-creator-info { flex: 1; min-width: 0; }
+  .score-creator-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 700;
+    margin-bottom: 4px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .score-creator-handle { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .score-rank {
+    font-size: 11px; font-weight: 700;
+    color: var(--bg); padding: 2px 8px;
+    border-radius: 20px; display: inline-block;
+  }
+
+  .score-bars { display: flex; flex-direction: column; gap: 8px; }
+  .score-bar-row { display: flex; align-items: center; gap: 8px; }
+  .score-bar-label {
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); width: 80px; flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .score-bar-track {
+    flex: 1; height: 5px; background: rgba(255,255,255,.07);
+    border-radius: 3px; overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%; border-radius: 3px;
+    transition: width .6s cubic-bezier(.34,1.56,.64,1);
+  }
+  .score-bar-val {
+    font-size: 11px; font-weight: 600;
+    width: 32px; text-align: right; flex-shrink: 0;
+    color: var(--text);
+  }
+
+  /* leaderboard table */
+  .leaderboard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 28px; }
+  .lb-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 80px 80px 80px 80px 80px 70px;
+    align-items: center;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    transition: background .13s;
+    gap: 8px;
+  }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-row:hover { background: rgba(184,240,0,.03); }
+  .lb-header {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: var(--muted); background: var(--bg2);
+    padding: 10px 18px;
+    display: grid;
+    grid-template-columns: 40px 1fr 80px 80px 80px 80px 80px 70px;
+    gap: 8px;
+  }
+  .lb-rank {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px; font-weight: 700; color: var(--muted);
+  }
+  .lb-rank.r1 { color: #ffd700; }
+  .lb-rank.r2 { color: #c0c0c0; }
+  .lb-rank.r3 { color: #cd7f32; }
+  .lb-name { font-weight: 600; font-size: 13px; }
+  .lb-score {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; font-weight: 700; color: var(--neon);
+  }
+  .lb-val { font-size: 12px; color: var(--muted); }
+  .lb-val strong { color: var(--text); font-weight: 600; }
+
+  /* score badge on creator cards */
+  .score-badge {
+    position: absolute; top: 14px; right: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: var(--bg);
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">B&amp;S <em>Influence</em></div>
+  <div class="logo-wrap">
+    <svg class="logo-svg" viewBox="0 0 160 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <path d="M10.4174 9.51916V9.45291C11.1531 9.03266 11.7592 8.41831 12.1695 7.67696C12.5798 6.93561 12.7784 6.09576 12.7437 5.24916C12.7437 2.59145 10.8885 0.0957031 6.78783 0.0957031H1.1853V20.4592H7.31056C11.7278 20.4592 14.0248 17.588 14.0248 14.437C14.0767 13.3283 13.7469 12.2353 13.0905 11.3404C12.434 10.4454 11.4905 9.80259 10.4174 9.51916ZM4.66755 3.15097H6.29459C8.38542 3.15097 9.29093 4.35835 9.29093 5.86758C9.29093 7.3768 8.26761 8.59155 6.3461 8.59155H4.68964L4.66755 3.15097ZM6.87617 17.3966H4.66755V11.6468H7.2811C9.23205 11.6468 10.4762 12.6996 10.4762 14.4297C10.4983 16.4984 9.23204 17.3966 6.90563 17.3966H6.87617Z" fill="white"/>
+        <path d="M20.3119 15.3573H27.1366L28.9992 20.4518H32.6802L25.0089 0H22.3365L14.9155 20.4518H18.4935L20.3119 15.3573ZM22.7267 8.31178C23.2494 6.73629 23.5365 5.83813 23.7132 5.13137H23.75C23.9267 5.80868 24.1844 6.7363 24.7071 8.28234L26.047 12.3241H21.3058L22.7267 8.31178Z" fill="white"/>
+        <path d="M45.7406 14.518C44.7247 12.6701 43.9443 11.5732 43.3627 11.2124V11.1535C44.4816 10.8166 45.4568 10.1175 46.1351 9.166C46.8134 8.21451 47.1563 7.06461 47.11 5.89702C47.1722 4.88097 46.9356 3.86895 46.4292 2.98585C45.9229 2.10275 45.1691 1.38724 44.2608 0.927615C42.9859 0.316424 41.5801 0.0282001 40.1675 0.0883387H34.9331V20.4518H38.4227V12.5155H40.0792C40.543 12.6333 41.2424 13.4726 42.17 15.291L44.9308 20.4445H48.9358L45.7406 14.518ZM42.1111 8.95964C41.4669 9.32801 40.7325 9.50905 39.9908 9.48234H38.4227V3.11415H40.0203C40.7814 3.06582 41.5371 3.27028 42.17 3.69575C42.5837 3.97999 42.9178 4.36525 43.1407 4.81494C43.3636 5.26462 43.4679 5.76381 43.4437 6.26512C43.4793 6.79192 43.3748 7.31879 43.1408 7.79208C42.9067 8.26538 42.5514 8.66823 42.1111 8.95964Z" fill="white"/>
+        <path d="M65.5814 0.0957031H61.5175L54.98 8.77559H54.8917V0.0957031H51.4094V20.4592H54.8917V11.529H54.98L61.7458 20.4592H66.0158L57.888 9.98297L65.5814 0.0957031Z" fill="white"/>
+        <path d="M71.8466 11.5879H77.9718V8.56209H71.8466V3.12152H78.0013L78.9362 0.0957031H68.3569V20.4592H78.9583V17.426H71.8466V11.5879Z" fill="white"/>
+        <path d="M90.8553 11.2124V11.1535C91.9756 10.8189 92.9523 10.1203 93.631 9.16829C94.3096 8.21627 94.6515 7.06516 94.6026 5.89702C94.6665 4.88161 94.4313 3.86976 93.9263 2.98656C93.4212 2.10336 92.6684 1.38755 91.7609 0.927617C90.4833 0.316391 89.0752 0.0281966 87.6602 0.0883406H82.4331V20.4518H85.9154V12.5155H87.5718C88.043 12.6333 88.735 13.4726 89.6627 15.291L92.4234 20.4445H96.4358L93.2407 14.5106C92.2173 12.6848 91.4369 11.5585 90.8553 11.2124ZM89.6111 8.95964C88.9669 9.32801 88.2325 9.50905 87.4908 9.48234H85.9154V3.11415H87.5129C88.2741 3.06471 89.0302 3.26926 89.6627 3.69575C90.0777 3.97914 90.4133 4.36402 90.6375 4.81376C90.8617 5.2635 90.9671 5.76313 90.9437 6.26512C90.9793 6.79193 90.8748 7.31879 90.6408 7.79209C90.4067 8.26539 90.0514 8.66823 89.6111 8.95964Z" fill="white"/>
+        <path d="M3.99758 32.7539C3.99758 31.2815 5.17551 30.7367 6.41234 30.7367C7.89386 30.7747 9.342 31.1849 10.6234 31.9293V28.8005C9.27522 28.157 7.7955 27.8369 6.30189 27.8655C2.62085 27.8655 0.55948 30.2802 0.55948 33.0189C0.55948 38.7319 8.20869 38.2754 8.20869 41.9418C8.20869 43.5614 6.73627 44.1504 5.26386 44.1504C3.81758 44.1425 2.4136 43.6616 1.26623 42.781L0.00732422 45.3946C1.57351 46.479 3.44012 47.0454 5.34483 47.0142C8.96697 47.0142 11.6468 44.9676 11.6468 41.6473C11.6394 35.7355 3.99758 36.1846 3.99758 32.7539Z" fill="white"/>
+        <path d="M12.6406 28.0348V30.825H17.7867V46.7565H21.0113V30.825H25.7598L26.5918 28.0348H12.6406Z" fill="white"/>
+        <path d="M35.4411 27.8654C30.214 27.8654 26.533 31.7821 26.533 37.4361C26.533 43.0902 30.214 47.0068 35.4411 47.0068C40.6682 47.0068 44.3492 43.1712 44.3492 37.4361C44.3492 31.7011 40.6829 27.8654 35.4411 27.8654ZM35.4411 44.1725C32.1723 44.1725 29.9711 41.6988 29.9711 37.4656C29.9711 33.2324 32.1797 30.7367 35.4411 30.7367C38.7025 30.7367 40.9111 33.3208 40.9111 37.4656C40.9111 41.6105 38.6878 44.1725 35.4411 44.1725Z" fill="white"/>
+        <path d="M60.0229 38.003C60.0229 39.0264 60.0229 40.1675 60.0744 41.154H60.0229C59.4855 40.3074 58.845 39.365 58.0351 38.2607L50.5037 28.0348H47.3086V46.7565H50.5258V36.1331C50.5258 35.0803 50.5258 33.9981 50.4743 33.2324H50.5258C51.1148 34.1159 51.7332 35.0508 52.5136 36.1036L60.3174 46.7565H63.2622V28.0348H60.0155L60.0229 38.003Z" fill="white"/>
+        <path d="M70.352 38.6067H76.0134V35.8239H70.352V30.825H76.0429L76.8969 28.0348H67.1348V46.7565H76.9263V43.9737H70.352V38.6067Z" fill="white"/>
+        <path d="M91.724 35.765H83.1398V28.0348H79.9226V46.7565H83.1398V38.6583H91.724V46.7565H94.9707V28.0348H91.724V35.765Z" fill="white"/>
+        <path d="M106.875 27.8654C101.648 27.8654 97.9746 31.7821 97.9746 37.4361C97.9746 43.0902 101.656 47.0068 106.875 47.0068C112.095 47.0068 115.783 43.1712 115.783 37.4361C115.783 31.7011 112.095 27.8654 106.875 27.8654ZM106.875 44.1725C103.607 44.1725 101.405 41.6988 101.405 37.4656C101.405 33.2324 103.614 30.7367 106.875 30.7367C110.137 30.7367 112.353 33.3208 112.353 37.4656C112.353 41.6105 110.122 44.1725 106.875 44.1725Z" fill="white"/>
+        <path d="M129.992 39.5123C130.021 40.3892 129.855 41.2617 129.506 42.0669C129.188 42.7445 128.671 43.3091 128.024 43.6853C127.377 44.0615 126.63 44.2314 125.884 44.1724C125.138 44.2314 124.392 44.0615 123.744 43.6853C123.097 43.3091 122.58 42.7445 122.262 42.0669C121.922 41.2695 121.759 40.4081 121.784 39.5417V28.0348H118.566V39.7699C118.525 41.014 118.753 42.2522 119.236 43.3994C120.304 45.8436 122.615 47.0363 125.862 47.0363C129.109 47.0363 131.421 45.8436 132.488 43.4289C132.977 42.2653 133.205 41.009 133.158 39.7478V28.0127H129.941L129.992 39.5123Z" fill="white"/>
+        <path d="M139.636 32.7539C139.636 31.2814 140.814 30.7367 142.051 30.7367C143.533 30.7722 144.982 31.1825 146.262 31.9293V28.8004C144.917 28.1569 143.439 27.8367 141.948 27.8654C138.267 27.8654 136.206 30.2802 136.206 33.0189C136.206 38.7319 143.848 38.2754 143.848 41.9417C143.848 43.5614 142.375 44.1504 140.903 44.1504C139.459 44.1408 138.058 43.66 136.912 42.781L135.654 45.4166C137.22 46.5002 139.086 47.0665 140.991 47.0363C144.613 47.0363 147.3 44.9896 147.3 41.6693C147.286 35.7355 139.636 36.1846 139.636 32.7539Z" fill="white"/>
+        <path d="M153.426 43.9737V38.6067H159.087V35.8239H153.426V30.825H159.109L159.971 28.0348H150.208V46.7565H160V43.9737H153.426Z" fill="white"/>
+      </g>
+    </svg>
+    <div class="logo-divider"></div>
+    <span class="logo-sub">Influence</span>
+  </div>
   <div class="header-right">
-    <span class="freshness">Nov 2025 – <strong>Jun 2026</strong></span>
+    <span class="hdr-stat">Nov 2025 – <strong>Jun 2026</strong></span>
     <span class="pill" id="hdr-pill">Loading…</span>
   </div>
 </header>
 
 <div class="tabs">
   <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="scores">InfluenScores</div>
   <div class="tab" data-tab="paid">Paid Ads</div>
   <div class="tab" data-tab="organic">Organic / Gifted</div>
   <div class="tab" data-tab="ga4">GA4 / UTM</div>
@@ -189,62 +581,76 @@
 
 <main>
 
-  <!-- ══ OVERVIEW ══ -->
+  <!-- OVERVIEW -->
   <div class="tab-panel active" id="tab-overview">
     <div class="kpis" id="kpis-ov"></div>
-
     <div class="g2">
       <div class="cc">
         <div class="cc-title">Paid — weekly reach by creator</div>
         <div class="cc-head">Reach Over Time</div>
-        <div class="cw" style="height:210px"><canvas id="ch-ov-timeline"></canvas></div>
+        <div style="height:210px"><canvas id="ch-ov-timeline"></canvas></div>
       </div>
       <div class="cc">
         <div class="cc-title">Revenue attribution</div>
         <div class="cc-head">Conv. Value Split</div>
-        <div class="cw" style="height:210px"><canvas id="ch-ov-donut"></canvas></div>
+        <div style="height:210px"><canvas id="ch-ov-donut"></canvas></div>
       </div>
     </div>
-
     <div class="g3">
       <div class="cc">
         <div class="cc-title">Paid performance</div>
         <div class="cc-head">ROAS by Creator</div>
-        <div class="cw" style="height:175px"><canvas id="ch-ov-roas"></canvas></div>
+        <div style="height:175px"><canvas id="ch-ov-roas"></canvas></div>
       </div>
       <div class="cc">
         <div class="cc-title">Spend vs. revenue</div>
-        <div class="cc-head">Efficiency Scatter</div>
-        <div class="cw" style="height:175px"><canvas id="ch-ov-scatter"></canvas></div>
+        <div class="cc-head">Efficiency</div>
+        <div style="height:175px"><canvas id="ch-ov-scatter"></canvas></div>
       </div>
       <div class="cc">
         <div class="cc-title">Organic engagement</div>
         <div class="cc-head">Likes + Comments</div>
-        <div class="cw" style="height:175px"><canvas id="ch-ov-orgeng"></canvas></div>
+        <div style="height:175px"><canvas id="ch-ov-orgeng"></canvas></div>
       </div>
     </div>
-
     <div class="sh"><h2>Creators</h2><span class="sh-sub" id="cr-filter-label">Click a card to filter all views</span></div>
     <div class="cgrid" id="creator-grid"></div>
   </div>
 
-  <!-- ══ PAID ADS ══ -->
+  <!-- SCORES -->
+  <div class="tab-panel" id="tab-scores">
+    <div class="sh" style="margin-top:0">
+      <h2>InfluenScore</h2>
+      <span class="sh-sub">Composite score across ROAS (30%), Conv. Value (25%), Reach (20%), Purchases (15%), Engagement (10%)</span>
+    </div>
+
+    <div class="lb-header">
+      <span>#</span><span>Creator</span>
+      <span>Score</span><span>ROAS</span>
+      <span>Conv. Val</span><span>Reach</span>
+      <span>Purchases</span><span>Engagement</span>
+    </div>
+    <div class="leaderboard" id="lb-table"></div>
+
+    <div class="sh"><h2>Creator Profiles</h2><span class="sh-sub">Breakdown by metric</span></div>
+    <div class="score-grid" id="score-grid"></div>
+  </div>
+
+  <!-- PAID -->
   <div class="tab-panel" id="tab-paid">
     <div class="kpis" id="kpis-paid"></div>
-
     <div class="g2e">
       <div class="cc">
         <div class="cc-title">Daily spend</div>
         <div class="cc-head">Ad Spend Over Time</div>
-        <div class="cw" style="height:200px"><canvas id="ch-paid-spend"></canvas></div>
+        <div style="height:200px"><canvas id="ch-paid-spend"></canvas></div>
       </div>
       <div class="cc">
         <div class="cc-title">Purchases by creator</div>
         <div class="cc-head">Conversions</div>
-        <div class="cw" style="height:200px"><canvas id="ch-paid-purch"></canvas></div>
+        <div style="height:200px"><canvas id="ch-paid-purch"></canvas></div>
       </div>
     </div>
-
     <div class="sh"><h2>Daily Breakdown</h2><span class="sh-sub" id="paid-lbl"></span></div>
     <div class="tw">
       <table id="paid-table">
@@ -263,23 +669,21 @@
     </div>
   </div>
 
-  <!-- ══ ORGANIC ══ -->
+  <!-- ORGANIC -->
   <div class="tab-panel" id="tab-organic">
     <div class="kpis" id="kpis-org"></div>
-
     <div class="g2e">
       <div class="cc">
         <div class="cc-title">Posts over time</div>
         <div class="cc-head">Monthly Activity</div>
-        <div class="cw" style="height:200px"><canvas id="ch-org-time"></canvas></div>
+        <div style="height:200px"><canvas id="ch-org-time"></canvas></div>
       </div>
       <div class="cc">
         <div class="cc-title">Engagement by content type</div>
         <div class="cc-head">Likes + Comments</div>
-        <div class="cw" style="height:200px"><canvas id="ch-org-type"></canvas></div>
+        <div style="height:200px"><canvas id="ch-org-type"></canvas></div>
       </div>
     </div>
-
     <div class="sh">
       <h2>Posts</h2>
       <span class="sh-sub" id="org-lbl"></span>
@@ -304,37 +708,34 @@
       </table>
     </div>
     <p style="font-size:12px;color:var(--muted);margin-top:-16px;margin-bottom:24px">
-      ⚠ Reach is only available where Meta shared it for third-party accounts (3 of 30 posts). Views (impressions) are more complete.
-      Product tags are editable — changes save automatically to your browser.
+      ⚠ Reach is only available where Meta shared it for third-party accounts. Product tags are editable — changes save automatically to your browser.
     </p>
   </div>
 
-  <!-- ══ GA4 ══ -->
+  <!-- GA4 -->
   <div class="tab-panel" id="tab-ga4">
     <div class="info-box">
-      <strong>How to populate:</strong> Run <code>python scripts/fetch_ga4_influencer.py</code> to pull <code>utm_medium=influencer</code> sessions &amp; revenue from BigQuery into <code>data/ga4_influencer.json</code>. Commit the file — dashboard picks it up on next load. The GitHub Action runs this automatically every Monday.
+      <strong>How to refresh:</strong> Run <code>python scripts/fetch_ga4_influencer.py</code> or double-click <code>refresh.bat</code> to pull <code>utm_medium=influencer</code> data from BigQuery. Commit the updated <code>data/ga4_influencer.json</code> and the dashboard updates automatically.
     </div>
-
     <div class="kpis" id="kpis-ga4"></div>
-
     <div class="g2e">
       <div class="cc">
         <div class="cc-title">Weekly sessions</div>
         <div class="cc-head">Traffic Over Time</div>
-        <div class="cw" style="height:200px"><canvas id="ch-ga4-sess"></canvas></div>
+        <div style="height:200px"><canvas id="ch-ga4-sess"></canvas></div>
       </div>
       <div class="cc">
         <div class="cc-title">Revenue by creator</div>
         <div class="cc-head">UTM-Attributed</div>
-        <div class="cw" style="height:200px"><canvas id="ch-ga4-rev"></canvas></div>
+        <div style="height:200px"><canvas id="ch-ga4-rev"></canvas></div>
       </div>
     </div>
-
     <div class="sh"><h2>Creator Breakdown</h2><span class="sh-sub">utm_medium=influencer</span></div>
     <div class="tw">
       <table>
         <thead><tr>
-          <th>Creator (utm_source)</th>
+          <th>Creator</th>
+          <th>Campaign</th>
           <th>Sessions</th>
           <th>Transactions</th>
           <th>Revenue</th>
@@ -351,51 +752,39 @@
 // ─────────────────────────────────────
 // STATE
 // ─────────────────────────────────────
-let D = { paid: [], organic: [], ga4: [] };
+let D = { paid:[], organic:[], ga4:[] };
 let charts = {};
-let state = { period: 'all', creator: 'all', activeTab: 'overview' };
-let paidSort = { col: 'date', dir: -1 };
-let orgSort  = { col: 'date', dir: -1 };
+let state = { period:'all', creator:'all', activeTab:'overview' };
+let paidSort = { col:'date', dir:-1 };
+let orgSort  = { col:'date', dir:-1 };
 
-// Product overrides — persisted in localStorage
-function loadProducts() {
-  try { return JSON.parse(localStorage.getItem('bs_influence_products') || '{}'); }
-  catch(e) { return {}; }
-}
-function saveProducts(map) {
-  try { localStorage.setItem('bs_influence_products', JSON.stringify(map)); } catch(e){}
-}
+function loadProducts() { try { return JSON.parse(localStorage.getItem('bs_influence_products')||'{}'); } catch(e){return{};} }
+function saveProducts(m) { try { localStorage.setItem('bs_influence_products',JSON.stringify(m)); }catch(e){} }
 let productMap = loadProducts();
 
 // ─────────────────────────────────────
-// COLOURS
+// COLOURS — neon green + purple palette
 // ─────────────────────────────────────
-const PALETTE = ['#c9a84c','#7eb8a4','#9b7fd4','#e07070','#6baed6','#fd8d3c','#a0c4ff','#ffadad','#caffbf'];
-const _cmap = {};
-let _ci = 0;
-function cc(name) {
-  if (!_cmap[name]) _cmap[name] = PALETTE[_ci++ % PALETTE.length];
-  return _cmap[name];
-}
+const PALETTE = ['#b8f000','#8b5cf6','#ec4899','#06b6d4','#f59e0b','#10b981','#f97316','#6366f1','#14b8a6'];
+const _cmap = {}; let _ci = 0;
+function cc(n) { if(!_cmap[n]) _cmap[n]=PALETTE[_ci++%PALETTE.length]; return _cmap[n]; }
 
 // ─────────────────────────────────────
-// LOAD DATA
+// LOAD
 // ─────────────────────────────────────
 async function loadAll() {
   try {
-    const [org, paid] = await Promise.all([
-      fetch('data/organic_posts.json').then(r => r.json()),
-      fetch('data/paid_ads.json').then(r => r.json()),
+    const [org,paid] = await Promise.all([
+      fetch('data/organic_posts.json').then(r=>r.json()),
+      fetch('data/paid_ads.json').then(r=>r.json()),
     ]);
     D.organic = org;
-    D.paid    = paid.map(r => ({ ...r, roas: r.spend > 0 ? r.conversion_value / r.spend : 0 }));
-  } catch(e) { console.error('Data load failed', e); }
-
+    D.paid    = paid.map(r=>({...r, roas: r.spend>0 ? r.conversion_value/r.spend : 0}));
+  } catch(e){ console.error('Data load failed',e); }
   try {
-    const ga4 = await fetch('data/ga4_influencer.json').then(r => r.json());
-    D.ga4 = ga4.rows || [];
-  } catch(e) { D.ga4 = []; }
-
+    const ga4 = await fetch('data/ga4_influencer.json').then(r=>r.json());
+    D.ga4 = ga4.rows||[];
+  } catch(e){ D.ga4=[]; }
   buildCreatorButtons();
   render();
 }
@@ -404,25 +793,22 @@ async function loadAll() {
 // FILTERS
 // ─────────────────────────────────────
 function inPeriod(d) {
-  if (state.period === 'all') return true;
-  const cut = new Date(); cut.setDate(cut.getDate() - +state.period);
-  return new Date(d) >= cut;
+  if(state.period==='all') return true;
+  const cut=new Date(); cut.setDate(cut.getDate()-+state.period);
+  return new Date(d)>=cut;
 }
-function fPaid()    { return D.paid.filter(r => inPeriod(r.date) && (state.creator==='all' || r.creator_name===state.creator)); }
-function fOrganic() { return D.organic.filter(r => inPeriod(r.date) && (state.creator==='all' || r.creator===state.creator)); }
+function fPaid()    { return D.paid.filter(r=>inPeriod(r.date)&&(state.creator==='all'||r.creator_name===state.creator)); }
+function fOrganic() { return D.organic.filter(r=>inPeriod(r.date)&&(state.creator==='all'||r.creator===state.creator)); }
 
-// ─────────────────────────────────────
-// AGGREGATORS
-// ─────────────────────────────────────
 function paidByCr(rows) {
-  const m = {};
-  rows.forEach(r => {
-    if (!m[r.creator_name]) m[r.creator_name] = { reach:0, clicks:0, purchases:0, conv_value:0, spend:0 };
-    m[r.creator_name].reach      += r.reach||0;
-    m[r.creator_name].clicks     += r.clicks||0;
-    m[r.creator_name].purchases  += r.purchases||0;
-    m[r.creator_name].conv_value += r.conversion_value||0;
-    m[r.creator_name].spend      += r.spend||0;
+  const m={};
+  rows.forEach(r=>{
+    if(!m[r.creator_name]) m[r.creator_name]={reach:0,clicks:0,purchases:0,conv_value:0,spend:0};
+    m[r.creator_name].reach      +=r.reach||0;
+    m[r.creator_name].clicks     +=r.clicks||0;
+    m[r.creator_name].purchases  +=r.purchases||0;
+    m[r.creator_name].conv_value +=r.conversion_value||0;
+    m[r.creator_name].spend      +=r.spend||0;
   });
   return m;
 }
@@ -430,8 +816,8 @@ function paidByCr(rows) {
 // ─────────────────────────────────────
 // KPIs
 // ─────────────────────────────────────
-function mkKPIs(id, items) {
-  document.getElementById(id).innerHTML = items.map(k =>
+function mkKPIs(id,items) {
+  document.getElementById(id).innerHTML = items.map(k=>
     `<div class="kpi au ${k.hi?'hi':''}">
       <div class="kpi-lbl">${k.label}</div>
       <div class="kpi-val">${k.value}</div>
@@ -441,143 +827,120 @@ function mkKPIs(id, items) {
 }
 
 // ─────────────────────────────────────
-// CHART HELPERS
+// CHART DEFAULTS
 // ─────────────────────────────────────
-function dc(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
-const TX = { color:'rgba(240,237,232,0.38)', font:{ family:'DM Sans', size:11 } };
-const GR = { color:'rgba(255,255,255,0.04)' };
-const LG = { labels:{ color:'rgba(240,237,232,0.48)', font:{ family:'DM Sans', size:11 }, boxWidth:9, boxHeight:9 } };
+function dc(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
+const TX={color:'rgba(240,237,248,0.35)',font:{family:'Inter',size:11}};
+const GR={color:'rgba(255,255,255,0.05)'};
+const LG={labels:{color:'rgba(240,237,248,0.45)',font:{family:'Inter',size:11},boxWidth:9,boxHeight:9}};
 
 // ─────────────────────────────────────
 // OVERVIEW
 // ─────────────────────────────────────
 function renderOverview() {
-  const paid = fPaid();
-  const org  = fOrganic();
-  const byCr = paidByCr(paid);
+  const paid=fPaid(), org=fOrganic(), byCr=paidByCr(paid);
+  const spend=Object.values(byCr).reduce((s,c)=>s+c.spend,0);
+  const rev  =Object.values(byCr).reduce((s,c)=>s+c.conv_value,0);
+  const reach=Object.values(byCr).reduce((s,c)=>s+c.reach,0);
+  const purch=Object.values(byCr).reduce((s,c)=>s+c.purchases,0);
+  const roas =spend>0?rev/spend:0;
+  const orgEng=org.reduce((s,p)=>s+p.likes+p.comments,0);
 
-  const spend   = Object.values(byCr).reduce((s,c)=>s+c.spend,0);
-  const rev     = Object.values(byCr).reduce((s,c)=>s+c.conv_value,0);
-  const reach   = Object.values(byCr).reduce((s,c)=>s+c.reach,0);
-  const purch   = Object.values(byCr).reduce((s,c)=>s+c.purchases,0);
-  const roas    = spend > 0 ? rev/spend : 0;
-  const orgEng  = org.reduce((s,p)=>s+p.likes+p.comments,0);
+  document.getElementById('hdr-pill').textContent=`${Object.keys(byCr).length} creators · ${org.length} organic posts`;
 
-  document.getElementById('hdr-pill').textContent =
-    `${Object.keys(byCr).length} creators · ${org.length} organic posts`;
-
-  mkKPIs('kpis-ov', [
-    { label:'Paid Reach',     value: fN(reach),         sub: `${Object.keys(byCr).length} creators` },
-    { label:'Total Spend',    value: fM(spend),         sub: '' },
-    { label:'Conv. Value',    value: fM(rev),           sub: 'Meta purchases' },
-    { label:'ROAS',           value: roas.toFixed(1)+'x', sub: 'return on ad spend', hi: roas > 20 },
-    { label:'Purchases',      value: fN(purch),         sub: '' },
-    { label:'Organic Posts',  value: org.length,        sub: fN(orgEng)+' engagements' },
+  mkKPIs('kpis-ov',[
+    {label:'Paid Reach',    value:fN(reach),        sub:`${Object.keys(byCr).length} creators`},
+    {label:'Total Spend',   value:fM(spend),        sub:''},
+    {label:'Conv. Value',   value:fM(rev),          sub:'Meta purchases'},
+    {label:'ROAS',          value:roas.toFixed(1)+'x', sub:'return on ad spend', hi:roas>20},
+    {label:'Purchases',     value:fN(purch),        sub:''},
+    {label:'Organic Posts', value:org.length,       sub:fN(orgEng)+' engagements'},
   ]);
 
-  // Timeline — weekly reach per creator
+  // Timeline
   dc('ov-timeline');
-  const weeks = {};
-  paid.forEach(r => {
-    const mon = getMonday(r.date);
-    if (!weeks[mon]) weeks[mon] = {};
-    weeks[mon][r.creator_name] = (weeks[mon][r.creator_name]||0) + (r.reach||0);
+  const weeks={};
+  paid.forEach(r=>{
+    const w=getMonday(r.date);
+    if(!weeks[w]) weeks[w]={};
+    weeks[w][r.creator_name]=(weeks[w][r.creator_name]||0)+(r.reach||0);
   });
-  const wks = Object.keys(weeks).sort();
-  const topCr = Object.entries(byCr).sort((a,b)=>b[1].reach-a[1].reach).slice(0,5).map(([n])=>n);
-  charts['ov-timeline'] = new Chart(el('ch-ov-timeline'), {
+  const wks=Object.keys(weeks).sort();
+  const topCr=Object.entries(byCr).sort((a,b)=>b[1].reach-a[1].reach).slice(0,5).map(([n])=>n);
+  charts['ov-timeline']=new Chart(el('ch-ov-timeline'),{
     type:'line',
-    data:{ labels: wks.map(w=>fDateShort(w)),
-      datasets: topCr.map(cr=>({
-        label: shortName(cr),
-        data: wks.map(w=>(weeks[w]||{})[cr]||0),
-        borderColor: cc(cr), backgroundColor:'transparent',
-        borderWidth:2, pointRadius:2, tension:.4
+    data:{labels:wks.map(w=>fDateShort(w)),
+      datasets:topCr.map(cr=>({
+        label:shortName(cr),
+        data:wks.map(w=>(weeks[w]||{})[cr]||0),
+        borderColor:cc(cr),backgroundColor:'transparent',
+        borderWidth:2,pointRadius:2,tension:.4
       }))
     },
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:LG },
-      scales:{ x:{ ticks:{...TX,maxRotation:40,maxTicksLimit:10}, grid:GR },
-               y:{ ticks:{...TX,callback:v=>fN(v)}, grid:GR } }
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:LG},
+      scales:{x:{ticks:{...TX,maxRotation:40,maxTicksLimit:10},grid:GR},y:{ticks:{...TX,callback:v=>fN(v)},grid:GR}}
     }
   });
 
-  // Revenue donut
+  // Donut
   dc('ov-donut');
-  const crE = Object.entries(byCr).sort((a,b)=>b[1].conv_value-a[1].conv_value);
-  charts['ov-donut'] = new Chart(el('ch-ov-donut'), {
+  const crE=Object.entries(byCr).sort((a,b)=>b[1].conv_value-a[1].conv_value);
+  charts['ov-donut']=new Chart(el('ch-ov-donut'),{
     type:'doughnut',
-    data:{ labels: crE.map(([n])=>shortName(n)),
-      datasets:[{ data: crE.map(([,v])=>v.conv_value),
-        backgroundColor: crE.map(([n])=>cc(n)+'bb'),
-        borderColor: crE.map(([n])=>cc(n)),
-        borderWidth:1.5, hoverOffset:5 }]
+    data:{labels:crE.map(([n])=>shortName(n)),
+      datasets:[{data:crE.map(([,v])=>v.conv_value),
+        backgroundColor:crE.map(([n])=>cc(n)+'bb'),
+        borderColor:crE.map(([n])=>cc(n)),borderWidth:1.5,hoverOffset:5}]
     },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
-      plugins:{ legend:LG, tooltip:{ callbacks:{ label:ctx=>` ${ctx.label}: ${fM(ctx.raw)}` } } }
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+      plugins:{legend:LG,tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${fM(ctx.raw)}`}}}
     }
   });
 
-  // ROAS bar
+  // ROAS
   dc('ov-roas');
-  const roasData = Object.entries(byCr)
-    .filter(([,v])=>v.spend>0)
-    .map(([n,v])=>({ n, roas: v.conv_value/v.spend }))
-    .sort((a,b)=>b.roas-a.roas);
-  charts['ov-roas'] = new Chart(el('ch-ov-roas'), {
+  const rd=Object.entries(byCr).filter(([,v])=>v.spend>0).map(([n,v])=>({n,roas:v.conv_value/v.spend})).sort((a,b)=>b.roas-a.roas);
+  charts['ov-roas']=new Chart(el('ch-ov-roas'),{
     type:'bar',
-    data:{ labels: roasData.map(c=>shortName(c.n)),
-      datasets:[{ data: roasData.map(c=>+c.roas.toFixed(2)),
-        backgroundColor: roasData.map(c=>cc(c.n)+'55'),
-        borderColor: roasData.map(c=>cc(c.n)),
-        borderWidth:1.5, borderRadius:4 }]
+    data:{labels:rd.map(c=>shortName(c.n)),
+      datasets:[{data:rd.map(c=>+c.roas.toFixed(2)),
+        backgroundColor:rd.map(c=>cc(c.n)+'44'),
+        borderColor:rd.map(c=>cc(c.n)),borderWidth:1.5,borderRadius:4}]
     },
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false} },
-      scales:{ x:{ ticks:{...TX,maxRotation:30}, grid:{display:false} },
-               y:{ ticks:{...TX,callback:v=>v+'x'}, grid:GR } }
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{...TX,maxRotation:30},grid:{display:false}},y:{ticks:{...TX,callback:v=>v+'x'},grid:GR}}
     }
   });
 
-  // Scatter spend vs rev
+  // Scatter
   dc('ov-scatter');
-  const scData = Object.entries(byCr).filter(([,v])=>v.spend>0).map(([n,v])=>({
-    x: v.spend, y: v.conv_value, label: shortName(n), col: cc(n)
-  }));
-  charts['ov-scatter'] = new Chart(el('ch-ov-scatter'), {
+  const sc=Object.entries(byCr).filter(([,v])=>v.spend>0).map(([n,v])=>({x:v.spend,y:v.conv_value,label:shortName(n),col:cc(n)}));
+  charts['ov-scatter']=new Chart(el('ch-ov-scatter'),{
     type:'scatter',
-    data:{ datasets: scData.map(d=>({
-      label: d.label,
-      data:[{ x:d.x, y:d.y }],
-      backgroundColor: d.col+'99', borderColor: d.col,
-      pointRadius:7, pointHoverRadius:9
-    }))},
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:LG, tooltip:{ callbacks:{
-        label: ctx=>`${ctx.dataset.label}: ${fM(ctx.parsed.x)} → ${fM(ctx.parsed.y)}`
-      }}},
-      scales:{ x:{ ticks:{...TX,callback:v=>fM(v)}, grid:GR },
-               y:{ ticks:{...TX,callback:v=>fM(v)}, grid:GR } }
+    data:{datasets:sc.map(d=>({label:d.label,data:[{x:d.x,y:d.y}],backgroundColor:d.col+'99',borderColor:d.col,pointRadius:7,pointHoverRadius:9}))},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:LG,tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fM(ctx.parsed.x)} → ${fM(ctx.parsed.y)}`}}},
+      scales:{x:{ticks:{...TX,callback:v=>fM(v)},grid:GR},y:{ticks:{...TX,callback:v=>fM(v)},grid:GR}}
     }
   });
 
-  // Organic engagement bar
+  // Organic eng
   dc('ov-orgeng');
-  const orgByCr = {};
-  org.forEach(p => { orgByCr[p.creator] = (orgByCr[p.creator]||0) + p.likes + p.comments; });
-  const orgE = Object.entries(orgByCr).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  charts['ov-orgeng'] = new Chart(el('ch-ov-orgeng'), {
+  const ob={};
+  org.forEach(p=>{ob[p.creator]=(ob[p.creator]||0)+p.likes+p.comments;});
+  const oe=Object.entries(ob).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  charts['ov-orgeng']=new Chart(el('ch-ov-orgeng'),{
     type:'bar',
-    data:{ labels: orgE.map(([n])=>shortName(n)),
-      datasets:[{ data: orgE.map(([,v])=>v), indexAxis:'y',
-        backgroundColor: orgE.map(([n])=>cc(n)+'55'),
-        borderColor: orgE.map(([n])=>cc(n)),
-        borderWidth:1.5, borderRadius:3 }]
+    data:{labels:oe.map(([n])=>shortName(n)),
+      datasets:[{data:oe.map(([,v])=>v),indexAxis:'y',
+        backgroundColor:oe.map(([n])=>cc(n)+'44'),
+        borderColor:oe.map(([n])=>cc(n)),borderWidth:1.5,borderRadius:3}]
     },
-    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
-      plugins:{ legend:{display:false} },
-      scales:{ x:{ ticks:{...TX,callback:v=>fN(v)}, grid:GR },
-               y:{ ticks:TX, grid:{display:false} } }
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{...TX,callback:v=>fN(v)},grid:GR},y:{ticks:TX,grid:{display:false}}}
     }
   });
 
@@ -588,26 +951,27 @@ function renderOverview() {
 // CREATOR GRID
 // ─────────────────────────────────────
 function renderCreatorGrid() {
-  const paid    = fPaid();
-  const org     = fOrganic();
-  const byCr    = paidByCr(paid);
-  const allCrs  = new Set([...Object.keys(byCr), ...org.map(p=>p.creator)]);
-
-  const creators = [...allCrs].map(name => {
-    const p   = byCr[name] || {};
-    const ops = org.filter(o=>o.creator===name);
-    const orgEng = ops.reduce((s,o)=>s+o.likes+o.comments,0);
-    return { name, p, ops, orgEng, hasPaid:!!byCr[name], hasOrg:ops.length>0 };
+  const paid=fPaid(),org=fOrganic(),byCr=paidByCr(paid);
+  const allCrs=new Set([...Object.keys(byCr),...org.map(p=>p.creator)]);
+  const scores = computeScores();
+  const creators=[...allCrs].map(name=>{
+    const p=byCr[name]||{};
+    const ops=org.filter(o=>o.creator===name);
+    return{name,p,ops,orgEng:ops.reduce((s,o)=>s+o.likes+o.comments,0),hasPaid:!!byCr[name],hasOrg:ops.length>0};
   }).sort((a,b)=>(b.p.reach||0)-(a.p.reach||0));
 
-  document.getElementById('creator-grid').innerHTML = creators.map(c => {
-    const initials = c.name.split(' ').filter(w=>w[0]).map(w=>w[0]).join('').slice(0,2);
-    const col    = cc(c.name);
-    const roas   = c.p.spend > 0 ? (c.p.conv_value/c.p.spend).toFixed(1)+'x' : '—';
-    const tier   = c.p.reach > 300000 ? 'Macro' : c.p.reach > 80000 ? 'Mid' : 'Micro';
-    const isSel  = state.creator === c.name;
-    const handle = c.ops[0]?.handle || '';
+  document.getElementById('creator-grid').innerHTML=creators.map(c=>{
+    const initials=c.name.split(' ').filter(w=>w[0]).map(w=>w[0]).join('').slice(0,2);
+    const col=cc(c.name);
+    const roas=c.p.spend>0?(c.p.conv_value/c.p.spend).toFixed(1)+'x':'—';
+    const tier=c.p.reach>300000?'Macro':c.p.reach>80000?'Mid':'Micro';
+    const isSel=state.creator===c.name;
+    const handle=c.ops[0]?.handle||'';
+    const score=scores[c.name];
+    const scoreVal=score?score.total:null;
+    const scoreBg=scoreVal>=8?'#b8f000':scoreVal>=6?'#8b5cf6':scoreVal>=4?'#06b6d4':'#f97316';
     return `<div class="ccard au ${isSel?'sel':''}" onclick="toggleCreator(${JSON.stringify(c.name)})">
+      ${scoreVal!==null?`<div class="score-badge" style="background:${scoreBg}">${scoreVal}</div>`:''}
       <div class="ctop">
         <div class="cav" style="background:${col}">${initials}</div>
         <div class="cinfo"><div class="cname">${c.name}</div><div class="chandle">${handle}</div></div>
@@ -619,281 +983,247 @@ function renderCreatorGrid() {
         <div><div class="csm-lbl">ROAS</div><div class="csm-val">${roas}</div></div>
       </div>
       <div class="ctags">
-        ${c.hasPaid ? '<span class="tag tag-p">Paid</span>' : ''}
-        ${c.hasOrg  ? `<span class="tag tag-o">${c.ops.length} post${c.ops.length!==1?'s':''}</span>` : ''}
+        ${c.hasPaid?'<span class="tag tag-p">Paid</span>':''}
+        ${c.hasOrg?`<span class="tag tag-o">${c.ops.length} post${c.ops.length!==1?'s':''}</span>`:''}
       </div>
     </div>`;
-  }).join('') || '<div class="empty"><span class="empty-icon">👤</span>No creators in period</div>';
+  }).join('')||'<div class="empty"><span class="empty-icon">👤</span>No creators in period</div>';
 }
 
 // ─────────────────────────────────────
-// PAID TAB
+// PAID
 // ─────────────────────────────────────
 function renderPaid() {
-  const rows = fPaid();
-  const byCr = paidByCr(rows);
+  const rows=fPaid(),byCr=paidByCr(rows);
+  const spend=rows.reduce((s,r)=>s+r.spend,0);
+  const rev  =rows.reduce((s,r)=>s+r.conversion_value,0);
+  const purch=rows.reduce((s,r)=>s+r.purchases,0);
+  const reach=rows.reduce((s,r)=>s+(r.reach||0),0);
+  const roas =spend>0?rev/spend:0;
 
-  const spend = rows.reduce((s,r)=>s+r.spend,0);
-  const rev   = rows.reduce((s,r)=>s+r.conversion_value,0);
-  const purch = rows.reduce((s,r)=>s+r.purchases,0);
-  const reach = rows.reduce((s,r)=>s+(r.reach||0),0);
-  const roas  = spend > 0 ? rev/spend : 0;
-
-  mkKPIs('kpis-paid', [
-    { label:'Spend',          value: fM(spend),       sub: '' },
-    { label:'Reach',          value: fN(reach),       sub: '' },
-    { label:'Purchases',      value: fN(purch),       sub: '' },
-    { label:'Conv. Value',    value: fM(rev),         sub: '' },
-    { label:'ROAS',           value: roas.toFixed(1)+'x', sub: '', hi: roas > 20 },
-    { label:'Creators',       value: Object.keys(byCr).length, sub: '' },
+  mkKPIs('kpis-paid',[
+    {label:'Spend',        value:fM(spend),       sub:''},
+    {label:'Reach',        value:fN(reach),       sub:''},
+    {label:'Purchases',    value:fN(purch),       sub:''},
+    {label:'Conv. Value',  value:fM(rev),         sub:''},
+    {label:'ROAS',         value:roas.toFixed(1)+'x', sub:'', hi:roas>20},
+    {label:'Creators',     value:Object.keys(byCr).length, sub:''},
   ]);
 
-  // Daily spend
   dc('paid-spend');
-  const byDate = {};
-  rows.forEach(r => { byDate[r.date] = (byDate[r.date]||0)+r.spend; });
-  const dates = Object.keys(byDate).sort();
-  charts['paid-spend'] = new Chart(el('ch-paid-spend'), {
+  const byDate={};
+  rows.forEach(r=>{byDate[r.date]=(byDate[r.date]||0)+r.spend;});
+  const dates=Object.keys(byDate).sort();
+  charts['paid-spend']=new Chart(el('ch-paid-spend'),{
     type:'line',
-    data:{ labels: dates.map(d=>fDateShort(d)),
-      datasets:[{ data: dates.map(d=>byDate[d]),
-        borderColor:'#c9a84c', backgroundColor:'rgba(201,168,76,0.07)',
-        fill:true, borderWidth:2, pointRadius:1, tension:.4 }]
+    data:{labels:dates.map(d=>fDateShort(d)),
+      datasets:[{data:dates.map(d=>byDate[d]),
+        borderColor:'#b8f000',backgroundColor:'rgba(184,240,0,0.07)',
+        fill:true,borderWidth:2,pointRadius:1,tension:.4}]
     },
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false} },
-      scales:{ x:{ ticks:{...TX,maxRotation:45,maxTicksLimit:14}, grid:GR },
-               y:{ ticks:{...TX,callback:v=>'£'+v.toFixed(0)}, grid:GR } }
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{...TX,maxRotation:45,maxTicksLimit:14},grid:GR},y:{ticks:{...TX,callback:v=>'£'+v.toFixed(0)},grid:GR}}
     }
   });
 
-  // Purchases bar
   dc('paid-purch');
-  const pS = Object.entries(byCr).sort((a,b)=>b[1].purchases-a[1].purchases);
-  charts['paid-purch'] = new Chart(el('ch-paid-purch'), {
+  const pS=Object.entries(byCr).sort((a,b)=>b[1].purchases-a[1].purchases);
+  charts['paid-purch']=new Chart(el('ch-paid-purch'),{
     type:'bar',
-    data:{ labels: pS.map(([n])=>shortName(n)),
-      datasets:[{ data: pS.map(([,v])=>v.purchases),
-        backgroundColor: pS.map(([n])=>cc(n)+'55'),
-        borderColor: pS.map(([n])=>cc(n)),
-        borderWidth:1.5, borderRadius:4 }]
+    data:{labels:pS.map(([n])=>shortName(n)),
+      datasets:[{data:pS.map(([,v])=>v.purchases),
+        backgroundColor:pS.map(([n])=>cc(n)+'44'),
+        borderColor:pS.map(([n])=>cc(n)),borderWidth:1.5,borderRadius:4}]
     },
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false} },
-      scales:{ x:{ ticks:{...TX,maxRotation:28}, grid:{display:false} },
-               y:{ ticks:TX, grid:GR } }
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{...TX,maxRotation:28},grid:{display:false}},y:{ticks:TX,grid:GR}}
     }
   });
 
-  // Table
-  const sorted = [...rows].sort((a,b) => {
-    const av=a[paidSort.col], bv=b[paidSort.col];
-    return typeof av==='string' ? paidSort.dir*av.localeCompare(bv) : paidSort.dir*(av-bv);
+  const sorted=[...rows].sort((a,b)=>{
+    const av=a[paidSort.col],bv=b[paidSort.col];
+    return typeof av==='string'?paidSort.dir*av.localeCompare(bv):paidSort.dir*(av-bv);
   });
-  document.getElementById('paid-lbl').textContent = `${sorted.length} daily rows`;
-  document.getElementById('paid-tbody').innerHTML = sorted.map(r => {
-    const roas = r.spend>0 ? (r.conversion_value/r.spend).toFixed(1)+'x' : '—';
+  document.getElementById('paid-lbl').textContent=`${sorted.length} daily rows`;
+  document.getElementById('paid-tbody').innerHTML=sorted.map(r=>{
+    const roas=r.spend>0?(r.conversion_value/r.spend).toFixed(1)+'x':'—';
+    const roasCol=r.roas>20?'var(--neon)':r.roas>10?'var(--purple)':'var(--text)';
     return `<tr>
       <td class="td-m">${fDate(r.date)}</td>
       <td>${r.creator_name}</td>
       <td>${fN(r.reach||0)}</td>
       <td>${fN(r.clicks||0)}</td>
-      <td>${r.purchases>0 ? r.purchases : '<span class="td-m">—</span>'}</td>
-      <td>${r.conversion_value>0 ? fM(r.conversion_value) : '<span class="td-m">—</span>'}</td>
+      <td>${r.purchases>0?r.purchases:'<span class="td-m">—</span>'}</td>
+      <td>${r.conversion_value>0?fM(r.conversion_value):'<span class="td-m">—</span>'}</td>
       <td>£${r.spend.toFixed(2)}</td>
-      <td><strong style="color:${r.roas>20?'var(--green)':r.roas>10?'var(--gold)':'var(--text)'}">${roas}</strong></td>
+      <td><strong style="color:${roasCol}">${roas}</strong></td>
     </tr>`;
   }).join('');
 }
 
 // ─────────────────────────────────────
-// ORGANIC TAB
+// ORGANIC
 // ─────────────────────────────────────
 function renderOrganic() {
-  const posts = fOrganic();
+  const posts=fOrganic();
+  const knownR=posts.filter(p=>p.reach>0);
+  const totalR=knownR.reduce((s,p)=>s+p.reach,0);
+  const totalV=posts.reduce((s,p)=>s+(p.impressions||0),0);
+  const totalL=posts.reduce((s,p)=>s+p.likes,0);
+  const totalC=posts.reduce((s,p)=>s+p.comments,0);
 
-  const knownReach   = posts.filter(p=>p.reach>0);
-  const totalReach   = knownReach.reduce((s,p)=>s+p.reach,0);
-  const totalViews   = posts.reduce((s,p)=>s+(p.impressions||0),0);
-  const totalLikes   = posts.reduce((s,p)=>s+p.likes,0);
-  const totalComments= posts.reduce((s,p)=>s+p.comments,0);
-  const uniqueCrs    = new Set(posts.map(p=>p.creator)).size;
-
-  mkKPIs('kpis-org', [
-    { label:'Posts',          value: posts.length,        sub: `${uniqueCrs} creators` },
-    { label:'Reach (partial)',value: fN(totalReach),      sub: `${knownReach.length} of ${posts.length} posts` },
-    { label:'Total Views',    value: fN(totalViews),      sub: 'impressions' },
-    { label:'Likes',          value: fN(totalLikes),      sub: '' },
-    { label:'Comments',       value: fN(totalComments),   sub: '' },
-    { label:'Avg Likes',      value: fN(posts.length>0?(totalLikes/posts.length).toFixed(0):0), sub: 'per post' },
+  mkKPIs('kpis-org',[
+    {label:'Posts',           value:posts.length,         sub:`${new Set(posts.map(p=>p.creator)).size} creators`},
+    {label:'Reach (partial)', value:fN(totalR),           sub:`${knownR.length} of ${posts.length} posts`},
+    {label:'Total Views',     value:fN(totalV),           sub:'impressions'},
+    {label:'Likes',           value:fN(totalL),           sub:''},
+    {label:'Comments',        value:fN(totalC),           sub:''},
+    {label:'Avg Likes',       value:fN(posts.length>0?(totalL/posts.length).toFixed(0):0), sub:'per post'},
   ]);
 
-  // Monthly bar
   dc('org-time');
-  const byMonth = {};
-  posts.forEach(p => { const m=p.date.slice(0,7); byMonth[m]=(byMonth[m]||0)+1; });
-  const months = Object.keys(byMonth).sort();
-  charts['org-time'] = new Chart(el('ch-org-time'), {
+  const bm={};
+  posts.forEach(p=>{const m=p.date.slice(0,7);bm[m]=(bm[m]||0)+1;});
+  const months=Object.keys(bm).sort();
+  charts['org-time']=new Chart(el('ch-org-time'),{
     type:'bar',
-    data:{ labels: months.map(m=>new Date(m+'-01').toLocaleDateString('en-GB',{month:'short',year:'2-digit'})),
-      datasets:[{ data: months.map(m=>byMonth[m]),
-        backgroundColor:'rgba(126,184,164,0.3)', borderColor:'#7eb8a4',
-        borderWidth:1.5, borderRadius:4 }]
+    data:{labels:months.map(m=>new Date(m+'-01').toLocaleDateString('en-GB',{month:'short',year:'2-digit'})),
+      datasets:[{data:months.map(m=>bm[m]),
+        backgroundColor:'rgba(139,92,246,0.3)',borderColor:'#8b5cf6',borderWidth:1.5,borderRadius:4}]
     },
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false} },
-      scales:{ x:{ ticks:TX, grid:{display:false} }, y:{ ticks:{...TX,stepSize:1}, grid:GR } }
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:TX,grid:{display:false}},y:{ticks:{...TX,stepSize:1},grid:GR}}
     }
   });
 
-  // Engagement by type
   dc('org-type');
-  const tmap = {};
-  posts.forEach(p => {
-    tmap[p.content_type] = tmap[p.content_type]||{likes:0,comments:0};
-    tmap[p.content_type].likes    += p.likes;
-    tmap[p.content_type].comments += p.comments;
+  const tmap={};
+  posts.forEach(p=>{
+    tmap[p.content_type]=tmap[p.content_type]||{likes:0,comments:0};
+    tmap[p.content_type].likes   +=p.likes;
+    tmap[p.content_type].comments+=p.comments;
   });
-  const tcols = { Reel:'#a78bfa', Carousel:'#93c5fd', Static:'#7eb8a4' };
-  const types = Object.keys(tmap);
-  charts['org-type'] = new Chart(el('ch-org-type'), {
+  const tcols={Reel:'#b8f000',Carousel:'#8b5cf6',Static:'#06b6d4'};
+  const types=Object.keys(tmap);
+  charts['org-type']=new Chart(el('ch-org-type'),{
     type:'bar',
-    data:{ labels: types,
+    data:{labels:types,
       datasets:[
-        { label:'Likes',    data: types.map(t=>tmap[t].likes),    backgroundColor: types.map(t=>(tcols[t]||'#aaa')+'55'), borderColor:types.map(t=>tcols[t]||'#aaa'), borderWidth:1.5, borderRadius:3 },
-        { label:'Comments', data: types.map(t=>tmap[t].comments), backgroundColor:'rgba(255,255,255,.08)', borderColor:'rgba(255,255,255,.2)', borderWidth:1 }
+        {label:'Likes',    data:types.map(t=>tmap[t].likes),   backgroundColor:types.map(t=>(tcols[t]||'#aaa')+'44'),borderColor:types.map(t=>tcols[t]||'#aaa'),borderWidth:1.5,borderRadius:3},
+        {label:'Comments', data:types.map(t=>tmap[t].comments),backgroundColor:'rgba(255,255,255,.07)',borderColor:'rgba(255,255,255,.18)',borderWidth:1}
       ]
     },
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:LG },
-      scales:{ x:{ stacked:true, ticks:TX, grid:{display:false} }, y:{ stacked:true, ticks:TX, grid:GR } }
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:LG},
+      scales:{x:{stacked:true,ticks:TX,grid:{display:false}},y:{stacked:true,ticks:TX,grid:GR}}
     }
   });
 
-  // Table
-  const sorted = [...posts].sort((a,b) => {
-    const av=a[orgSort.col]||0, bv=b[orgSort.col]||0;
-    return typeof av==='string' ? orgSort.dir*av.localeCompare(bv) : orgSort.dir*(av-bv);
+  const sorted=[...posts].sort((a,b)=>{
+    const av=a[orgSort.col]||0,bv=b[orgSort.col]||0;
+    return typeof av==='string'?orgSort.dir*av.localeCompare(bv):orgSort.dir*(av-bv);
   });
-  document.getElementById('org-lbl').textContent = `${sorted.length} post${sorted.length!==1?'s':''}`;
-
-  document.getElementById('org-tbody').innerHTML = sorted.map(p => {
-    const prodVal  = productMap[p.id] !== undefined ? productMap[p.id] : (p.product||'');
-    const reachStr = p.reach > 0
-      ? fN(p.reach)
-      : `<span class="reach-na" title="Not available from Meta for third-party accounts">—</span>`;
+  document.getElementById('org-lbl').textContent=`${sorted.length} post${sorted.length!==1?'s':''}`;
+  document.getElementById('org-tbody').innerHTML=sorted.map(p=>{
+    const pv=productMap[p.id]!==undefined?productMap[p.id]:(p.product||'');
     return `<tr>
       <td class="td-m">${fDate(p.date)}</td>
       <td>${p.creator}</td>
       <td class="td-m" style="font-size:11px">${p.handle}</td>
       <td><span class="tbadge tb-${p.content_type}">${p.content_type}</span></td>
-      <td>${reachStr}</td>
-      <td>${p.impressions>0 ? fN(p.impressions) : '<span class="reach-na">—</span>'}</td>
+      <td>${p.reach>0?fN(p.reach):'<span class="reach-na">—</span>'}</td>
+      <td>${p.impressions>0?fN(p.impressions):'<span class="reach-na">—</span>'}</td>
       <td>${fN(p.likes)}</td>
       <td>${fN(p.comments)}</td>
-      <td>
-        <input class="prod-input" data-id="${p.id}"
-          value="${prodVal.replace(/"/g,'&quot;')}"
-          placeholder="e.g. Farley Sofa" />
-      </td>
-      <td>${p.permalink ? `<a href="${p.permalink}" target="_blank" style="color:var(--gold);font-size:13px;text-decoration:none">↗</a>` : '<span class="td-m">—</span>'}</td>
+      <td><input class="prod-input" data-id="${p.id}" value="${pv.replace(/"/g,'&quot;')}" placeholder="e.g. Farley Sofa"/></td>
+      <td>${p.permalink?`<a href="${p.permalink}" target="_blank" style="color:var(--neon);font-size:13px;text-decoration:none">↗</a>`:'<span class="td-m">—</span>'}</td>
     </tr>`;
   }).join('');
 
-  // Attach product input listeners
-  document.querySelectorAll('.prod-input').forEach(input => {
-    input.addEventListener('input', () => {
-      const id = +input.dataset.id;
-      productMap[id] = input.value;
+  document.querySelectorAll('.prod-input').forEach(input=>{
+    input.addEventListener('input',()=>{
+      productMap[+input.dataset.id]=input.value;
       saveProducts(productMap);
-      // Flash save indicator
-      const dot   = document.getElementById('save-dot');
-      const label = document.getElementById('save-label');
-      dot.classList.add('show');
-      label.textContent = 'Saved';
-      clearTimeout(input._saveTimer);
-      input._saveTimer = setTimeout(() => { dot.classList.remove('show'); label.textContent=''; }, 2000);
+      const dot=document.getElementById('save-dot'),lbl=document.getElementById('save-label');
+      dot.classList.add('show'); lbl.textContent='Saved';
+      clearTimeout(input._t);
+      input._t=setTimeout(()=>{dot.classList.remove('show');lbl.textContent='';},2000);
     });
   });
 }
 
 // ─────────────────────────────────────
-// GA4 TAB
+// GA4
 // ─────────────────────────────────────
 function renderGA4() {
-  const ga4 = D.ga4.filter(r => inPeriod(r.date) && (state.creator==='all' || r.creator===state.creator));
-
-  if (!ga4.length) {
-    mkKPIs('kpis-ga4', [{ label:'Status', value:'No data', sub:'Run BigQuery script first' }]);
-    document.getElementById('ga4-tbody').innerHTML =
-      '<tr><td colspan="5"><div class="empty"><span class="empty-icon">🔄</span>Run <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px">python scripts/fetch_ga4_influencer.py</code> to populate</div></td></tr>';
+  const ga4=D.ga4.filter(r=>inPeriod(r.date)&&(state.creator==='all'||r.creator===state.creator));
+  if(!ga4.length){
+    mkKPIs('kpis-ga4',[{label:'Status',value:'No data',sub:'Run refresh.bat first'}]);
+    document.getElementById('ga4-tbody').innerHTML=
+      '<tr><td colspan="6"><div class="empty"><span class="empty-icon">🔄</span>Run <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px">refresh.bat</code> to populate GA4 data</div></td></tr>';
     return;
   }
+  const totS=ga4.reduce((s,r)=>s+r.sessions,0);
+  const totT=ga4.reduce((s,r)=>s+r.transactions,0);
+  const totR=ga4.reduce((s,r)=>s+r.revenue,0);
+  const cvr =totS>0?(totT/totS*100).toFixed(2):0;
 
-  const totSess  = ga4.reduce((s,r)=>s+r.sessions,0);
-  const totTrans = ga4.reduce((s,r)=>s+r.transactions,0);
-  const totRev   = ga4.reduce((s,r)=>s+r.revenue,0);
-  const cvr      = totSess>0 ? (totTrans/totSess*100).toFixed(2) : 0;
-
-  mkKPIs('kpis-ga4', [
-    { label:'Sessions',     value: fN(totSess),   sub: 'utm_medium=influencer' },
-    { label:'Transactions', value: fN(totTrans),  sub: '' },
-    { label:'Revenue',      value: fM(totRev),    sub: 'GA4 attributed' },
-    { label:'Conv. Rate',   value: cvr+'%',       sub: '' },
+  mkKPIs('kpis-ga4',[
+    {label:'Sessions',     value:fN(totS),  sub:'utm_medium=influencer'},
+    {label:'Transactions', value:fN(totT),  sub:''},
+    {label:'Revenue',      value:fM(totR),  sub:'GA4 attributed'},
+    {label:'Conv. Rate',   value:cvr+'%',   sub:''},
   ]);
 
   dc('ga4-sess');
-  const byWk = {};
-  ga4.forEach(r => {
-    const w = getMonday(r.date);
-    if (!byWk[w]) byWk[w]={sessions:0};
-    byWk[w].sessions += r.sessions;
-  });
-  const wks = Object.keys(byWk).sort().slice(-20);
-  charts['ga4-sess'] = new Chart(el('ch-ga4-sess'), {
+  const bw={};
+  ga4.forEach(r=>{const w=getMonday(r.date);if(!bw[w])bw[w]={sessions:0};bw[w].sessions+=r.sessions;});
+  const wks=Object.keys(bw).sort().slice(-20);
+  charts['ga4-sess']=new Chart(el('ch-ga4-sess'),{
     type:'line',
-    data:{ labels: wks.map(w=>fDateShort(w)),
-      datasets:[{ data: wks.map(w=>byWk[w].sessions),
-        borderColor:'#c9a84c', backgroundColor:'rgba(201,168,76,0.07)', fill:true,
-        borderWidth:2, pointRadius:2, tension:.4 }]
+    data:{labels:wks.map(w=>fDateShort(w)),
+      datasets:[{data:wks.map(w=>bw[w].sessions),
+        borderColor:'#b8f000',backgroundColor:'rgba(184,240,0,0.07)',fill:true,borderWidth:2,pointRadius:2,tension:.4}]
     },
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false} },
-      scales:{ x:{ ticks:{...TX,maxRotation:45}, grid:GR }, y:{ ticks:TX, grid:GR } }
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{...TX,maxRotation:45},grid:GR},y:{ticks:TX,grid:GR}}
     }
   });
 
   dc('ga4-rev');
-  const byCr = {};
-  ga4.forEach(r => { byCr[r.creator] = (byCr[r.creator]||0)+r.revenue; });
-  const crE = Object.entries(byCr).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  charts['ga4-rev'] = new Chart(el('ch-ga4-rev'), {
+  const bc={};
+  ga4.forEach(r=>{bc[r.creator]=(bc[r.creator]||0)+r.revenue;});
+  const crE=Object.entries(bc).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  charts['ga4-rev']=new Chart(el('ch-ga4-rev'),{
     type:'bar',
-    data:{ labels: crE.map(([n])=>n), datasets:[{
-      data: crE.map(([,v])=>v),
-      backgroundColor: crE.map(([n])=>cc(n)+'55'),
-      borderColor: crE.map(([n])=>cc(n)),
-      borderWidth:1.5, borderRadius:4
-    }]},
-    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
-      plugins:{ legend:{display:false} },
-      scales:{ x:{ ticks:{...TX,callback:v=>fM(v)}, grid:GR }, y:{ ticks:TX, grid:{display:false} } }
+    data:{labels:crE.map(([n])=>n),datasets:[{data:crE.map(([,v])=>v),
+      backgroundColor:crE.map(([n])=>cc(n)+'44'),borderColor:crE.map(([n])=>cc(n)),borderWidth:1.5,borderRadius:4}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{...TX,callback:v=>fM(v)},grid:GR},y:{ticks:TX,grid:{display:false}}}
     }
   });
 
-  const crTable = Object.entries(
+  const crTable=Object.entries(
     ga4.reduce((m,r)=>{
-      if(!m[r.creator]) m[r.creator]={sessions:0,transactions:0,revenue:0};
-      m[r.creator].sessions    += r.sessions;
-      m[r.creator].transactions += r.transactions;
-      m[r.creator].revenue     += r.revenue;
+      const key=`${r.creator}||${r.utm_campaign||''}`;
+      if(!m[key]) m[key]={creator:r.creator,campaign:r.utm_campaign||'—',sessions:0,transactions:0,revenue:0};
+      m[key].sessions    +=r.sessions;
+      m[key].transactions+=r.transactions;
+      m[key].revenue     +=r.revenue;
       return m;
     },{})
   ).sort((a,b)=>b[1].revenue-a[1].revenue);
 
-  document.getElementById('ga4-tbody').innerHTML = crTable.map(([cr,v])=>`
+  document.getElementById('ga4-tbody').innerHTML=crTable.map(([,v])=>`
     <tr>
-      <td>${cr}</td>
+      <td>${v.creator}</td>
+      <td class="td-m" style="font-size:11px">${v.campaign}</td>
       <td>${fN(v.sessions)}</td>
       <td>${fN(v.transactions)}</td>
       <td>${fM(v.revenue)}</td>
@@ -902,73 +1232,212 @@ function renderGA4() {
 }
 
 // ─────────────────────────────────────
+// INFLUENSCORE ENGINE
+// ─────────────────────────────────────
+const WEIGHTS = { roas:.30, conv_value:.25, reach:.20, purchases:.15, engagement:.10 };
+
+function computeScores() {
+  const paid = fPaid(), org = fOrganic(), byCr = paidByCr(paid);
+  const allCrs = new Set([...Object.keys(byCr), ...org.map(p=>p.creator)]);
+
+  // Raw metrics per creator
+  const raw = {};
+  allCrs.forEach(name => {
+    const p = byCr[name]||{};
+    const ops = org.filter(o=>o.creator===name);
+    const eng = ops.reduce((s,o)=>s+o.likes+o.comments, 0);
+    raw[name] = {
+      roas:       p.spend>0 ? p.conv_value/p.spend : 0,
+      conv_value: p.conv_value||0,
+      reach:      p.reach||0,
+      purchases:  p.purchases||0,
+      engagement: eng,
+    };
+  });
+
+  // Normalise each metric 0–1 against max in set
+  const metrics = Object.keys(WEIGHTS);
+  const maxes = {};
+  metrics.forEach(m => { maxes[m] = Math.max(1, ...Object.values(raw).map(r=>r[m])); });
+
+  const scores = {};
+  Object.entries(raw).forEach(([name, r]) => {
+    let score = 0;
+    const breakdown = {};
+    metrics.forEach(m => {
+      const norm = r[m] / maxes[m];       // 0–1
+      breakdown[m] = +(norm * 10).toFixed(2); // 0–10 per metric
+      score += norm * WEIGHTS[m];
+    });
+    scores[name] = {
+      total:     +(score * 10).toFixed(1), // 0–10
+      breakdown,
+      raw:       r,
+      hasPaid:   !!byCr[name],
+      handle:    org.find(o=>o.creator===name)?.handle || '',
+    };
+  });
+
+  return scores;
+}
+
+// ─────────────────────────────────────
+// SCORES TAB
+// ─────────────────────────────────────
+function renderScores() {
+  const scores = computeScores();
+  const ranked = Object.entries(scores).sort((a,b)=>b[1].total-a[1].total);
+
+  // Score colour based on value
+  function scoreColor(s) {
+    if (s >= 8) return '#b8f000';
+    if (s >= 6) return '#8b5cf6';
+    if (s >= 4) return '#06b6d4';
+    return '#f97316';
+  }
+
+  const metricLabels = { roas:'ROAS', conv_value:'Conv. Val', reach:'Reach', purchases:'Purchases', engagement:'Engagement' };
+  const metricColors = { roas:'#b8f000', conv_value:'#8b5cf6', reach:'#06b6d4', purchases:'#ec4899', engagement:'#f59e0b' };
+
+  // Leaderboard
+  document.getElementById('lb-table').innerHTML = ranked.map(([name, s], i) => {
+    const rankClass = i===0?'r1':i===1?'r2':i===2?'r3':'';
+    const col = scoreColor(s.total);
+    return `<div class="lb-row">
+      <span class="lb-rank ${rankClass}">${i+1}</span>
+      <span class="lb-name">${name}</span>
+      <span class="lb-score" style="color:${col}">${s.total}</span>
+      <span class="lb-val"><strong>${s.raw.roas>0?s.raw.roas.toFixed(1)+'x':'—'}</strong></span>
+      <span class="lb-val"><strong>${fM(s.raw.conv_value)}</strong></span>
+      <span class="lb-val"><strong>${fN(s.raw.reach)}</strong></span>
+      <span class="lb-val"><strong>${fN(s.raw.purchases)}</strong></span>
+      <span class="lb-val"><strong>${fN(s.raw.engagement)}</strong></span>
+    </div>`;
+  }).join('');
+
+  // Score cards with ring + bars
+  const scoreRingCharts = {};
+  document.getElementById('score-grid').innerHTML = ranked.map(([name, s], i) => {
+    const col = scoreColor(s.total);
+    const initials = name.split(' ').filter(w=>w[0]).map(w=>w[0]).join('').slice(0,2);
+    return `<div class="score-card au">
+      <div class="score-card-top">
+        <div class="score-ring-wrap">
+          <canvas id="ring-${i}" width="90" height="90"></canvas>
+          <div class="score-ring-center">
+            <div class="score-num" style="color:${col}">${s.total}</div>
+            <div class="score-label">Score</div>
+          </div>
+        </div>
+        <div class="score-creator-info">
+          <div class="score-creator-name">${name}</div>
+          <div class="score-creator-handle">${s.handle}</div>
+          <span class="score-rank" style="background:${col}">#${i+1} ${i===0?'Top Creator':i===1?'2nd Place':i===2?'3rd Place':''}</span>
+        </div>
+      </div>
+      <div class="score-bars">
+        ${Object.entries(metricLabels).map(([key, label]) => `
+          <div class="score-bar-row">
+            <div class="score-bar-label">${label}</div>
+            <div class="score-bar-track">
+              <div class="score-bar-fill" style="width:${s.breakdown[key]*10}%;background:${metricColors[key]}"></div>
+            </div>
+            <div class="score-bar-val" style="color:${metricColors[key]}">${s.breakdown[key]}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Draw ring charts
+  ranked.forEach(([name, s], i) => {
+    const col = scoreColor(s.total);
+    const canvas = document.getElementById(`ring-${i}`);
+    if (!canvas) return;
+    if (scoreRingCharts[i]) scoreRingCharts[i].destroy();
+    scoreRingCharts[i] = new Chart(canvas.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        datasets: [
+          // Outer ring — overall score
+          {
+            data: [s.total, 10 - s.total],
+            backgroundColor: [col, 'rgba(255,255,255,0.05)'],
+            borderWidth: 0,
+            borderRadius: 4,
+            weight: 2,
+          },
+          // Inner rings — each metric
+          ...Object.entries(metricLabels).map(([key]) => ({
+            data: [s.breakdown[key], 10 - s.breakdown[key]],
+            backgroundColor: [metricColors[key]+'cc', 'rgba(255,255,255,0.03)'],
+            borderWidth: 0,
+            weight: 1,
+          }))
+        ]
+      },
+      options: {
+        responsive: false,
+        cutout: '30%',
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        animation: { animateRotate: true, duration: 800 },
+      }
+    });
+  });
+}
+
+// ─────────────────────────────────────
 // RENDER ROUTER
 // ─────────────────────────────────────
 function render() {
-  const t = state.activeTab;
-  if (t==='overview') renderOverview();
-  if (t==='paid')     renderPaid();
-  if (t==='organic')  renderOrganic();
-  if (t==='ga4')      renderGA4();
+  const t=state.activeTab;
+  if(t==='overview') renderOverview();
+  if(t==='scores')   renderScores();
+  if(t==='paid')     renderPaid();
+  if(t==='organic')  renderOrganic();
+  if(t==='ga4')      renderGA4();
 }
 
 // ─────────────────────────────────────
 // INTERACTIONS
 // ─────────────────────────────────────
 function toggleCreator(name) {
-  state.creator = state.creator === name ? 'all' : name;
-  document.querySelectorAll('[data-creator]').forEach(b =>
-    b.classList.toggle('active', b.dataset.creator===state.creator || (state.creator==='all'&&b.dataset.creator==='all'))
+  state.creator=state.creator===name?'all':name;
+  document.querySelectorAll('[data-creator]').forEach(b=>
+    b.classList.toggle('active',b.dataset.creator===state.creator||(state.creator==='all'&&b.dataset.creator==='all'))
   );
   render();
 }
 
-document.querySelectorAll('.fbtn[data-period]').forEach(btn =>
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.fbtn[data-period]').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    state.period = btn.dataset.period;
-    render();
-  })
-);
+document.querySelectorAll('.fbtn[data-period]').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn[data-period]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); state.period=btn.dataset.period; render();
+}));
 
-document.querySelectorAll('.tab').forEach(tab =>
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-    tab.classList.add('active');
-    state.activeTab = tab.dataset.tab;
-    document.getElementById('tab-'+state.activeTab).classList.add('active');
-    render();
-  })
-);
+document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  tab.classList.add('active'); state.activeTab=tab.dataset.tab;
+  document.getElementById('tab-'+state.activeTab).classList.add('active'); render();
+}));
 
-// Paid table sort
-document.getElementById('paid-table').querySelectorAll('thead th[data-sort]').forEach(th =>
-  th.addEventListener('click', () => {
-    document.getElementById('paid-table').querySelectorAll('thead th').forEach(t=>t.classList.remove('sorted'));
-    th.classList.add('sorted');
-    if (paidSort.col===th.dataset.sort) paidSort.dir*=-1;
-    else { paidSort.col=th.dataset.sort; paidSort.dir=-1; }
-    renderPaid();
-  })
-);
+document.getElementById('paid-table').querySelectorAll('thead th[data-sort]').forEach(th=>th.addEventListener('click',()=>{
+  document.getElementById('paid-table').querySelectorAll('thead th').forEach(t=>t.classList.remove('sorted'));
+  th.classList.add('sorted');
+  if(paidSort.col===th.dataset.sort) paidSort.dir*=-1; else{paidSort.col=th.dataset.sort;paidSort.dir=-1;}
+  renderPaid();
+}));
 
-// Organic table sort
-document.getElementById('org-table').querySelectorAll('thead th[data-sort]').forEach(th =>
-  th.addEventListener('click', () => {
-    document.getElementById('org-table').querySelectorAll('thead th').forEach(t=>t.classList.remove('sorted'));
-    th.classList.add('sorted');
-    if (orgSort.col===th.dataset.sort) orgSort.dir*=-1;
-    else { orgSort.col=th.dataset.sort; orgSort.dir=-1; }
-    renderOrganic();
-  })
-);
+document.getElementById('org-table').querySelectorAll('thead th[data-sort]').forEach(th=>th.addEventListener('click',()=>{
+  document.getElementById('org-table').querySelectorAll('thead th').forEach(t=>t.classList.remove('sorted'));
+  th.classList.add('sorted');
+  if(orgSort.col===th.dataset.sort) orgSort.dir*=-1; else{orgSort.col=th.dataset.sort;orgSort.dir=-1;}
+  renderOrganic();
+}));
 
 function buildCreatorButtons() {
-  const names = [...new Set(D.paid.map(r=>r.creator_name))].sort();
-  const span = document.getElementById('creator-btns');
-  span.innerHTML = names.map(name =>
+  const names=[...new Set(D.paid.map(r=>r.creator_name))].sort();
+  const span=document.getElementById('creator-btns');
+  span.innerHTML=names.map(name=>
     `<button class="fbtn" data-creator="${name}" onclick="toggleCreator(${JSON.stringify(name)})">${shortName(name)}</button>`
   ).join('');
 }
@@ -976,36 +1445,15 @@ function buildCreatorButtons() {
 // ─────────────────────────────────────
 // UTILS
 // ─────────────────────────────────────
-function el(id) { return document.getElementById(id).getContext('2d'); }
+function el(id){return document.getElementById(id).getContext('2d');}
+function fN(n){n=+n;if(!n)return'0';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return Math.round(n).toString();}
+function fM(n){return'£'+(+n).toLocaleString('en-GB',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function fDate(d){return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function fDateShort(d){return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'});}
+function getMonday(s){const d=new Date(s),day=d.getDay(),diff=d.getDate()-day+(day===0?-6:1);return new Date(new Date(s).setDate(diff)).toISOString().slice(0,10);}
+function shortName(n){if(n.includes('('))return n.split('(')[0].trim()+' ('+n.replace(/.*\(/,'').replace(')','').split(' ')[0]+')';return n.split(' ').slice(0,2).join(' ');}
 
-function fN(n) {
-  n=+n; if(!n) return '0';
-  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
-  if(n>=1e3) return (n/1e3).toFixed(1)+'K';
-  return Math.round(n).toString();
-}
-function fM(n) {
-  return '£'+(+n).toLocaleString('en-GB',{minimumFractionDigits:0,maximumFractionDigits:0});
-}
-function fDate(d) {
-  return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-}
-function fDateShort(d) {
-  return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-}
-function getMonday(dateStr) {
-  const d = new Date(dateStr); const day = d.getDay();
-  const diff = d.getDate() - day + (day===0?-6:1);
-  return new Date(new Date(dateStr).setDate(diff)).toISOString().slice(0,10);
-}
-function shortName(name) {
-  if (name.includes('(')) return name.split('(')[0].trim()+' ('+name.replace(/.*\(/,'').replace(')','').split(' ')[0]+')';
-  return name.split(' ').slice(0,2).join(' ');
-}
-
-// ─────────────────────────────────────
 // INIT
-// ─────────────────────────────────────
 loadAll();
 </script>
 </body>
