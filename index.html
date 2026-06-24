@@ -429,10 +429,12 @@
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     pointer-events: none; z-index: 2;
+    width: 90px; height: 90px;
+    overflow: hidden;
   }
   .score-num {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 22px; font-weight: 700; line-height: 1;
+    font-size: 16px; font-weight: 700; line-height: 1;
     color: var(--neon);
     background: none !important;
     border: none !important;
@@ -441,9 +443,9 @@
     display: block !important;
   }
   .score-label {
-    font-size: 9px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: .1em;
-    color: var(--muted); margin-top: 2px;
+    font-size: 7px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); margin-top: 1px;
   }
 
   .score-creator-info { flex: 1; min-width: 0; }
@@ -1328,7 +1330,7 @@ function computeScores() {
         engagement: +(r.engagement/maxEng*10).toFixed(2),
         org_views:  +(r.org_views/maxViews*10).toFixed(2),
       },
-      raw,
+      rawCreator: r,
       hasPaid:    r.hasPaid,
       handle:     org.find(o=>o.creator===name)?.handle || '',
     };
@@ -1362,16 +1364,17 @@ function renderScores() {
       <span class="lb-rank ${rankClass}">${i+1}</span>
       <span class="lb-name">${name}</span>
       <span class="lb-score" style="color:${col}">${s.total}</span>
-      <span class="lb-val"><strong>${s.raw.roas>0?s.raw.roas.toFixed(1)+'x':'—'}</strong></span>
-      <span class="lb-val"><strong>${fM(s.raw.conv_value)}</strong></span>
-      <span class="lb-val"><strong>${fN(s.raw.reach)}</strong></span>
-      <span class="lb-val"><strong>${fN(s.raw.purchases)}</strong></span>
-      <span class="lb-val"><strong>${fN(s.raw.engagement)}</strong></span>
+      <span class="lb-val"><strong>${s.rawCreator.roas>0?s.rawCreator.roas.toFixed(1)+'x':'—'}</strong></span>
+      <span class="lb-val"><strong>${fM(s.rawCreator.conv_value)}</strong></span>
+      <span class="lb-val"><strong>${fN(s.rawCreator.reach)}</strong></span>
+      <span class="lb-val"><strong>${fN(s.rawCreator.purchases)}</strong></span>
+      <span class="lb-val"><strong>${fN(s.rawCreator.engagement)}</strong></span>
     </div>`;
   }).join('');
 
   // Score cards with ring + bars
-  const scoreRingCharts = {};
+  // Destroy any existing ring charts first
+  Object.values(charts).forEach(c => { if (c._isRing) { c.destroy(); } });
   document.getElementById('score-grid').innerHTML = ranked.map(([name, s], i) => {
     const col = scoreColor(s.total);
     return `<div class="score-card au">
@@ -1379,8 +1382,8 @@ function renderScores() {
         <div class="score-ring-wrap">
           <canvas id="ring-${i}" width="90" height="90"></canvas>
           <div class="score-ring-center">
-            <span style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;line-height:1;color:${col}">${s.total}</span>
-            <span style="font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(240,237,248,0.42);margin-top:2px">Score</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;line-height:1;color:${col};display:block;text-align:center">${s.total}</span>
+            <span style="font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(240,237,248,0.35);margin-top:1px;display:block;text-align:center">score</span>
           </div>
         </div>
         <div class="score-creator-info">
@@ -1412,8 +1415,9 @@ function renderScores() {
     const col = scoreColor(s.total);
     const canvas = document.getElementById(`ring-${i}`);
     if (!canvas) return;
-    if (scoreRingCharts[i]) scoreRingCharts[i].destroy();
-    scoreRingCharts[i] = new Chart(canvas.getContext('2d'), {
+    const key = `ring-${i}`;
+    if (charts[key]) { charts[key].destroy(); delete charts[key]; }
+    charts[key] = new Chart(canvas.getContext('2d'), {
       type: 'doughnut',
       data: {
         datasets: [
@@ -1440,6 +1444,7 @@ function renderScores() {
         animation: { animateRotate: true, duration: 800 },
       }
     });
+    charts[key]._isRing = true;
   });
 }
 
