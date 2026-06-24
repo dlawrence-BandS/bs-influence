@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-24T09:04:31.896948Z",
+  "updated_at": "2026-06-24T09:18:44.354240Z",
   "lookback_days": 180,
   "rows": [
     {
@@ -292,17 +292,17 @@
     },
     {
       "date": "2026-05-16",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 4,
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-16",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 9,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -324,17 +324,17 @@
     },
     {
       "date": "2026-05-13",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 1,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-13",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 2,
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -428,17 +428,17 @@
     },
     {
       "date": "2026-05-01",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 7,
+      "creator": "instagram",
+      "campaign": "houseofhetheringtons",
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-01",
-      "creator": "instagram",
-      "campaign": "houseofhetheringtons",
-      "sessions": 9,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 7,
       "transactions": 0,
       "revenue": 0.0
     },
