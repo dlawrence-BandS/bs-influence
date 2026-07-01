@@ -532,6 +532,74 @@
     display: flex; align-items: center; justify-content: center;
     z-index: 2;
   }
+
+  /* ── WHAT'S NEW ── */
+  .whats-new {
+    background: var(--surface);
+    border: 1px solid rgba(184,240,0,.25);
+    border-left: 3px solid var(--neon);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .whats-new::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at top left, rgba(184,240,0,.06), transparent 60%);
+    pointer-events: none;
+  }
+  .wn-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
+  }
+  .wn-title {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px; font-weight: 700; color: var(--text);
+  }
+  .wn-badge {
+    font-size: 10px; font-weight: 700;
+    background: var(--neon); color: var(--bg);
+    padding: 2px 8px; border-radius: 20px;
+    letter-spacing: .06em; text-transform: uppercase;
+  }
+  .wn-meta { display: flex; align-items: center; gap: 12px; }
+  .wn-updated { font-size: 11px; color: var(--muted); }
+  .wn-dismiss {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted); font-family: 'Inter', sans-serif;
+    font-size: 12px; padding: 5px 12px;
+    border-radius: 20px; cursor: pointer;
+    transition: all .17s;
+  }
+  .wn-dismiss:hover { border-color: var(--border2); color: var(--text); }
+  .wn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .wn-section-title {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .wn-items { display: flex; flex-direction: column; gap: 5px; }
+  .wn-item {
+    font-size: 12px; color: var(--text);
+    padding: 6px 10px;
+    background: rgba(255,255,255,.04);
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+    line-height: 1.4;
+  }
+  .wn-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+  .wn-sub { color: var(--muted); font-size: 11px; }
+  .wn-up   { color: var(--neon); font-weight:600; }
+  .wn-dn   { color: var(--red);  font-weight:600; }
 </style>
 </head>
 <body>
@@ -599,6 +667,7 @@
 
   <!-- OVERVIEW -->
   <div class="tab-panel active" id="tab-overview">
+    <div id="whats-new-panel"></div>
     <div class="kpis" id="kpis-ov"></div>
     <div class="g2">
       <div class="cc">
@@ -1449,11 +1518,161 @@ function renderScores() {
 }
 
 // ─────────────────────────────────────
+// WHAT'S NEW ENGINE
+// ─────────────────────────────────────
+const WN_KEY = 'bs_influence_snapshot';
+
+function getSnapshot() {
+  try { return JSON.parse(localStorage.getItem(WN_KEY)||'null'); } catch(e){ return null; }
+}
+
+function saveSnapshot() {
+  const snap = {
+    savedAt:      new Date().toISOString(),
+    postIds:      D.organic.map(p=>p.id),
+    creatorNames: [...new Set([...D.paid.map(r=>r.creator_name),...D.organic.map(p=>p.creator)])],
+    latestDate:   D.paid.reduce((m,r)=>r.date>m?r.date:m,''),
+    totalSpend:   D.paid.reduce((s,r)=>s+r.spend,0),
+    scores:       Object.fromEntries(Object.entries(computeScores()).map(([k,v])=>[k,v.total])),
+  };
+  try { localStorage.setItem(WN_KEY, JSON.stringify(snap)); } catch(e){}
+}
+
+function buildWhatsNew() {
+  const panel = document.getElementById('whats-new-panel');
+  if (!panel) return;
+  const snap = getSnapshot();
+
+  // First visit — just save and show nothing
+  if (!snap) { saveSnapshot(); panel.innerHTML=''; return; }
+
+  const changes = [];
+
+  // 1. New organic posts
+  const prevIds = new Set(snap.postIds||[]);
+  const newPosts = D.organic.filter(p=>!prevIds.has(p.id));
+  if (newPosts.length) {
+    changes.push({
+      icon:'📸', label:'New Posts',
+      color:'#8b5cf6',
+      items: newPosts.map(p=>`
+        <div class="wn-item">
+          <div class="wn-dot" style="background:#8b5cf6"></div>
+          <div>
+            <span>${p.creator}</span>
+            <span class="wn-sub"> · ${p.content_type} · ${fDate(p.date)}</span>
+          </div>
+        </div>`)
+    });
+  }
+
+  // 2. New creators
+  const prevCrs = new Set(snap.creatorNames||[]);
+  const allCrs  = [...new Set([...D.paid.map(r=>r.creator_name),...D.organic.map(p=>p.creator)])];
+  const newCrs  = allCrs.filter(c=>!prevCrs.has(c));
+  if (newCrs.length) {
+    changes.push({
+      icon:'👤', label:'New Creators',
+      color:'#06b6d4',
+      items: newCrs.map(c=>`
+        <div class="wn-item">
+          <div class="wn-dot" style="background:#06b6d4"></div>
+          <span>${c}</span>
+        </div>`)
+    });
+  }
+
+  // 3. Spend change — compare last 7 days vs prior 7 days
+  const now = new Date();
+  const d7  = new Date(); d7.setDate(d7.getDate()-7);
+  const d14 = new Date(); d14.setDate(d14.getDate()-14);
+  const thisWeekSpend = D.paid.filter(r=>new Date(r.date)>=d7).reduce((s,r)=>s+r.spend,0);
+  const lastWeekSpend = D.paid.filter(r=>new Date(r.date)>=d14&&new Date(r.date)<d7).reduce((s,r)=>s+r.spend,0);
+  if (lastWeekSpend>0 || thisWeekSpend>0) {
+    const pct = lastWeekSpend>0 ? ((thisWeekSpend-lastWeekSpend)/lastWeekSpend*100).toFixed(0) : null;
+    const dir = thisWeekSpend >= lastWeekSpend ? 'up' : 'dn';
+    const arrow = dir==='up' ? '↑' : '↓';
+    changes.push({
+      icon:'💰', label:'Weekly Spend',
+      color: dir==='up'?'#b8f000':'#e07070',
+      items:[`
+        <div class="wn-item">
+          <div class="wn-dot" style="background:${dir==='up'?'#b8f000':'#e07070'}"></div>
+          <div>
+            This week: <strong>${fM(thisWeekSpend)}</strong>
+            ${pct!==null?`<span class="wn-${dir}"> ${arrow}${Math.abs(pct)}% vs prior week</span>`:''}
+            <div class="wn-sub">Prior week: ${fM(lastWeekSpend)}</div>
+          </div>
+        </div>`]
+    });
+  }
+
+  // 4. Top InfluenScore mover
+  const curScores = computeScores();
+  const prevScores = snap.scores||{};
+  const movers = Object.entries(curScores)
+    .filter(([n])=>prevScores[n]!==undefined)
+    .map(([n,s])=>({ name:n, cur:s.total, prev:prevScores[n], delta:+(s.total-prevScores[n]).toFixed(1) }))
+    .filter(m=>Math.abs(m.delta)>=0.1)
+    .sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta));
+
+  if (movers.length) {
+    const top = movers[0];
+    const dir = top.delta>0?'up':'dn';
+    changes.push({
+      icon:'🏆', label:'Score Movers',
+      color:'#f59e0b',
+      items: movers.slice(0,3).map(m=>{
+        const d=m.delta>0?'up':'dn', a=m.delta>0?'↑':'↓';
+        return `<div class="wn-item">
+          <div class="wn-dot" style="background:#f59e0b"></div>
+          <div>
+            <strong>${m.name}</strong>
+            <span class="wn-${d}"> ${a}${Math.abs(m.delta)} (${m.prev}→${m.cur})</span>
+          </div>
+        </div>`;
+      })
+    });
+  }
+
+  if (!changes.length) { panel.innerHTML=''; return; }
+
+  const totalNew = newPosts.length + newCrs.length;
+  const updatedAt = snap.savedAt ? new Date(snap.savedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—';
+
+  panel.innerHTML = `
+    <div class="whats-new">
+      <div class="wn-header">
+        <div class="wn-title">
+          What's New
+          ${totalNew>0?`<span class="wn-badge">${totalNew} new</span>`:''}
+        </div>
+        <div class="wn-meta">
+          <span class="wn-updated">Last snapshot: ${updatedAt}</span>
+          <button class="wn-dismiss" onclick="dismissWhatsNew()">Mark as seen</button>
+        </div>
+      </div>
+      <div class="wn-grid">
+        ${changes.map(c=>`
+          <div>
+            <div class="wn-section-title">${c.icon} ${c.label}</div>
+            <div class="wn-items">${c.items.join('')}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function dismissWhatsNew() {
+  saveSnapshot();
+  document.getElementById('whats-new-panel').innerHTML='';
+}
+
+// ─────────────────────────────────────
 // RENDER ROUTER
 // ─────────────────────────────────────
 function render() {
   const t=state.activeTab;
-  if(t==='overview') renderOverview();
+  if(t==='overview') { renderOverview(); buildWhatsNew(); }
   if(t==='scores')   renderScores();
   if(t==='paid')     renderPaid();
   if(t==='organic')  renderOrganic();
