@@ -1,7 +1,55 @@
 {
-  "updated_at": "2026-06-24T09:56:31.692838Z",
+  "updated_at": "2026-07-01T06:56:11.536581Z",
   "lookback_days": 180,
   "rows": [
+    {
+      "date": "2026-06-29",
+      "creator": "instagram",
+      "campaign": "amelialucyhome",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-28",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-27",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-26",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-24",
+      "creator": "social",
+      "campaign": "my.lymingtonhome",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-24",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
     {
       "date": "2026-06-23",
       "creator": "social",
@@ -181,16 +229,16 @@
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 4,
+      "campaign": "amelialucyhome",
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "amelialucyhome",
-      "sessions": 1,
+      "campaign": "life_at_the_lodge",
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -292,17 +340,17 @@
     },
     {
       "date": "2026-05-16",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 4,
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-16",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 9,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -428,17 +476,17 @@
     },
     {
       "date": "2026-05-01",
-      "creator": "instagram",
-      "campaign": "houseofhetheringtons",
-      "sessions": 9,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 7,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-01",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 7,
+      "creator": "instagram",
+      "campaign": "houseofhetheringtons",
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
