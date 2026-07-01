@@ -637,6 +637,7 @@
 
 <div class="tabs">
   <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="week">Last 7 Days</div>
   <div class="tab" data-tab="scores">InfluenScores</div>
   <div class="tab" data-tab="paid">Paid Ads</div>
   <div class="tab" data-tab="organic">Organic</div>
@@ -664,6 +665,33 @@
 </div>
 
 <main>
+
+  <!-- LAST 7 DAYS -->
+  <div class="tab-panel" id="tab-week">
+    <div class="sh" style="margin-top:0">
+      <h2>Last 7 Days</h2>
+      <span class="sh-sub" id="week-date-range"></span>
+    </div>
+
+    <div class="kpis" id="kpis-week"></div>
+
+    <div class="g2e">
+      <div>
+        <div class="sh"><h2>New Posts</h2><span class="sh-sub" id="week-posts-count"></span></div>
+        <div id="week-posts-list"></div>
+      </div>
+      <div>
+        <div class="sh"><h2>Paid Activity</h2><span class="sh-sub">Spend &amp; conversions this week</span></div>
+        <div id="week-paid-list"></div>
+      </div>
+    </div>
+
+    <div class="sh"><h2>New Creators</h2><span class="sh-sub">First appearance in the data</span></div>
+    <div id="week-new-creators"></div>
+
+    <div class="sh"><h2>Score Changes</h2><span class="sh-sub">vs. prior 7 days</span></div>
+    <div id="week-score-changes"></div>
+  </div>
 
   <!-- OVERVIEW -->
   <div class="tab-panel active" id="tab-overview">
@@ -1668,11 +1696,222 @@ function dismissWhatsNew() {
 }
 
 // ─────────────────────────────────────
-// RENDER ROUTER
+// LAST 7 DAYS TAB
+// ─────────────────────────────────────
+function renderWeek() {
+  const now   = new Date();
+  const d7    = new Date(); d7.setDate(d7.getDate()-7);
+  const d14   = new Date(); d14.setDate(d14.getDate()-14);
+  const cut7  = d7.toISOString().slice(0,10);
+  const cut14 = d14.toISOString().slice(0,10);
+
+  // Date range label
+  document.getElementById('week-date-range').textContent =
+    `${d7.toLocaleDateString('en-GB',{day:'numeric',month:'short'})} – ${now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}`;
+
+  // Filter data
+  const weekPosts    = D.organic.filter(p => p.date >= cut7);
+  const prevPosts    = D.organic.filter(p => p.date >= cut14 && p.date < cut7);
+  const weekPaid     = D.paid.filter(r => r.date >= cut7);
+  const prevPaid     = D.paid.filter(r => r.date >= cut14 && r.date < cut7);
+
+  // KPIs
+  const weekSpend    = weekPaid.reduce((s,r)=>s+r.spend,0);
+  const prevSpend    = prevPaid.reduce((s,r)=>s+r.spend,0);
+  const weekConv     = weekPaid.reduce((s,r)=>s+r.conversion_value,0);
+  const prevConv     = prevPaid.reduce((s,r)=>s+r.conversion_value,0);
+  const weekReach    = weekPaid.reduce((s,r)=>s+(r.reach||0),0);
+  const weekPurch    = weekPaid.reduce((s,r)=>s+r.purchases,0);
+  const weekRoas     = weekSpend>0 ? weekConv/weekSpend : 0;
+
+  function pctChg(cur,prev) {
+    if (!prev) return null;
+    return ((cur-prev)/prev*100).toFixed(0);
+  }
+  function chgLabel(pct, prefix='') {
+    if (pct===null) return '';
+    const dir = +pct>=0?'up':'dn', arrow = +pct>=0?'↑':'↓';
+    return `<span class="wn-${dir}" style="font-size:12px;margin-left:6px">${arrow}${Math.abs(pct)}% vs prior week</span>`;
+  }
+
+  mkKPIs('kpis-week',[
+    { label:'Posts This Week',  value: weekPosts.length,       sub: `${prevPosts.length} prior week` },
+    { label:'Paid Spend',       value: fM(weekSpend),          sub: `Prior week: ${fM(prevSpend)}` },
+    { label:'Conv. Value',      value: fM(weekConv),           sub: `Prior week: ${fM(prevConv)}` },
+    { label:'ROAS',             value: weekRoas>0?weekRoas.toFixed(1)+'x':'—', sub: 'this week', hi: weekRoas>20 },
+    { label:'Paid Reach',       value: fN(weekReach),          sub: '' },
+    { label:'Purchases',        value: fN(weekPurch),          sub: '' },
+  ]);
+
+  // ── New posts ──
+  const postCount = document.getElementById('week-posts-count');
+  const postsList = document.getElementById('week-posts-list');
+  postCount.textContent = `${weekPosts.length} post${weekPosts.length!==1?'s':''}`;
+
+  if (!weekPosts.length) {
+    postsList.innerHTML = `<div class="empty"><span class="empty-icon">📭</span>No new posts in the last 7 days</div>`;
+  } else {
+    postsList.innerHTML = weekPosts.sort((a,b)=>b.date.localeCompare(a.date)).map(p => {
+      const eng = p.likes + p.comments;
+      const pct = pctChg(eng, prevPosts.filter(o=>o.creator===p.creator).reduce((s,o)=>s+o.likes+o.comments,0)||null);
+      return `<div class="wn-item" style="margin-bottom:8px;padding:12px 14px;border-radius:${CSS_VARS.radius||'10px'}">
+        <div class="wn-dot" style="background:${cc(p.creator)};width:8px;height:8px"></div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <strong style="font-size:13px">${p.creator}</strong>
+            <span class="tbadge tb-${p.content_type}">${p.content_type}</span>
+            <span class="wn-sub">${fDate(p.date)}</span>
+          </div>
+          <div style="margin-top:4px;font-size:12px;color:var(--muted)">
+            ${p.likes>0?`<span style="color:var(--text)">❤ ${fN(p.likes)}</span> `:''}
+            ${p.comments>0?`<span style="color:var(--text)">💬 ${fN(p.comments)}</span> `:''}
+            ${p.impressions>0?`<span>👁 ${fN(p.impressions)} views</span> `:''}
+            ${p.reach>0?`<span>📢 ${fN(p.reach)} reach</span>`:''}
+          </div>
+          ${p.permalink?`<a href="${p.permalink}" target="_blank" style="font-size:11px;color:var(--neon);text-decoration:none;margin-top:4px;display:inline-block">View post ↗</a>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Paid activity ──
+  const paidList = document.getElementById('week-paid-list');
+  const byCr = {};
+  weekPaid.forEach(r => {
+    if (!byCr[r.creator_name]) byCr[r.creator_name]={spend:0,reach:0,purchases:0,conv_value:0};
+    byCr[r.creator_name].spend      += r.spend;
+    byCr[r.creator_name].reach      += r.reach||0;
+    byCr[r.creator_name].purchases  += r.purchases;
+    byCr[r.creator_name].conv_value += r.conversion_value;
+  });
+
+  const prevByCr = {};
+  prevPaid.forEach(r => {
+    if (!prevByCr[r.creator_name]) prevByCr[r.creator_name]={spend:0,conv_value:0};
+    prevByCr[r.creator_name].spend      += r.spend;
+    prevByCr[r.creator_name].conv_value += r.conversion_value;
+  });
+
+  if (!Object.keys(byCr).length) {
+    paidList.innerHTML = `<div class="empty"><span class="empty-icon">💰</span>No paid activity in the last 7 days</div>`;
+  } else {
+    paidList.innerHTML = Object.entries(byCr).sort((a,b)=>b[1].spend-a[1].spend).map(([name,v]) => {
+      const prev   = prevByCr[name]||{spend:0,conv_value:0};
+      const roas   = v.spend>0?(v.conv_value/v.spend).toFixed(1)+'x':'—';
+      const spendP = pctChg(v.spend, prev.spend||null);
+      return `<div class="wn-item" style="margin-bottom:8px;padding:12px 14px">
+        <div class="wn-dot" style="background:${cc(name)};width:8px;height:8px"></div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
+            <strong style="font-size:13px">${name}</strong>
+            <span style="font-size:12px;color:var(--neon);font-weight:700">${roas} ROAS</span>
+          </div>
+          <div style="margin-top:4px;font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap">
+            <span>Spend: <strong style="color:var(--text)">${fM(v.spend)}</strong>${chgLabel(spendP)}</span>
+            <span>Reach: <strong style="color:var(--text)">${fN(v.reach)}</strong></span>
+            ${v.conv_value>0?`<span>Conv: <strong style="color:var(--text)">${fM(v.conv_value)}</strong></span>`:''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── New creators ──
+  const allPrevCreators = new Set([
+    ...D.organic.filter(p=>p.date<cut7).map(p=>p.creator),
+    ...D.paid.filter(r=>r.date<cut7).map(r=>r.creator_name),
+  ]);
+  const weekCreators = new Set([
+    ...weekPosts.map(p=>p.creator),
+    ...weekPaid.map(r=>r.creator_name),
+  ]);
+  const newCreators = [...weekCreators].filter(c=>!allPrevCreators.has(c));
+
+  const newCrEl = document.getElementById('week-new-creators');
+  if (!newCreators.length) {
+    newCrEl.innerHTML = `<p style="font-size:13px;color:var(--muted);margin-bottom:24px">No new creators this week.</p>`;
+  } else {
+    newCrEl.innerHTML = `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px">` +
+      newCreators.map(c=>`
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--surface);border:1px solid rgba(184,240,0,.2);border-radius:20px">
+          <div style="width:8px;height:8px;border-radius:50%;background:${cc(c)}"></div>
+          <span style="font-size:13px;font-weight:600">${c}</span>
+          <span class="wn-badge" style="font-size:9px">NEW</span>
+        </div>`).join('') + `</div>`;
+  }
+
+  // ── Score changes ──
+  const weekScores = computeScoresForPeriod(cut7, now.toISOString().slice(0,10));
+  const prevScores = computeScoresForPeriod(cut14, cut7);
+  const movers = Object.entries(weekScores)
+    .filter(([n])=>prevScores[n]!==undefined)
+    .map(([n,s])=>({ name:n, cur:s, prev:prevScores[n], delta:+(s-prevScores[n]).toFixed(1) }))
+    .filter(m=>Math.abs(m.delta)>=0.1)
+    .sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta));
+
+  const scEl = document.getElementById('week-score-changes');
+  if (!movers.length) {
+    scEl.innerHTML = `<p style="font-size:13px;color:var(--muted);margin-bottom:24px">No significant score changes this week.</p>`;
+  } else {
+    scEl.innerHTML = `<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">` +
+      movers.map(m => {
+        const dir=m.delta>0?'up':'dn', arrow=m.delta>0?'↑':'↓', col=m.delta>0?'var(--neon)':'var(--red)';
+        return `<div class="wn-item" style="padding:12px 14px">
+          <div class="wn-dot" style="background:${cc(m.name)};width:8px;height:8px"></div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <strong>${m.name}</strong>
+            <span style="font-size:13px;color:${col};font-weight:700">${arrow} ${Math.abs(m.delta)} pts &nbsp;<span style="color:var(--muted);font-weight:400;font-size:12px">${m.prev} → ${m.cur}</span></span>
+          </div>
+        </div>`;
+      }).join('') + `</div>`;
+  }
+}
+
+// Helper: compute scores for a specific date window
+function computeScoresForPeriod(from, to) {
+  const paid = D.paid.filter(r=>r.date>=from && r.date<=to);
+  const org  = D.organic.filter(p=>p.date>=from && p.date<=to);
+  const byCr = paidByCr(paid);
+  const allCrs = new Set([...Object.keys(byCr),...org.map(p=>p.creator)]);
+
+  const raw = {};
+  allCrs.forEach(name => {
+    const p=byCr[name]||{};
+    const ops=org.filter(o=>o.creator===name);
+    raw[name]={
+      roas: p.spend>0?p.conv_value/p.spend:0,
+      conv_value: p.conv_value||0, reach: p.reach||0, purchases: p.purchases||0,
+      engagement: ops.reduce((s,o)=>s+o.likes+o.comments,0),
+      org_views:  ops.reduce((s,o)=>s+(o.impressions||0),0),
+      hasPaid: !!byCr[name],
+    };
+  });
+
+  const vals=Object.values(raw);
+  const paidVals=vals.filter(r=>r.hasPaid);
+  const maxRoas =Math.max(1,...paidVals.map(r=>r.roas));
+  const maxConv =Math.max(1,...paidVals.map(r=>r.conv_value));
+  const maxReach=Math.max(1,...paidVals.map(r=>r.reach));
+  const maxPurch=Math.max(1,...paidVals.map(r=>r.purchases));
+  const maxEng  =Math.max(1,...vals.map(r=>r.engagement));
+  const maxViews=Math.max(1,...vals.map(r=>r.org_views));
+
+  const scores={};
+  Object.entries(raw).forEach(([name,r])=>{
+    const paidScore=r.hasPaid?((r.roas/maxRoas)*.35+(r.conv_value/maxConv)*.30+(r.reach/maxReach)*.20+(r.purchases/maxPurch)*.15)*10:0;
+    const orgScore=((r.engagement/maxEng)*.55+(r.org_views/maxViews)*.45)*10;
+    scores[name]=+(r.hasPaid?(paidScore*.70+orgScore*.30):Math.min(6,orgScore)).toFixed(1);
+  });
+  return scores;
+}
+
+// CSS_VARS helper for border-radius in dynamic styles
+const CSS_VARS = { radius: '10px' };
 // ─────────────────────────────────────
 function render() {
   const t=state.activeTab;
   if(t==='overview') { renderOverview(); buildWhatsNew(); }
+  if(t==='week')     renderWeek();
   if(t==='scores')   renderScores();
   if(t==='paid')     renderPaid();
   if(t==='organic')  renderOrganic();
