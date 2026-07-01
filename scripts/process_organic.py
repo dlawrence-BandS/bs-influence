@@ -25,6 +25,9 @@ from pathlib import Path
 # ── B&S owned accounts to exclude ──
 BS_ACCOUNTS = {'barkerandstonehouse'}
 
+# ── Non-influencer accounts to exclude (partners, sponsors, businesses) ──
+EXCLUDE_ACCOUNTS = {'trees4trees', 'jarroldnorwich', 'queensburycoffee'}
+
 # ── Username → clean creator name ──
 CREATOR_MAP = {
     'my.lymingtonhome':       'Shannon (Lymington Home)',
@@ -121,9 +124,9 @@ def main(input_path=None):
             return
         print(f"Found: {input_path}")
 
-    # Filter out B&S owned posts — keep only influencer posts
-    influencer_df = df[~df['Account username'].isin(BS_ACCOUNTS)].copy()
-    print(f"  Total rows: {len(df)} | B&S owned: {len(df) - len(influencer_df)} | Influencer: {len(influencer_df)}")
+    # Filter out B&S owned posts and non-influencer accounts
+    influencer_df = df[~df['Account username'].isin(BS_ACCOUNTS | EXCLUDE_ACCOUNTS)].copy()
+    print(f"  Total rows: {len(df)} | Excluded: {len(df) - len(influencer_df)} | Influencer: {len(influencer_df)}")
 
     if influencer_df.empty:
         print("✗ No influencer posts found after filtering.")
