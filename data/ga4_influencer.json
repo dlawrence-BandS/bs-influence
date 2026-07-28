@@ -1,7 +1,119 @@
 {
-  "updated_at": "2026-07-14T10:36:19.397169Z",
+  "updated_at": "2026-07-28T10:12:53.098173Z",
   "lookback_days": 180,
   "rows": [
+    {
+      "date": "2026-07-27",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-26",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-25",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-24",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-23",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 7,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-22",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-21",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-20",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-19",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-18",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-17",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-16",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-15",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 0,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-07-14",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
+      "transactions": 0,
+      "revenue": 0.0
+    },
     {
       "date": "2026-07-13",
       "creator": "social",
@@ -149,7 +261,7 @@
     {
       "date": "2026-06-24",
       "creator": "social",
-      "campaign": "my.lymingtonhome",
+      "campaign": "behindnumberdeux",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -157,7 +269,7 @@
     {
       "date": "2026-06-24",
       "creator": "social",
-      "campaign": "behindnumberdeux",
+      "campaign": "my.lymingtonhome",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -341,16 +453,16 @@
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 4,
+      "campaign": "amelialucyhome",
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "amelialucyhome",
-      "sessions": 1,
+      "campaign": "life_at_the_lodge",
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -452,17 +564,17 @@
     },
     {
       "date": "2026-05-16",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 9,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-16",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 4,
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -484,17 +596,17 @@
     },
     {
       "date": "2026-05-13",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 1,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-13",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 2,
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
