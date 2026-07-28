@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T10:12:53.098173Z",
+  "updated_at": "2026-07-28T10:44:13.555081Z",
   "lookback_days": 180,
   "rows": [
     {
@@ -453,16 +453,16 @@
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "amelialucyhome",
-      "sessions": 1,
+      "campaign": "life_at_the_lodge",
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 4,
+      "campaign": "amelialucyhome",
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -564,17 +564,17 @@
     },
     {
       "date": "2026-05-16",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 4,
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-16",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 9,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
