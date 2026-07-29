@@ -4,7 +4,7 @@ echo  B^&S Influence — Data Refresh
 echo ================================
 echo.
 
-set GOOGLE_APPLICATION_CREDENTIALS=C:\Users\dlawrence\Documents\commanding-air-450109-p0-f8a1b53898f5.json
+set GOOGLE_APPLICATION_CREDENTIALS=C:\Users\dlawrence\Documents\commanding-air-450109-p0-fc13755f68d3.json
 
 echo [1/3] Fetching GA4 influencer data from BigQuery...
 python scripts/fetch_ga4_influencer.py

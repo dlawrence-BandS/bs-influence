@@ -765,17 +765,16 @@
         <div style="height:200px"><canvas id="ch-paid-purch"></canvas></div>
       </div>
     </div>
-    <div class="sh"><h2>Daily Breakdown</h2><span class="sh-sub" id="paid-lbl"></span></div>
+    <div class="sh"><h2>Creator Breakdown</h2><span class="sh-sub" id="paid-lbl"></span></div>
     <div class="tw">
       <table id="paid-table">
         <thead><tr>
-          <th data-sort="date" class="sorted">Date ↓</th>
-          <th>Creator</th>
+          <th data-sort="creator">Creator</th>
           <th data-sort="reach">Reach</th>
           <th data-sort="clicks">Clicks</th>
           <th data-sort="purchases">Purchases</th>
           <th data-sort="conversion_value">Conv. Value</th>
-          <th data-sort="spend">Spend</th>
+          <th data-sort="spend" class="sorted">Spend ↓</th>
           <th data-sort="roas">ROAS</th>
         </tr></thead>
         <tbody id="paid-tbody"></tbody>
@@ -869,7 +868,7 @@
 let D = { paid:[], organic:[], ga4:[] };
 let charts = {};
 let state = { period:'all', creator:'all', activeTab:'overview' };
-let paidSort = { col:'date', dir:-1 };
+let paidSort = { col:'spend', dir:-1 };
 let orgSort  = { col:'date', dir:-1 };
 
 function loadProducts() { try { return JSON.parse(localStorage.getItem('bs_influence_products')||'{}'); } catch(e){return{};} }
@@ -1156,17 +1155,22 @@ function renderPaid() {
     }
   });
 
-  const sorted=[...rows].sort((a,b)=>{
+  const crRows = Object.entries(byCr).map(([creator,v])=>({
+    creator,
+    reach: v.reach, clicks: v.clicks, purchases: v.purchases,
+    conversion_value: v.conv_value, spend: v.spend,
+    roas: v.spend>0 ? v.conv_value/v.spend : 0,
+  }));
+  const sorted=[...crRows].sort((a,b)=>{
     const av=a[paidSort.col],bv=b[paidSort.col];
     return typeof av==='string'?paidSort.dir*av.localeCompare(bv):paidSort.dir*(av-bv);
   });
-  document.getElementById('paid-lbl').textContent=`${sorted.length} daily rows`;
+  document.getElementById('paid-lbl').textContent=`${sorted.length} creators`;
   document.getElementById('paid-tbody').innerHTML=sorted.map(r=>{
-    const roas=r.spend>0?(r.conversion_value/r.spend).toFixed(1)+'x':'—';
+    const roas=r.spend>0?r.roas.toFixed(1)+'x':'—';
     const roasCol=r.roas>20?'var(--neon)':r.roas>10?'var(--purple)':'var(--text)';
     return `<tr>
-      <td class="td-m">${fDate(r.date)}</td>
-      <td>${r.creator_name}</td>
+      <td>${r.creator}</td>
       <td>${fN(r.reach||0)}</td>
       <td>${fN(r.clicks||0)}</td>
       <td>${r.purchases>0?r.purchases:'<span class="td-m">—</span>'}</td>

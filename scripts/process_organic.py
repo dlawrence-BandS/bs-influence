@@ -138,19 +138,21 @@ def main(input_path=None):
     )
     influencer_df['date'] = influencer_df['Publish time'].dt.strftime('%Y-%m-%d')
 
-    # Preserve existing product tags (manual edits in dashboard)
+    # Load existing posts — used to preserve manual product tags AND to
+    # merge history (exports only cover a window; older posts must be kept)
+    existing_posts = []
     existing_products = {}
     existing_path = Path('data/organic_posts.json')
     if existing_path.exists():
         try:
             with open(existing_path, encoding='utf-8') as f:
-                existing = json.load(f)
+                existing_posts = json.load(f)
             existing_products = {
                 p['permalink']: p.get('product', '')
-                for p in existing if p.get('permalink')
+                for p in existing_posts if p.get('permalink')
             }
             tagged = sum(1 for v in existing_products.values() if v)
-            print(f"  Preserving {tagged} existing product tags")
+            print(f"  Loaded {len(existing_posts)} existing posts | Preserving {tagged} product tags")
         except Exception as e:
             print(f"  Warning: could not read existing organic_posts.json ({e})")
 
@@ -196,12 +198,27 @@ def main(input_path=None):
             "paid":         is_paid,
         })
 
+    # ── Merge with existing history ──
+    # New export wins for overlapping posts (refreshed metrics);
+    # older posts not in this export's window are kept.
+    new_permalinks = {p['permalink'] for p in posts if p['permalink']}
+    kept_old = [
+        p for p in existing_posts
+        if not (p.get('permalink') and p['permalink'] in new_permalinks)
+    ]
+    merged = kept_old + posts
+    merged.sort(key=lambda p: str(p.get('date') or ''))
+    for i, p in enumerate(merged):
+        p['id'] = i + 1
+
+    print(f"  Merge: {len(posts)} from export | {len(kept_old)} kept from history | {len(merged)} total")
+
     out = Path('data/organic_posts.json')
     with open(out, 'w', encoding='utf-8') as f:
-        json.dump(posts, f, indent=2, ensure_ascii=False)
+        json.dump(merged, f, indent=2, ensure_ascii=False)
 
-    print(f"✓ Written {len(posts)} influencer posts to {out}")
-    creators = set(p['creator'] for p in posts)
+    print(f"✓ Written {len(merged)} influencer posts to {out}")
+    creators = set(p['creator'] for p in merged)
     print(f"  Creators ({len(creators)}): {', '.join(sorted(creators))}")
 
 
