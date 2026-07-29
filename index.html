@@ -265,7 +265,7 @@
   }
 
   /* ── CREATOR CARDS ── */
-  .cgrid { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 12px; margin-bottom: 24px; }
+  .cgrid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 12px; margin-bottom: 24px; }
 
   .ccard {
     background: var(--surface);
@@ -290,7 +290,7 @@
   .ccard:hover::before { opacity: 1; }
   .ccard.sel { border-color: var(--neon); background: var(--surface2); }
 
-  .ctop { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; position: relative; z-index: 1; }
+  .ctop { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; position: relative; z-index: 1; padding-right: 40px; }
   .cav {
     width: 40px; height: 40px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -300,10 +300,11 @@
   }
   .cinfo { flex: 1; min-width: 0; }
   .cname { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .chandle { font-size: 11px; color: var(--muted); }
+  .chandle-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .chandle { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .ctier {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .09em; padding: 2px 7px; border-radius: 8px; flex-shrink: 0;
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; padding: 1px 6px; border-radius: 8px; flex-shrink: 0;
   }
   .t-Macro { background: rgba(184,240,0,.14); color: var(--neon); }
   .t-Mid   { background: rgba(139,92,246,.14); color: var(--purple); }
@@ -1087,8 +1088,10 @@ function renderCreatorGrid() {
       ${scoreVal!==null?`<div class="score-badge" style="background:${scoreBg}">${scoreVal}</div>`:''}
       <div class="ctop">
         <div class="cav" style="background:${col}">${initials}</div>
-        <div class="cinfo"><div class="cname">${c.name}</div><div class="chandle">${handle}</div></div>
-        <span class="ctier t-${tier}">${tier}</span>
+        <div class="cinfo">
+          <div class="cname">${c.name}</div>
+          <div class="chandle-row"><span class="chandle">${handle}</span><span class="ctier t-${tier}">${tier}</span></div>
+        </div>
       </div>
       <div class="cstats">
         <div><div class="csm-lbl">Reach</div><div class="csm-val">${fN(c.p.reach||0)}</div></div>
