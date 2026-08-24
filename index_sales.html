@@ -1,0 +1,221 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing &amp; Sales — Barker &amp; Stonehouse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root{--ivory:#f7f3ea;--paper:#fffdf8;--ink:#2b2721;--muted:#7d7566;--brass:#9c7b45;--brass-soft:#c8ad7e;--line:rgba(156,123,69,.28);--online:#6f7f78;--none:#c8c2b3;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ivory);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.5;padding:0 0 64px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  header{padding:30px 0 18px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+  .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);font-weight:600}
+  h1{font-family:'Playfair Display',serif;font-weight:500;font-size:33px;margin-top:6px}
+  .sub{color:var(--muted);font-size:13.5px;margin-top:6px;max-width:640px}
+  #status{font-size:12.5px;color:var(--muted);text-align:right;white-space:nowrap}
+  #status .live{color:var(--brass);font-weight:600}
+  .controls{display:flex;gap:22px;align-items:end;flex-wrap:wrap;padding:14px 0 18px;border-bottom:1px solid var(--line);margin-bottom:22px}
+  .cgroup{display:flex;flex-direction:column;gap:6px}
+  .cgroup label{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .pills{display:flex;gap:6px}
+  .pill{font-family:inherit;font-size:12.5px;font-weight:600;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:8px 13px;cursor:pointer}
+  .pill.on{color:var(--paper);background:var(--brass);border-color:var(--brass)}
+  .insights{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+  .ins{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:6px;padding:15px 17px}
+  .ins .it{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);font-weight:600}
+  .ins .iw{font-size:13px;color:var(--ink);margin-top:8px;line-height:1.5}.ins .iw b{color:var(--ink)}
+  .ins .ia{font-size:12px;color:var(--muted);margin-top:8px}.ins .ia b{color:var(--ink)}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  .kpi{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:18px 20px}
+  .kpi .lbl{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .kpi .val{font-family:'Playfair Display',serif;font-size:28px;font-weight:500;margin-top:8px}
+  .kpi .note{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:20px 22px 24px;margin-bottom:20px}
+  .card h2{font-family:'Playfair Display',serif;font-weight:500;font-size:18px}
+  .card .cap{font-size:12px;color:var(--muted);margin-top:3px;margin-bottom:16px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .grid2 .card{margin-bottom:0}
+  .chart-box{position:relative;height:300px}.chart-box.short{height:240px}
+  footer{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  footer b{color:var(--ink)}footer ul{margin:8px 0 0 18px}footer li{margin:3px 0}
+  .gate{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:44px 40px;text-align:center;margin:60px auto;max-width:520px}
+  .gate h2{font-family:'Playfair Display',serif;font-weight:500;font-size:22px;margin-bottom:8px}
+  .gate p{color:var(--muted);font-size:14px;margin-bottom:24px}
+  .btn{font-family:inherit;font-size:14px;font-weight:600;color:var(--paper);background:var(--brass);border:none;border-radius:5px;padding:11px 20px;cursor:pointer}
+  .err{color:#9c443c;font-size:13px;margin-top:16px}.hidden{display:none}
+  @media(max-width:820px){.kpis,.insights{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}h1{font-size:26px}}
+</style></head>
+<body>
+<div class="wrap">
+  <header>
+    <div><div class="eyebrow">Barker &amp; Stonehouse · Ometria</div>
+      <h1>Marketing &amp; Sales</h1>
+      <div class="sub">Order-level revenue by channel and marketing source — does marketing drive in-store and online sales?</div></div>
+    <div id="status"></div>
+  </header>
+  <div id="gate" class="gate">
+    <h2>Connect to BigQuery</h2>
+    <p>Reads live from the Ometria orders view. Aggregated in the browser — no personal details leave BigQuery.</p>
+    <button id="connectBtn" class="btn">Connect</button><div id="gateErr" class="err"></div>
+  </div>
+</div>
+
+<div id="dash" class="wrap hidden">
+  <div class="controls">
+    <div class="cgroup"><label>Period (by order date)</label>
+      <div class="pills" id="periodPills">
+        <button class="pill" data-p="30d">30 days</button>
+        <button class="pill" data-p="90d">90 days</button>
+        <button class="pill on" data-p="12m">12 months</button>
+        <button class="pill" data-p="all">All</button>
+      </div></div>
+  </div>
+
+  <div id="insights" class="insights"></div>
+  <div class="kpis" id="kpis"></div>
+
+  <div class="card">
+    <h2>Revenue over time — online vs in-store</h2>
+    <div class="cap">Monthly order revenue by channel. In-store began appearing as the offline integration came online.</div>
+    <div class="chart-box"><canvas id="monthChart"></canvas></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Revenue by marketing source</h2>
+      <div class="cap">Order revenue by the source that drove the visit; brass portion is in-store.</div>
+      <div class="chart-box short"><canvas id="medChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>In-store revenue by store</h2>
+      <div class="cap">Physical-store order revenue (top 12).</div>
+      <div class="chart-box short"><canvas id="storeChart"></canvas></div>
+    </div>
+  </div>
+
+  <footer>
+    <b>Reading this honestly.</b>
+    <ul>
+      <li>Valid orders only, rolling ~12 months. "Untracked / direct" covers orders with no captured marketing source (walk-in, direct, or untagged) — a large share, normal for retail.</li>
+      <li>In-store is a small share of revenue today because the offline order feed is new — the trend is the thing to watch, not the level.</li>
+      <li>"Ometria email" attribution is Ometria's own model crediting an order to an email — your cleanest read on email-driven revenue.</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+const PROJECT="commanding-air-450109-p0", LOCATION="europe-west2";
+const VIEWS="`"+PROJECT+".ometria.v_sales`";
+const CLIENT_ID="46227372300-rk63ag0caqgd7n12gjd0nt7f2qi7llqr.apps.googleusercontent.com";
+const SCOPE="https://www.googleapis.com/auth/bigquery.readonly";
+const STORE_NAMES={"01":"Head Office","1":"Web Site","11":"Phone","12":"Darlington","13":"Stockton","14":"Knaresborough","15":"Metro","16":"Leeds","17":"Middlesbrough Outlet","19":"Nottingham","20":"Hull","21":"Battersea","22":"Hove","23":"Guildford","24":"Fenwick Newcastle","25":"Metro Outlet","27":"Jarrolds","34":"Fenwick Kingston"};
+const PERIODS={'30d':{days:30},'90d':{days:90},'12m':{days:365},'all':{days:null}};
+let RANGE='12m';
+
+let tokenClient=null,cachedToken=null,tokenExpiry=0,tokenInFlight=null;
+function getToken(){
+  if(cachedToken&&Date.now()<tokenExpiry)return Promise.resolve(cachedToken);
+  if(tokenInFlight)return tokenInFlight;
+  tokenInFlight=new Promise((resolve,reject)=>{
+    tokenClient.callback=(r)=>{tokenInFlight=null;if(r.error){reject(new Error(r.error));return;}
+      cachedToken=r.access_token;tokenExpiry=Date.now()+((r.expires_in||3600)-60)*1000;resolve(cachedToken);};
+    tokenClient.requestAccessToken({prompt:cachedToken?'':'consent'});});
+  return tokenInFlight;}
+async function bq(sql){
+  const token=await getToken();
+  const r=await fetch(`https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT}/queries`,{
+    method:"POST",headers:{Authorization:`Bearer ${token}`,"Content-Type":"application/json"},
+    body:JSON.stringify({query:sql,useLegacySql:false,location:LOCATION,timeoutMs:60000})});
+  const j=await r.json(); if(j.error)throw new Error(j.error.message);
+  const cols=(j.schema?.fields||[]).map(f=>f.name);
+  return (j.rows||[]).map(row=>{const o={};row.f.forEach((c,i)=>o[cols[i]]=c.v);return o;});}
+
+const gbp0=n=>"£"+Math.round(n).toLocaleString("en-GB");
+const gbpK=n=>Math.abs(n)>=1e6?"£"+(n/1e6).toFixed(1)+"m":"£"+Math.round(n/1000)+"k";
+const N=v=>Number(v)||0;
+const C={ink:'#2b2721',muted:'#7d7566',brass:'#9c7b45',brassSoft:'#c8ad7e',online:'#6f7f78',none:'#c8c2b3',line:'rgba(156,123,69,.18)',paper:'#fffdf8'};
+function setStatus(h){document.getElementById('status').innerHTML=h;}
+let charts={};
+function pw(){const p=PERIODS[RANGE];return p.days?`WHERE order_ts >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL ${p.days} DAY)`:'';}
+function mlabel(m){const d=new Date(m);return d.toLocaleDateString('en-GB',{month:'short',year:'2-digit'});}
+
+async function load(){
+  setStatus('Loading…');
+  const w=pw(); const sw=w?w.replace('WHERE',"WHERE channel='In-store' AND"):"WHERE channel='In-store'";
+  const [kpi,month,med,store]=await Promise.all([
+    bq(`SELECT SUM(revenue) rev, COUNT(*) orders, SUM(IF(channel='In-store',revenue,0)) irev,
+        COUNTIF(channel='In-store') iord, SUM(IF(email_attributed,revenue,0)) erev FROM ${VIEWS} ${w}`),
+    bq(`SELECT CAST(month AS STRING) m, channel, SUM(revenue) rev FROM ${VIEWS} ${w} GROUP BY 1,2 ORDER BY 1`),
+    bq(`SELECT medium, SUM(revenue) rev, SUM(IF(channel='In-store',revenue,0)) irev FROM ${VIEWS} ${w} GROUP BY 1`),
+    bq(`SELECT store, SUM(revenue) rev, COUNT(*) o FROM ${VIEWS} ${sw} GROUP BY 1`)
+  ]);
+  const k=kpi[0];
+  const rev=N(k.rev),orders=N(k.orders),irev=N(k.irev),erev=N(k.erev);
+  const ishare=rev?Math.round(irev/rev*100):0, aov=orders?rev/orders:0;
+  document.getElementById('kpis').innerHTML=[
+    {l:'Revenue',v:gbpK(rev),n:orders.toLocaleString('en-GB')+' orders'},
+    {l:'Avg order value',v:gbp0(aov),n:'per order'},
+    {l:'In-store revenue',v:gbpK(irev),n:ishare+'% of revenue'},
+    {l:'Email-attributed',v:gbpK(erev),n:'credited to Ometria email'}
+  ].map(x=>`<div class="kpi"><div class="lbl">${x.l}</div><div class="val">${x.v}</div><div class="note">${x.n}</div></div>`).join('');
+
+  // insights
+  const medArr=med.map(r=>({m:r.medium,rev:N(r.rev),irev:N(r.irev)})).sort((a,b)=>b.rev-a.rev);
+  const topTracked=medArr.filter(x=>!x.m.startsWith('Untracked'))[0];
+  document.getElementById('insights').innerHTML=[
+    {t:'In-store sales',w:`In-store is <b>${gbpK(irev)}</b> (<b>${ishare}%</b>) of revenue this period, across ${N(k.iord).toLocaleString('en-GB')} orders.`,a:'<b>Watch:</b> small today because the offline feed is new — the trend is what matters.'},
+    {t:'Does marketing drive sales?',w:topTracked?`<b>${topTracked.m}</b> is your top tracked source at <b>${gbpK(topTracked.rev)}</b> of order revenue.`:'Most orders have no tracked source.',a:'<b>For James:</b> revenue tied to the marketing that drove the visit.'},
+    {t:'Email-driven revenue',w:`<b>${gbpK(erev)}</b> of revenue is attributed to Ometria email this period.`,a:'<b>Proof point:</b> direct evidence email marketing generates sales.'}
+  ].map(i=>`<div class="ins"><div class="it">${i.t}</div><div class="iw">${i.w}</div><div class="ia">${i.a}</div></div>`).join('');
+
+  // monthly revenue by channel (stacked)
+  const mm={};month.forEach(r=>{(mm[r.m]=mm[r.m]||{Online:0,'In-store':0})[r.channel]=N(r.rev);});
+  const months=Object.keys(mm).sort();
+  charts.month&&charts.month.destroy();
+  charts.month=new Chart(monthChart,{type:'bar',
+    data:{labels:months.map(mlabel),datasets:[
+      {label:'Online',data:months.map(m=>mm[m].Online),backgroundColor:C.online,borderRadius:2,stack:'s'},
+      {label:'In-store',data:months.map(m=>mm[m]['In-store']),backgroundColor:C.brass,borderRadius:2,stack:'s'}]},
+    options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:14}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${gbpK(c.parsed.y)}`}}},
+      scales:{x:{stacked:true,grid:{display:false},ticks:{maxTicksLimit:14,font:{size:10}}},y:{stacked:true,grid:{color:C.line},ticks:{callback:gbpK}}}}});
+
+  // revenue by medium (total + in-store portion)
+  const top=medArr.slice(0,8);
+  charts.med&&charts.med.destroy();
+  charts.med=new Chart(medChart,{type:'bar',
+    data:{labels:top.map(x=>x.m),datasets:[
+      {label:'Online',data:top.map(x=>x.rev-x.irev),backgroundColor:C.online,borderRadius:2,stack:'s'},
+      {label:'In-store',data:top.map(x=>x.irev),backgroundColor:C.brass,borderRadius:2,stack:'s'}]},
+    options:{indexAxis:'y',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10,font:{size:11}}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${gbpK(c.parsed.x)}`}}},
+      scales:{x:{stacked:true,grid:{color:C.line},ticks:{callback:gbpK}},y:{stacked:true,grid:{display:false}}}}});
+
+  // in-store revenue by store
+  const st=store.map(r=>({name:STORE_NAMES[r.store]||r.store,rev:N(r.rev),o:N(r.o)})).filter(x=>x.name!=='Web Site').sort((a,b)=>b.rev-a.rev).slice(0,12);
+  charts.store&&charts.store.destroy();
+  charts.store=new Chart(storeChart,{type:'bar',
+    data:{labels:st.map(x=>x.name),datasets:[{data:st.map(x=>x.rev),backgroundColor:C.brass,borderRadius:3,barThickness:20}]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${gbpK(c.parsed.y)} · ${st[c.dataIndex].o} orders`}}},
+      scales:{y:{grid:{color:C.line},ticks:{callback:gbpK}},x:{grid:{display:false},ticks:{maxRotation:45,minRotation:45,font:{size:9}}}}}});
+
+  const now=new Date().toLocaleString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const pl={'30d':'last 30 days','90d':'last 90 days','12m':'last 12 months','all':'all data'}[RANGE];
+  setStatus(`<span class="live">● Live</span> · ${orders.toLocaleString('en-GB')} orders · ${pl} · ${now}`);
+}
+
+document.querySelectorAll('#periodPills .pill').forEach(p=>p.addEventListener('click',()=>{
+  document.querySelectorAll('#periodPills .pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');RANGE=p.dataset.p;load();}));
+document.getElementById('connectBtn').addEventListener('click',async()=>{
+  const btn=document.getElementById('connectBtn'),err=document.getElementById('gateErr');
+  err.textContent='';btn.disabled=true;btn.textContent='Connecting…';
+  try{
+    if(!tokenClient)tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:SCOPE,callback:()=>{}});
+    await getToken();
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('dash').classList.remove('hidden');
+    await load();
+  }catch(e){err.textContent='Could not load: '+e.message;btn.disabled=false;btn.textContent='Retry';}
+});
+</script>
+</body></html>
