@@ -52,6 +52,7 @@ CREATOR_MAP = {
     'ourberkelyhome':         'Abbey (Our Berkeley Home)',
     'nerkesharogers':         'Nerkesha Rogers',
     'trees4trees':            'Trees4Trees',
+    'thehoppyhome':           'The Hoppy Home',
 }
 
 # ── Creators who have been in paid campaigns ──
