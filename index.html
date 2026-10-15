@@ -169,6 +169,21 @@
 
   /* ── MAIN ── */
   main { padding: 28px 40px; max-width: 1440px; margin: 0 auto; }
+
+  /* ── EVENT TAB ── */
+  .evgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; margin-bottom:24px; }
+  .evcard { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .evcard-top { display:flex; align-items:center; gap:11px; margin-bottom:12px; }
+  .evav { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; color:#0d0b14; flex-shrink:0; }
+  .evname { font-weight:600; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .evhandle a { font-size:11px; color:var(--muted); text-decoration:none; }
+  .evhandle a:hover { color:var(--neon); }
+  .evstats { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:12px; }
+  .evstat-l { font-size:9px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+  .evstat-v { font-size:14px; font-weight:700; }
+  .evlinks a { font-size:12px; color:var(--neon); text-decoration:none; margin-right:12px; }
+  .evpending { opacity:.55; border-style:dashed; }
+  .evnote { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--purple); border-radius:10px; padding:14px 16px; font-size:13px; line-height:1.6; margin-bottom:24px; }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
@@ -642,10 +657,12 @@
   <div class="tab" data-tab="scores">InfluenScores</div>
   <div class="tab" data-tab="paid">Paid Ads</div>
   <div class="tab" data-tab="organic">Organic</div>
+  <div class="tab" data-tab="event">Event</div>
+  <div class="tab" data-tab="influx">Influx</div>
   <div class="tab" data-tab="ga4">GA4</div>
 </div>
 
-<div class="filters">
+<div class="filters" id="filters-bar">
   <span class="flabel">Period</span>
   <button class="fbtn active" data-period="all">All time</button>
   <button class="fbtn" data-period="90">Last 90 days</button>
@@ -1274,6 +1291,191 @@ function renderOrganic() {
       input._t=setTimeout(()=>{dot.classList.remove('show');lbl.textContent='';},2000);
     });
   });
+}
+
+
+// ─────────────────────────────────────
+// CAMPAIGN TABS (Event, Influx) — one config each, one shared renderer
+// ─────────────────────────────────────
+const CAMPAIGNS = {
+  event: {
+    title: 'Influencer Event',
+    date: '2026-09-24',   // posts from this date count
+    handles: ['homebydaniellex','yorkshirehousebuild','life_at_the_lodge','thatmeadowreno',
+              'cresta_home','thehousebythetreeviews','ashwood_house_','thelittlehouseinlondon',
+              'bessieshome','ourblythgaff','aspen.home.x','yasi.fatollahy','makingitmint',
+              '_1902interiors','stylingnumber12','thegeorgianfarmhouse__'],
+    ga4Extra: [],
+  },
+  influx: {
+    title: 'Influx — Autumn Campaign',
+    date: '2026-09-01',   // ← campaign start date; posts from this date count
+    handles: ['meaux.house','lifeinthewolds','overdale_home','sophiejaynehomes','reynoldsresidence',
+              'thestylepad_uk','east_shore_home','ourberkelyhome','our.home.in.dorset'],
+    ga4Extra: ['influx'],
+  },
+};
+
+const evH = p => (p.handle||'').replace('@','').toLowerCase();
+const evNorm = s => (s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+function campaignPosts(cfg) {
+  return D.organic.filter(p => p.date >= cfg.date && cfg.handles.includes(evH(p)));
+}
+
+// build each campaign's panel once, just before the GA4 panel
+Object.entries(CAMPAIGNS).forEach(([k,cfg]) => {
+  document.getElementById('tab-ga4').insertAdjacentHTML('beforebegin', `
+  <div class="tab-panel" id="tab-${k}">
+    <div class="sh" style="margin-top:0"><h2>${cfg.title}</h2><span class="sh-sub" id="${k}-sub"></span></div>
+    <div class="kpis" id="kpis-${k}"></div>
+    <div class="sh"><h2>Creators</h2><span class="sh-sub" id="${k}-creators-lbl"></span></div>
+    <div class="evgrid" id="${k}-grid"></div>
+    <div class="g2e">
+      <div class="cc"><div class="cc-title">Reach vs views</div><div class="cc-head">By Creator</div>
+        <div style="height:240px"><canvas id="ch-${k}-reach"></canvas></div></div>
+      <div class="cc"><div class="cc-title">Engagement</div><div class="cc-head">Likes + Comments by Creator</div>
+        <div style="height:240px"><canvas id="ch-${k}-eng"></canvas></div></div>
+    </div>
+    <div class="sh"><h2>Posts</h2><span class="sh-sub" id="${k}-lbl"></span></div>
+    <div class="tw"><table>
+      <thead><tr><th>Creator</th><th>Handle</th><th>Type</th><th>Date</th><th>Reach</th><th>Views</th>
+        <th>Likes</th><th>Comments</th><th>New followers</th><th>Post</th></tr></thead>
+      <tbody id="${k}-tbody"></tbody>
+    </table></div>
+    <div class="sh"><h2>Website Impact</h2><span class="sh-sub">GA4 sessions from trackable links</span></div>
+    <div id="${k}-ga4"></div>
+  </div>`);
+});
+
+function renderCampaign(k) {
+  const cfg = CAMPAIGNS[k];
+  const posts = campaignPosts(cfg);
+  const posted = new Set(posts.map(evH));
+  const waiting = cfg.handles.filter(h => !posted.has(h));
+  const days = Math.max(1, Math.round((new Date() - new Date(cfg.date)) / 864e5));
+  document.getElementById(k+'-sub').textContent =
+    `From ${new Date(cfg.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})} · ${days} days in`;
+
+  const reach = posts.reduce((s,p)=>s+(p.reach||0),0);
+  const views = posts.reduce((s,p)=>s+(p.impressions||0),0);
+  const likes = posts.reduce((s,p)=>s+(p.likes||0),0);
+  const comms = posts.reduce((s,p)=>s+(p.comments||0),0);
+  const hasFollows = posts.some(p => p.follows !== undefined);
+  const follows = posts.reduce((s,p)=>s+(p.follows||0),0);
+  const eng = likes + comms;
+
+  mkKPIs('kpis-'+k, [
+    {label:'Creators posted', value:`${posted.size}/${cfg.handles.length}`, sub: waiting.length ? `${waiting.length} not posted yet` : 'all posted', hi:true},
+    {label:'Posts',           value:posts.length, sub:'in this campaign'},
+    {label:'Reach',           value:fN(reach),    sub:'combined'},
+    {label:'Views',           value:fN(views),    sub:'combined'},
+    {label:'Engagement',      value:fN(eng),      sub:'likes + comments'},
+    {label:'Engagement rate', value:reach>0?(eng/reach*100).toFixed(1)+'%':'—', sub:'engagement / reach'},
+    {label:'New followers',   value:hasFollows?fN(follows):'—', sub:hasFollows?'gained on creators\u2019 accounts':'run refresh.bat'},
+  ]);
+
+  const by = {};
+  posts.forEach(p => {
+    const h = evH(p);
+    if (!by[h]) by[h] = {name:p.creator, handle:h, posts:[], reach:0, views:0, likes:0, comments:0};
+    const c = by[h];
+    c.posts.push(p); c.reach+=p.reach||0; c.views+=p.impressions||0; c.likes+=p.likes||0; c.comments+=p.comments||0;
+  });
+  const creators = Object.values(by).sort((a,b)=>b.reach-a.reach);
+
+  document.getElementById(k+'-creators-lbl').textContent =
+    `${creators.length} posted${waiting.length?` · ${waiting.length} awaiting`:''}`;
+
+  const initials = n => n.replace(/\(.*?\)/g,'').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+  const live = creators.map(c => `
+    <div class="evcard">
+      <div class="evcard-top">
+        <div class="evav" style="background:${cc(c.name)}">${initials(c.name)}</div>
+        <div style="min-width:0">
+          <div class="evname">${c.name}</div>
+          <div class="evhandle"><a href="https://www.instagram.com/${c.handle}/" target="_blank">@${c.handle}</a></div>
+        </div>
+      </div>
+      <div class="evstats">
+        <div><div class="evstat-l">Reach</div><div class="evstat-v">${fN(c.reach)}</div></div>
+        <div><div class="evstat-l">Views</div><div class="evstat-v">${fN(c.views)}</div></div>
+        <div><div class="evstat-l">Likes</div><div class="evstat-v">${fN(c.likes)}</div></div>
+        <div><div class="evstat-l">Comments</div><div class="evstat-v">${fN(c.comments)}</div></div>
+      </div>
+      <div class="evlinks">
+        ${c.posts.map((p,i)=>p.permalink?`<a href="${p.permalink}" target="_blank">${c.posts.length>1?'Post '+(i+1):'View post'} ↗</a>`:'').join('')}
+      </div>
+    </div>`);
+  const pending = waiting.map(h => `
+    <div class="evcard evpending">
+      <div class="evcard-top">
+        <div class="evav" style="background:rgba(255,255,255,.15);color:var(--muted)">–</div>
+        <div style="min-width:0">
+          <div class="evname" style="color:var(--muted)">No post yet</div>
+          <div class="evhandle"><a href="https://www.instagram.com/${h}/" target="_blank">@${h}</a></div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted)">Not in the data yet — will appear after the next export + refresh.</div>
+    </div>`);
+  document.getElementById(k+'-grid').innerHTML = live.concat(pending).join('');
+
+  dc(k+'-reach'); dc(k+'-eng');
+  const lbl = creators.map(c => c.name);
+  charts[k+'-reach'] = new Chart(el('ch-'+k+'-reach'), {
+    type:'bar',
+    data:{labels:lbl, datasets:[
+      {label:'Reach', data:creators.map(c=>c.reach), backgroundColor:'rgba(184,240,0,0.3)', borderColor:'#b8f000', borderWidth:1.5, borderRadius:3},
+      {label:'Views', data:creators.map(c=>c.views), backgroundColor:'rgba(139,92,246,0.3)', borderColor:'#8b5cf6', borderWidth:1.5, borderRadius:3},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:LG},
+      scales:{x:{ticks:TX,grid:{display:false}}, y:{ticks:TX,grid:GR}}}
+  });
+  charts[k+'-eng'] = new Chart(el('ch-'+k+'-eng'), {
+    type:'bar',
+    data:{labels:lbl, datasets:[
+      {label:'Likes',    data:creators.map(c=>c.likes),    backgroundColor:'rgba(236,72,153,0.3)', borderColor:'#ec4899', borderWidth:1.5, borderRadius:3},
+      {label:'Comments', data:creators.map(c=>c.comments), backgroundColor:'rgba(6,182,212,0.3)',  borderColor:'#06b6d4', borderWidth:1.5, borderRadius:3},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:LG},
+      scales:{x:{stacked:true,ticks:TX,grid:{display:false}}, y:{stacked:true,ticks:TX,grid:GR}}}
+  });
+
+  const sorted = [...posts].sort((a,b)=>(b.reach||0)-(a.reach||0));
+  document.getElementById(k+'-lbl').textContent = `${sorted.length} post${sorted.length!==1?'s':''}`;
+  document.getElementById(k+'-tbody').innerHTML = sorted.map(p => `<tr>
+    <td>${p.creator}</td>
+    <td class="td-m" style="font-size:11px">${p.handle}</td>
+    <td><span class="tbadge tb-${p.content_type}">${p.content_type}</span></td>
+    <td class="td-m">${fDate(p.date)}</td>
+    <td>${p.reach>0?fN(p.reach):'<span class="reach-na">—</span>'}</td>
+    <td>${p.impressions>0?fN(p.impressions):'<span class="reach-na">—</span>'}</td>
+    <td>${fN(p.likes)}</td>
+    <td>${fN(p.comments)}</td>
+    <td>${p.follows!==undefined?fN(p.follows):'<span class="reach-na">—</span>'}</td>
+    <td>${p.permalink?`<a href="${p.permalink}" target="_blank" style="color:var(--neon);font-size:13px;text-decoration:none">↗</a>`:'<span class="td-m">—</span>'}</td>
+  </tr>`).join('') || '<tr><td colspan="10" class="td-m">No posts in the data yet.</td></tr>';
+
+  // website impact — GA4 rows tagged with a creator handle (or an agency tag)
+  const tags = cfg.handles.map(evNorm).concat((cfg.ga4Extra||[]).map(evNorm));
+  const rows = D.ga4.filter(r => r.date >= cfg.date &&
+    (tags.includes(evNorm(r.creator)) || tags.includes(evNorm(r.campaign))));
+  const box = document.getElementById(k+'-ga4');
+  if (!rows.length) {
+    box.innerHTML = `<div class="evnote"><strong>No trackable traffic yet.</strong> GA4 only attributes sessions that
+      arrive through a link carrying a utm tag matching the creator. None of these creators are showing one,
+      so any traffic they drove is currently mixed in with general Instagram/social. A unique tracked link per
+      creator (UTM link-in-bio or a discount code) would let this section show sessions and revenue.</div>`;
+  } else {
+    const ses = rows.reduce((s,r)=>s+(r.sessions||0),0);
+    const tx  = rows.reduce((s,r)=>s+(r.transactions||0),0);
+    const rev = rows.reduce((s,r)=>s+(r.revenue||0),0);
+    box.innerHTML = `<div class="kpis" id="kpis-${k}-ga4"></div>`;
+    mkKPIs(`kpis-${k}-ga4`, [
+      {label:'Sessions',     value:fN(ses), sub:'from tracked links'},
+      {label:'Transactions', value:fN(tx),  sub:''},
+      {label:'Revenue',      value:fM(rev), sub:''},
+    ]);
+  }
 }
 
 // ─────────────────────────────────────
@@ -1917,12 +2119,14 @@ const CSS_VARS = { radius: '10px' };
 // ─────────────────────────────────────
 function render() {
   const t=state.activeTab;
+  const fb=document.getElementById('filters-bar'); if(fb) fb.style.display=CAMPAIGNS[t]?'none':'';
   if(t==='overview') { renderOverview(); buildWhatsNew(); }
   if(t==='week')     renderWeek();
   if(t==='scores')   renderScores();
   if(t==='paid')     renderPaid();
   if(t==='organic')  renderOrganic();
   if(t==='ga4')      renderGA4();
+  if(CAMPAIGNS[t])   renderCampaign(t);
 }
 
 // ─────────────────────────────────────
