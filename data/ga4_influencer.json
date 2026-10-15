@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-15T13:41:32.687010Z",
+  "updated_at": "2026-10-15T13:47:16.837081Z",
   "lookback_days": 180,
   "rows": [
     {
@@ -45,7 +45,7 @@
     {
       "date": "2026-10-09",
       "creator": "instagram",
-      "campaign": "amelialucyhome",
+      "campaign": "autumn_collaboration",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -53,7 +53,7 @@
     {
       "date": "2026-10-09",
       "creator": "instagram",
-      "campaign": "autumn_collaboration",
+      "campaign": "amelialucyhome",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -116,16 +116,16 @@
     },
     {
       "date": "2026-09-30",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-09-30",
-      "creator": "instagram",
-      "campaign": "autumn_collaboration",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -861,7 +861,7 @@
     {
       "date": "2026-06-24",
       "creator": "social",
-      "campaign": "my.lymingtonhome",
+      "campaign": "behindnumberdeux",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -869,16 +869,8 @@
     {
       "date": "2026-06-24",
       "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 1,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-06-23",
-      "creator": "social",
       "campaign": "my.lymingtonhome",
-      "sessions": 5,
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -887,6 +879,14 @@
       "creator": "social",
       "campaign": "behindnumberdeux",
       "sessions": 0,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-06-23",
+      "creator": "social",
+      "campaign": "my.lymingtonhome",
+      "sessions": 5,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -1196,17 +1196,17 @@
     },
     {
       "date": "2026-05-13",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 2,
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-13",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
-      "sessions": 1,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 2,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -1300,17 +1300,17 @@
     },
     {
       "date": "2026-05-01",
-      "creator": "instagram",
-      "campaign": "houseofhetheringtons",
-      "sessions": 9,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "sessions": 7,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-01",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "sessions": 7,
+      "creator": "instagram",
+      "campaign": "houseofhetheringtons",
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
