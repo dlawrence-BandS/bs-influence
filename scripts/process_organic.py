@@ -33,6 +33,7 @@ CREATOR_MAP = {
     'my.lymingtonhome':       'Shannon (Lymington Home)',
     'behindnumberdeux':       'Nisha (Behind Numéro Deux)',
     'toby_rex_thegingerduo':  'The Gingers & Jenn',
+    'thegingersandjenn':      'The Gingers & Jenn',
     'life_at_the_lodge':      'Life At The Lodge',
     'stripesinthecity':       'Anna (Stripes in the City)',
     'houseofhetheringtons':   'Georgia Hetherington',
@@ -53,6 +54,17 @@ CREATOR_MAP = {
     'nerkesharogers':         'Nerkesha Rogers',
     'trees4trees':            'Trees4Trees',
     'thehoppyhome':           'The Hoppy Home',
+    # ── added from Sep 2026 influencer event / recent unmapped posts ──
+    'newgirlintoon':          'New Girl in Toon (North East Guide)',
+    'yorkshirehousebuild':    'Juliette (Yorkshire House Build)',
+    '_katiepeakehome':        'Katie Peake (Home Interiors)',
+    'ralphs_home':            'Aisling & Ralph (Victorian Home)',
+    'molly.cottage':          'Molly Cottage',
+    'thatmeadowreno':         'Jade Aldred (That Meadow Reno)',
+    '_1902interiors':         'Danielle (1902 Interiors)',
+    'ourblythgaff':           'Our Blyth Gaff',
+    'ashwood_house_':         'Charlotte Tennant (Ashwood House)',
+    'hotwaxnewcastle':        'Hot Wax (Eco Friendly Candles)',
 }
 
 # ── Creators who have been in paid campaigns ──
