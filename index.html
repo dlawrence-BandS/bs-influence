@@ -1312,7 +1312,7 @@ const CAMPAIGNS = {
     date: '2026-09-01',   // ← campaign start date; posts from this date count
     handles: ['meaux.house','lifeinthewolds','overdale_home','sophiejaynehomes','reynoldsresidence',
               'thestylepad_uk','east_shore_home','ourberkelyhome','our.home.in.dorset'],
-    ga4Extra: ['influx'],
+    ga4Extra: ['autumn_collaboration'],   // utm_campaign on every Influx link
   },
 };
 
@@ -1455,25 +1455,54 @@ function renderCampaign(k) {
     <td>${p.permalink?`<a href="${p.permalink}" target="_blank" style="color:var(--neon);font-size:13px;text-decoration:none">↗</a>`:'<span class="td-m">—</span>'}</td>
   </tr>`).join('') || '<tr><td colspan="10" class="td-m">No posts in the data yet.</td></tr>';
 
-  // website impact — GA4 rows tagged with a creator handle (or an agency tag)
-  const tags = cfg.handles.map(evNorm).concat((cfg.ga4Extra||[]).map(evNorm));
-  const rows = D.ga4.filter(r => r.date >= cfg.date &&
-    (tags.includes(evNorm(r.creator)) || tags.includes(evNorm(r.campaign))));
+  // website impact — GA4 rows tied to this campaign, split by creator
+  //   a row belongs to a creator if its utm_content starts with their handle (e.g. meaux_house),
+  //   or if source/campaign equals their handle; rows on a campaign tag (ga4Extra) with no
+  //   recognisable creator are shown as "Unattributed".
+  const hn   = cfg.handles.map(h => ({h, n: evNorm(h)}));
+  const camp = (cfg.ga4Extra||[]).map(evNorm);
+  const ownerOf = r => {
+    const c = evNorm(r.content), s = evNorm(r.creator), g = evNorm(r.campaign);
+    const m = hn.find(x => (c && c.startsWith(x.n)) || s === x.n || g === x.n);
+    return m ? m.h : null;
+  };
+  const gRows = [];
+  D.ga4.forEach(r => {
+    if (r.date < cfg.date) return;
+    const owner = ownerOf(r);
+    if (owner || camp.includes(evNorm(r.campaign)) || camp.includes(evNorm(r.creator)))
+      gRows.push({owner: owner || '__other', r});
+  });
   const box = document.getElementById(k+'-ga4');
-  if (!rows.length) {
+  if (!gRows.length) {
     box.innerHTML = `<div class="evnote"><strong>No trackable traffic yet.</strong> GA4 only attributes sessions that
-      arrive through a link carrying a utm tag matching the creator. None of these creators are showing one,
+      arrive through a link carrying a utm tag matching the creator. None of these creators are showing one yet,
       so any traffic they drove is currently mixed in with general Instagram/social. A unique tracked link per
       creator (UTM link-in-bio or a discount code) would let this section show sessions and revenue.</div>`;
   } else {
-    const ses = rows.reduce((s,r)=>s+(r.sessions||0),0);
-    const tx  = rows.reduce((s,r)=>s+(r.transactions||0),0);
-    const rev = rows.reduce((s,r)=>s+(r.revenue||0),0);
-    box.innerHTML = `<div class="kpis" id="kpis-${k}-ga4"></div>`;
+    const tot = {s:0,t:0,v:0}, per = {};
+    gRows.forEach(({owner,r}) => {
+      const p = per[owner] || (per[owner] = {s:0,t:0,v:0});
+      p.s += r.sessions||0; p.t += r.transactions||0; p.v += r.revenue||0;
+      tot.s += r.sessions||0; tot.t += r.transactions||0; tot.v += r.revenue||0;
+    });
+    const nameOf = h => {
+      if (h === '__other') return 'Unattributed (campaign link, no creator tag)';
+      const p = D.organic.find(p => evH(p) === h);
+      return p ? p.creator : '@'+h;
+    };
+    const lines = Object.entries(per).sort((a,b)=>b[1].s-a[1].s).map(([h,p]) => `<tr>
+      <td>${nameOf(h)}</td><td class="td-m" style="font-size:11px">${(h==='__other'||nameOf(h)==='@'+h)?'':'@'+h}</td>
+      <td>${fN(p.s)}</td><td>${fN(p.t)}</td><td>${p.v>0?fM(p.v):'<span class="td-m">—</span>'}</td></tr>`).join('');
+    box.innerHTML = `<div class="kpis" id="kpis-${k}-ga4"></div>
+      <div class="tw" style="margin-top:16px"><table>
+        <thead><tr><th>Creator</th><th>Handle</th><th>Sessions</th><th>Transactions</th><th>Revenue</th></tr></thead>
+        <tbody>${lines}</tbody></table></div>`;
     mkKPIs(`kpis-${k}-ga4`, [
-      {label:'Sessions',     value:fN(ses), sub:'from tracked links'},
-      {label:'Transactions', value:fN(tx),  sub:''},
-      {label:'Revenue',      value:fM(rev), sub:''},
+      {label:'Sessions',     value:fN(tot.s), sub:'from tracked links'},
+      {label:'Transactions', value:fN(tot.t), sub:''},
+      {label:'Revenue',      value:fM(tot.v), sub:''},
+      {label:'Conv. rate',   value:tot.s>0?(tot.t/tot.s*100).toFixed(2)+'%':'—', sub:'transactions / sessions'},
     ]);
   }
 }
