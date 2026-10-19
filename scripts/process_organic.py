@@ -65,6 +65,12 @@ CREATOR_MAP = {
     'ourblythgaff':           'Our Blyth Gaff',
     'ashwood_house_':         'Charlotte Tennant (Ashwood House)',
     'hotwaxnewcastle':        'Hot Wax (Eco Friendly Candles)',
+    # ── added Oct 2026 (Event + Influx campaigns) ──
+    'aspen.home.x':           'Angela McGill (Aspen Home)',
+    'thegeorgianfarmhouse__': 'Shanice Kinnersley (The Georgian Farmhouse)',
+    'makingitmint':           'Making it Mint',
+    'stylingnumber12':        'Styling Number 12',
+    'cresta_home':            'Victoria Carr (Cresta Home)',
 }
 
 # ── Creators who have been in paid campaigns ──
@@ -180,6 +186,7 @@ def main(input_path=None):
         likes    = int(row['Likes'])    if pd.notna(row.get('Likes'))    else 0
         comments = int(row['Comments']) if pd.notna(row.get('Comments')) else 0
         saves    = int(row['Saves'])    if pd.notna(row.get('Saves'))    else 0
+        follows  = int(row['Follows'])  if pd.notna(row.get('Follows'))  else 0
         permalink= str(row.get('Permalink', '')) if pd.notna(row.get('Permalink')) else ''
         desc     = str(row.get('Description', ''))[:200] if pd.notna(row.get('Description')) else ''
 
@@ -205,6 +212,7 @@ def main(input_path=None):
             "likes":        likes,
             "comments":     comments,
             "saves":        saves,
+            "follows":      follows,
             "description":  desc,
             "permalink":    permalink,
             "gifted":       not is_paid,

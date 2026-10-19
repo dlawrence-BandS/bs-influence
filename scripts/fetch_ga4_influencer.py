@@ -13,7 +13,7 @@ Schedule via GitHub Actions (see .github/workflows/refresh_data.yml) or run loca
 """
 
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from google.cloud import bigquery
 
 PROJECT_ID = "commanding-air-450109-p0"
@@ -32,6 +32,7 @@ WITH events AS (
     (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'source') AS utm_source,
     (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'medium') AS utm_medium,
     (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'campaign') AS utm_campaign,
+    COALESCE((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'content'), '') AS utm_content,
     event_name,
     (SELECT value.double_value FROM UNNEST(event_params) WHERE key = 'value') AS revenue,
     user_pseudo_id,
@@ -46,10 +47,11 @@ sessions AS (
     date,
     utm_source AS creator,
     utm_campaign AS campaign,
+    utm_content AS content,
     COUNT(DISTINCT CONCAT(user_pseudo_id, CAST(stream_id AS STRING))) AS sessions
   FROM events
   WHERE event_name = 'session_start'
-  GROUP BY 1, 2, 3
+  GROUP BY 1, 2, 3, 4
 ),
 
 purchases AS (
@@ -57,23 +59,25 @@ purchases AS (
     date,
     utm_source AS creator,
     utm_campaign AS campaign,
+    utm_content AS content,
     COUNT(*) AS transactions,
     SUM(revenue) AS revenue
   FROM events
   WHERE event_name = 'purchase'
-  GROUP BY 1, 2, 3
+  GROUP BY 1, 2, 3, 4
 )
 
 SELECT
   s.date,
   s.creator,
   s.campaign,
+  s.content,
   s.sessions,
   COALESCE(p.transactions, 0) AS transactions,
   COALESCE(p.revenue, 0) AS revenue
 FROM sessions s
 LEFT JOIN purchases p
-  ON s.date = p.date AND s.creator = p.creator AND s.campaign = p.campaign
+  ON s.date = p.date AND s.creator = p.creator AND s.campaign = p.campaign AND s.content = p.content
 ORDER BY s.date DESC
 """
 
@@ -85,7 +89,7 @@ df["date"] = df["date"].astype(str)
 
 records = df.to_dict(orient="records")
 output = {
-    "updated_at": datetime.utcnow().isoformat() + "Z",
+    "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z",
     "lookback_days": LOOKBACK_DAYS,
     "rows": records
 }

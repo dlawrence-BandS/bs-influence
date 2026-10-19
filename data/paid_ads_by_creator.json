@@ -45,25 +45,36 @@
   },
   {
     "creator": "@ralphs home",
-    "reach": 231974,
-    "clicks": 13517,
-    "purchases": 73.0,
-    "conversion_value": 60627.54,
-    "spend": 3629.36,
+    "reach": 234090,
+    "clicks": 13683,
+    "purchases": 74.0,
+    "conversion_value": 61072.54,
+    "spend": 3665.02,
     "first_date": "2026-07-31",
-    "last_date": "2026-10-15",
-    "roas": 16.7
+    "last_date": "2026-10-19",
+    "roas": 16.66
   },
   {
     "creator": "Life At The Lodge",
-    "reach": 297174,
-    "clicks": 11408,
-    "purchases": 43.0,
-    "conversion_value": 30793.54,
-    "spend": 2491.96,
+    "reach": 299566,
+    "clicks": 11554,
+    "purchases": 44.0,
+    "conversion_value": 33386.54,
+    "spend": 2526.37,
     "first_date": "2026-07-02",
-    "last_date": "2026-10-15",
-    "roas": 12.36
+    "last_date": "2026-10-19",
+    "roas": 13.22
+  },
+  {
+    "creator": "@thehoppyhome",
+    "reach": 173078,
+    "clicks": 7010,
+    "purchases": 34.0,
+    "conversion_value": 21960.2,
+    "spend": 1849.55,
+    "first_date": "2026-07-31",
+    "last_date": "2026-10-19",
+    "roas": 11.87
   },
   {
     "creator": "Amelia (Amelia Lucy Home)",
@@ -75,17 +86,6 @@
     "first_date": "2026-04-15",
     "last_date": "2026-09-02",
     "roas": 9.48
-  },
-  {
-    "creator": "@thehoppyhome",
-    "reach": 169501,
-    "clicks": 6836,
-    "purchases": 33.0,
-    "conversion_value": 21747.2,
-    "spend": 1804.02,
-    "first_date": "2026-07-31",
-    "last_date": "2026-10-15",
-    "roas": 12.05
   },
   {
     "creator": "Kate's Georgian Home",
@@ -144,13 +144,13 @@
   },
   {
     "creator": "@sarahinsurre",
-    "reach": 6453,
-    "clicks": 83,
+    "reach": 6471,
+    "clicks": 84,
     "purchases": 3.0,
     "conversion_value": 4271.5,
-    "spend": 30.41,
+    "spend": 30.45,
     "first_date": "2026-07-31",
-    "last_date": "2026-10-14",
-    "roas": 140.46
+    "last_date": "2026-10-19",
+    "roas": 140.28
   }
 ]
