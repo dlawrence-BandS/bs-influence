@@ -1,69 +1,113 @@
 [
   {
+    "date": "2026-10-20",
+    "creator_name": "Life At The Lodge",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_lifeatlodge",
+    "reach": 72,
+    "clicks": 6,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 0.93
+  },
+  {
+    "date": "2026-10-20",
+    "creator_name": "Life At The Lodge",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_lifeatlodge_2",
+    "reach": 24,
+    "clicks": 2,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 0.23
+  },
+  {
+    "date": "2026-10-20",
+    "creator_name": "@thehoppyhome",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@thehoppyhome",
+    "reach": 134,
+    "clicks": 7,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 1.48
+  },
+  {
+    "date": "2026-10-20",
+    "creator_name": "@ralphs home",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@ralphs_home",
+    "reach": 61,
+    "clicks": 3,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 0.88
+  },
+  {
     "date": "2026-10-19",
     "creator_name": "Life At The Lodge",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_lifeatlodge",
-    "reach": 59,
-    "clicks": 3,
+    "reach": 446,
+    "clicks": 28,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 0.97
+    "spend": 6.02
   },
   {
     "date": "2026-10-19",
     "creator_name": "Life At The Lodge",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_lifeatlodge_2",
-    "reach": 30,
-    "clicks": 0,
+    "reach": 288,
+    "clicks": 10,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 0.34
+    "spend": 2.84
   },
   {
     "date": "2026-10-19",
     "creator_name": "@thehoppyhome",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_@thehoppyhome",
-    "reach": 99,
-    "clicks": 6,
+    "reach": 1053,
+    "clicks": 51,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 1.1
+    "spend": 11.0
   },
   {
     "date": "2026-10-19",
     "creator_name": "@sarahinsurre",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_@sarahinsurre",
-    "reach": 1,
+    "reach": 8,
     "clicks": 0,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 0.01
+    "spend": 0.03
   },
   {
     "date": "2026-10-19",
     "creator_name": "@ralphs home",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_@ralphs_home",
-    "reach": 46,
-    "clicks": 1,
+    "reach": 484,
+    "clicks": 17,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 1.11
+    "spend": 7.98
   },
   {
     "date": "2026-10-18",
     "creator_name": "Life At The Lodge",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_lifeatlodge",
-    "reach": 538,
+    "reach": 540,
     "clicks": 38,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 7.26
+    "spend": 7.29
   },
   {
     "date": "2026-10-18",
@@ -74,29 +118,29 @@
     "clicks": 21,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 4.73
+    "spend": 4.77
   },
   {
     "date": "2026-10-18",
     "creator_name": "@thehoppyhome",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_@thehoppyhome",
-    "reach": 1410,
+    "reach": 1412,
     "clicks": 45,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 15.57
+    "spend": 15.61
   },
   {
     "date": "2026-10-18",
     "creator_name": "@ralphs home",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_@ralphs_home",
-    "reach": 679,
+    "reach": 682,
     "clicks": 45,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 11.24
+    "spend": 11.28
   },
   {
     "date": "2026-10-17",
