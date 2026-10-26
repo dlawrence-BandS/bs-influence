@@ -1377,9 +1377,9 @@ function renderCampaignPaid(k, cfg) {
   if (!rows.length) {
     lbl.textContent = 'no ads yet';
     box.innerHTML = `<div class="evnote"><strong>No Influx ads in the paid data yet.</strong>
-      Influx ads are picked up when <code>Influx</code> is in the ad name (for example
-      <code>c3_Partnership_Influx_Our Berkely Home_...</code>). They need to be in the Ads Manager export
-      saved as <code>Influx-Report.xlsx</code> in the bs-influence folder.</div>`;
+      Influx ads are picked up from the Influencer report whenever <code>Influx</code> is in the ad name
+      (for example <code>c3_Partnership_Influx_Our Berkely Home_...</code>). If you've exported them and they
+      still don't show, the data may not have been pushed to GitHub yet, or the export doesn't include those ads.</div>`;
     return;
   }
   const T = {spend:0, reach:0, clicks:0, purchases:0, conv:0}, per = {}, wk = {}, ads = new Set();
