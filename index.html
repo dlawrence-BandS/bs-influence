@@ -883,7 +883,7 @@
 // ─────────────────────────────────────
 // STATE
 // ─────────────────────────────────────
-let D = { paid:[], organic:[], ga4:[] };
+let D = { paid:[], paidInflux:[], organic:[], ga4:[] };
 let charts = {};
 let state = { period:'all', creator:'all', activeTab:'overview' };
 let paidSort = { col:'spend', dir:-1 };
@@ -910,7 +910,11 @@ async function loadAll() {
       fetch('data/paid_ads.json').then(r=>r.json()),
     ]);
     D.organic = org;
-    D.paid    = paid.map(r=>({...r, roas: r.spend>0 ? r.conversion_value/r.spend : 0}));
+    // Influx ads (ad name contains 'Influx') are kept apart from the normal influencer ads
+    const allPaid = paid.map(r=>({...r, roas: r.spend>0 ? r.conversion_value/r.spend : 0}));
+    const isInflux = r => /influx/i.test(r.ad_name||'');
+    D.paid       = allPaid.filter(r=>!isInflux(r));
+    D.paidInflux = allPaid.filter(isInflux);
   } catch(e){ console.error('Data load failed',e); }
   try {
     const ga4 = await fetch('data/ga4_influencer.json').then(r=>r.json());
@@ -1313,6 +1317,8 @@ const CAMPAIGNS = {
     handles: ['meaux.house','lifeinthewolds','overdale_home','sophiejaynehomes','reynoldsresidence',
               'thestylepad_uk','east_shore_home','ourberkelyhome','our.home.in.dorset'],
     ga4Extra: ['autumn_collaboration'],   // utm_campaign on every Influx link
+    paid: true,                           // show a Paid Ads section
+    paidSource: 'influx',                 // uses the ads with 'Influx' in the ad name (D.paidInflux)
   },
 };
 
@@ -1342,10 +1348,96 @@ Object.entries(CAMPAIGNS).forEach(([k,cfg]) => {
         <th>Likes</th><th>Comments</th><th>New followers</th><th>Post</th></tr></thead>
       <tbody id="${k}-tbody"></tbody>
     </table></div>
+    ${cfg.paid ? `<div class="sh"><h2>Paid Ads</h2><span class="sh-sub" id="${k}-paid-lbl"></span></div>
+    <div id="${k}-paid"></div>` : ''}
     <div class="sh"><h2>Website Impact</h2><span class="sh-sub">GA4 sessions from trackable links</span></div>
     <div id="${k}-ga4"></div>
   </div>`);
 });
+
+// Paid ads for a campaign's creators. Influx ads are named c3_Partnership_Influx_<Creator>_<n>:
+// we match the creator by handle in the ad name, or by the name segment after 'Influx_'.
+// Any Influx ad we can't tie to a creator is shown as "Other".
+function renderCampaignPaid(k, cfg) {
+  const hn  = cfg.handles.map(h => ({h, n: evNorm(h)}));
+  const src = cfg.paidSource === 'influx' ? D.paidInflux : D.paid;
+  const ownerOf = r => {
+    const a = evNorm(r.ad_name);
+    let m = hn.find(x => a.includes(x.n));
+    if (m) return m.h;
+    const sg = /influx[_\s-]+([^_]+)/i.exec(r.ad_name||'');
+    const s  = sg ? evNorm(sg[1]) : '';
+    if (s.length >= 5) { m = hn.find(x => x.n.startsWith(s) || s.startsWith(x.n)); if (m) return m.h; }
+    return '__other';
+  };
+  const rows = src.filter(r => r.date >= cfg.date).map(r => ({owner: ownerOf(r), r}));
+  dc(k+'-paid');
+  const box = document.getElementById(k+'-paid');
+  const lbl = document.getElementById(k+'-paid-lbl');
+  if (!rows.length) {
+    lbl.textContent = 'no ads yet';
+    box.innerHTML = `<div class="evnote"><strong>No Influx ads in the paid data yet.</strong>
+      Influx ads are picked up when <code>Influx</code> is in the ad name (for example
+      <code>c3_Partnership_Influx_Our Berkely Home_...</code>). They need to be in the Ads Manager export
+      saved as <code>Influx-Report.xlsx</code> in the bs-influence folder.</div>`;
+    return;
+  }
+  const T = {spend:0, reach:0, clicks:0, purchases:0, conv:0}, per = {}, wk = {}, ads = new Set();
+  rows.forEach(({owner, r}) => {
+    const p = per[owner] || (per[owner] = {spend:0, reach:0, clicks:0, purchases:0, conv:0, first:r.date, last:r.date, name:r.creator_name});
+    p.spend += r.spend||0; p.reach += r.reach||0; p.clicks += r.clicks||0;
+    p.purchases += r.purchases||0; p.conv += r.conversion_value||0;
+    if (r.date < p.first) p.first = r.date; if (r.date > p.last) p.last = r.date;
+    T.spend += r.spend||0; T.reach += r.reach||0; T.clicks += r.clicks||0;
+    T.purchases += r.purchases||0; T.conv += r.conversion_value||0;
+    const w = getMonday(r.date); const b = wk[w] || (wk[w] = {spend:0, conv:0});
+    b.spend += r.spend||0; b.conv += r.conversion_value||0;
+    ads.add(r.ad_name);
+  });
+  lbl.textContent = `${ads.size} ad${ads.size!==1?'s':''} · ${fM(T.spend)} spent`;
+  const roas = (c,s) => s>0 ? c/s : 0;
+  const roasCol = x => x>20?'var(--neon)':x>10?'var(--purple)':'var(--text)';
+  const nameOf = h => {
+    if (h === '__other') return 'Other Influx ads (creator not recognised)';
+    const p = D.organic.find(p => evH(p) === h);
+    return p ? p.creator : (per[h] && per[h].name) || '@'+h;
+  };
+  const lines = Object.entries(per).sort((a,b)=>b[1].spend-a[1].spend).map(([h,p]) => {
+    const x = roas(p.conv, p.spend);
+    return `<tr>
+      <td>${nameOf(h)}</td>
+      <td>${fM(p.spend)}</td><td>${fN(p.reach)}</td><td>${fN(p.clicks)}</td>
+      <td>${p.purchases>0?fN(p.purchases):'<span class="td-m">—</span>'}</td>
+      <td>${p.conv>0?fM(p.conv):'<span class="td-m">—</span>'}</td>
+      <td><strong style="color:${roasCol(x)}">${p.spend>0?x.toFixed(1)+'x':'—'}</strong></td>
+      <td class="td-m">${fDateShort(p.first)} – ${fDateShort(p.last)}</td></tr>`;
+  }).join('');
+  box.innerHTML = `<div class="kpis" id="kpis-${k}-paid"></div>
+    <div class="g2e" style="margin-top:16px"><div class="cc" style="grid-column:1/-1">
+      <div class="cc-title">Weekly</div><div class="cc-head">Ad spend vs conversion value</div>
+      <div style="height:220px"><canvas id="ch-${k}-paid"></canvas></div></div></div>
+    <div class="tw" style="margin-top:16px"><table>
+      <thead><tr><th>Creator</th><th>Spend</th><th>Reach</th><th>Clicks</th><th>Purchases</th><th>Conv. value</th><th>ROAS</th><th>Running</th></tr></thead>
+      <tbody>${lines}</tbody></table></div>`;
+  mkKPIs(`kpis-${k}-paid`, [
+    {label:'Spend',       value:fM(T.spend), sub:'Influx creator ads', hi:true},
+    {label:'Reach',       value:fN(T.reach), sub:'sum of daily reach'},
+    {label:'Clicks',      value:fN(T.clicks), sub:T.reach>0?(T.clicks/T.reach*100).toFixed(1)+'% of reach':''},
+    {label:'Purchases',   value:fN(T.purchases), sub:''},
+    {label:'Conv. value', value:fM(T.conv), sub:'Meta purchases'},
+    {label:'ROAS',        value:T.spend>0?roas(T.conv,T.spend).toFixed(1)+'x':'—', sub:'return on ad spend'},
+  ]);
+  const wks = Object.keys(wk).sort();
+  charts[k+'-paid'] = new Chart(el('ch-'+k+'-paid'), {
+    type:'bar',
+    data:{labels:wks.map(w=>fDateShort(w)), datasets:[
+      {label:'Spend',            data:wks.map(w=>Math.round(wk[w].spend)), backgroundColor:'rgba(184,240,0,0.3)',  borderColor:'#b8f000', borderWidth:1.5, borderRadius:3},
+      {label:'Conversion value', data:wks.map(w=>Math.round(wk[w].conv)),  backgroundColor:'rgba(139,92,246,0.3)', borderColor:'#8b5cf6', borderWidth:1.5, borderRadius:3},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:LG},
+      scales:{x:{ticks:TX,grid:{display:false}}, y:{ticks:TX,grid:GR}}}
+  });
+}
 
 function renderCampaign(k) {
   const cfg = CAMPAIGNS[k];
@@ -1454,6 +1546,8 @@ function renderCampaign(k) {
     <td>${p.follows!==undefined?fN(p.follows):'<span class="reach-na">—</span>'}</td>
     <td>${p.permalink?`<a href="${p.permalink}" target="_blank" style="color:var(--neon);font-size:13px;text-decoration:none">↗</a>`:'<span class="td-m">—</span>'}</td>
   </tr>`).join('') || '<tr><td colspan="10" class="td-m">No posts in the data yet.</td></tr>';
+
+  if (cfg.paid) renderCampaignPaid(k, cfg);
 
   // website impact — GA4 rows tied to this campaign, split by creator
   //   a row belongs to a creator if its utm_content starts with their handle (e.g. meaux_house),
