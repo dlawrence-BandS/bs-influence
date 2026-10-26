@@ -18049,5 +18049,104 @@
     "purchases": 0.0,
     "conversion_value": 0.0,
     "spend": 1.64
+  },
+  {
+    "date": "2026-10-25",
+    "creator_name": "Holly (Meaux House)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Meaux House_23.10.26",
+    "reach": 2415,
+    "clicks": 65,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 20.37
+  },
+  {
+    "date": "2026-10-25",
+    "creator_name": "Emily (Life in the Wolds)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Life In the Wolds_23.10.26",
+    "reach": 1698,
+    "clicks": 51,
+    "purchases": 1.0,
+    "conversion_value": 4113.0,
+    "spend": 18.68
+  },
+  {
+    "date": "2026-10-25",
+    "creator_name": "Abbey (Our Berkeley Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Our Berkely Home_23.10.26",
+    "reach": 4766,
+    "clicks": 176,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 47.77
+  },
+  {
+    "date": "2026-10-24",
+    "creator_name": "Holly (Meaux House)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Meaux House_23.10.26",
+    "reach": 1460,
+    "clicks": 51,
+    "purchases": 1.0,
+    "conversion_value": 778.0,
+    "spend": 15.23
+  },
+  {
+    "date": "2026-10-24",
+    "creator_name": "Emily (Life in the Wolds)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Life In the Wolds_23.10.26",
+    "reach": 1127,
+    "clicks": 47,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 12.77
+  },
+  {
+    "date": "2026-10-24",
+    "creator_name": "Abbey (Our Berkeley Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Our Berkely Home_23.10.26",
+    "reach": 3050,
+    "clicks": 139,
+    "purchases": 1.0,
+    "conversion_value": 338.0,
+    "spend": 35.8
+  },
+  {
+    "date": "2026-10-23",
+    "creator_name": "Holly (Meaux House)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Meaux House_23.10.26",
+    "reach": 905,
+    "clicks": 37,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 7.92
+  },
+  {
+    "date": "2026-10-23",
+    "creator_name": "Emily (Life in the Wolds)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Life In the Wolds_23.10.26",
+    "reach": 365,
+    "clicks": 9,
+    "purchases": 1.0,
+    "conversion_value": 1798.0,
+    "spend": 2.81
+  },
+  {
+    "date": "2026-10-23",
+    "creator_name": "Abbey (Our Berkeley Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Our Berkely Home_23.10.26",
+    "reach": 1003,
+    "clicks": 37,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 9.15
   }
 ]
