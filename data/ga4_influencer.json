@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T10:01:12.864809Z",
+  "updated_at": "2026-10-26T10:22:28.127926Z",
   "lookback_days": 180,
   "rows": [
     {
@@ -130,6 +130,15 @@
     },
     {
       "date": "2026-10-09",
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
+      "content": "ourberkelyhome",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-09",
       "creator": "social",
       "campaign": "behindnumberdeux",
       "content": "",
@@ -147,7 +156,16 @@
       "revenue": 0.0
     },
     {
-      "date": "2026-10-09",
+      "date": "2026-10-08",
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
+      "content": "meaux_house",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-08",
       "creator": "instagram",
       "campaign": "autumn_collaboration",
       "content": "ourberkelyhome",
@@ -160,24 +178,6 @@
       "creator": "social",
       "campaign": "behindnumberdeux",
       "content": "",
-      "sessions": 1,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-10-08",
-      "creator": "instagram",
-      "campaign": "autumn_collaboration",
-      "content": "ourberkelyhome",
-      "sessions": 1,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-10-08",
-      "creator": "instagram",
-      "campaign": "autumn_collaboration",
-      "content": "meaux_house",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -229,18 +229,18 @@
     },
     {
       "date": "2026-09-30",
-      "creator": "instagram",
-      "campaign": "autumn_collaboration",
-      "content": "meaux_house",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "content": "",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-09-30",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
+      "content": "meaux_house",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -1408,19 +1408,19 @@
     },
     {
       "date": "2026-05-16",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
       "content": "",
-      "sessions": 4,
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-16",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
       "content": "",
-      "sessions": 9,
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -1561,19 +1561,19 @@
     },
     {
       "date": "2026-05-01",
-      "creator": "instagram",
-      "campaign": "houseofhetheringtons",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
       "content": "",
-      "sessions": 9,
+      "sessions": 7,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-01",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
+      "creator": "instagram",
+      "campaign": "houseofhetheringtons",
       "content": "",
-      "sessions": 7,
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
