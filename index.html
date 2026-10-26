@@ -1334,6 +1334,8 @@ Object.entries(CAMPAIGNS).forEach(([k,cfg]) => {
   <div class="tab-panel" id="tab-${k}">
     <div class="sh" style="margin-top:0"><h2>${cfg.title}</h2><span class="sh-sub" id="${k}-sub"></span></div>
     <div class="kpis" id="kpis-${k}"></div>
+    ${cfg.paid ? `<div class="sh"><h2>Organic vs Paid</h2><span class="sh-sub" id="${k}-ovp-lbl"></span></div>
+    <div id="${k}-ovp"></div>` : ''}
     <div class="sh"><h2>Creators</h2><span class="sh-sub" id="${k}-creators-lbl"></span></div>
     <div class="evgrid" id="${k}-grid"></div>
     <div class="g2e">
@@ -1358,7 +1360,7 @@ Object.entries(CAMPAIGNS).forEach(([k,cfg]) => {
 // Paid ads for a campaign's creators. Influx ads are named c3_Partnership_Influx_<Creator>_<n>:
 // we match the creator by handle in the ad name, or by the name segment after 'Influx_'.
 // Any Influx ad we can't tie to a creator is shown as "Other".
-function renderCampaignPaid(k, cfg) {
+function campaignPaidRows(cfg) {
   const hn  = cfg.handles.map(h => ({h, n: evNorm(h)}));
   const src = cfg.paidSource === 'influx' ? D.paidInflux : D.paid;
   const ownerOf = r => {
@@ -1370,16 +1372,101 @@ function renderCampaignPaid(k, cfg) {
     if (s.length >= 5) { m = hn.find(x => x.n.startsWith(s) || s.startsWith(x.n)); if (m) return m.h; }
     return '__other';
   };
-  const rows = src.filter(r => r.date >= cfg.date).map(r => ({owner: ownerOf(r), r}));
+  return src.filter(r => r.date >= cfg.date).map(r => ({owner: ownerOf(r), r}));
+}
+
+// Organic vs paid for a campaign: totals side by side, then per creator.
+function renderCampaignOvP(k, cfg, posts) {
+  const rows = campaignPaidRows(cfg);
+  const box = document.getElementById(k+'-ovp'), lbl = document.getElementById(k+'-ovp-lbl');
+  dc(k+'-ovp');
+  const org = {}, paid = {};
+  posts.forEach(p => {
+    const h = evH(p), o = org[h] || (org[h] = {name:p.creator, posts:0, reach:0, views:0, eng:0});
+    o.posts++; o.reach += p.reach||0; o.views += p.impressions||0; o.eng += (p.likes||0)+(p.comments||0);
+  });
+  rows.forEach(({owner, r}) => {
+    const q = paid[owner] || (paid[owner] = {name:r.creator_name, spend:0, reach:0, clicks:0, purchases:0, conv:0});
+    q.spend += r.spend||0; q.reach += r.reach||0; q.clicks += r.clicks||0; q.purchases += r.purchases||0; q.conv += r.conversion_value||0;
+  });
+  const O = Object.values(org).reduce((a,o)=>({posts:a.posts+o.posts, reach:a.reach+o.reach, views:a.views+o.views, eng:a.eng+o.eng}), {posts:0,reach:0,views:0,eng:0});
+  const P = Object.values(paid).reduce((a,q)=>({spend:a.spend+q.spend, reach:a.reach+q.reach, clicks:a.clicks+q.clicks, purchases:a.purchases+q.purchases, conv:a.conv+q.conv}), {spend:0,reach:0,clicks:0,purchases:0,conv:0});
+  const hasPaid = rows.length > 0, hasOrg = posts.length > 0;
+  if (!hasPaid && !hasOrg) { lbl.textContent = ''; box.innerHTML = ''; return; }
+
+  const stat = (l, v, big) => `<div><div class="evstat-l">${l}</div><div class="evstat-v" style="font-size:${big?'22':'18'}px">${v}</div></div>`;
+  const grid = s => `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 10px;margin-top:10px">${s}</div>`;
+  const roasOf = (c,s) => s>0 ? c/s : 0;
+  const roasCol = x => x>20?'var(--neon)':x>10?'var(--purple)':'var(--text)';
+  const money2 = n => '£' + n.toFixed(2);
+
+  const orgCard = `<div class="cc"><div class="cc-title">Organic</div><div class="cc-head">Creator posts</div>${hasOrg ? grid(
+      stat('Posts', O.posts) + stat('Reach', fN(O.reach), true) + stat('Views', fN(O.views)) +
+      stat('Engagement', fN(O.eng)) + stat('Eng. rate', O.reach>0?(O.eng/O.reach*100).toFixed(1)+'%':'—') + stat('Creators', Object.keys(org).length)
+    ) : '<div class="td-m" style="margin-top:12px">No organic posts yet.</div>'}</div>`;
+
+  const eff = hasPaid ? [
+      P.reach>0  ? `${money2(P.spend/P.reach*1000)} per 1,000 reach` : '',
+      P.clicks>0 ? `${money2(P.spend/P.clicks)} per click` : '',
+      P.purchases>0 ? `${money2(P.spend/P.purchases)} per purchase` : '',
+    ].filter(Boolean).join(' · ') : '';
+  const paidCard = `<div class="cc"><div class="cc-title">Paid</div><div class="cc-head">Influx ads</div>${hasPaid ? grid(
+      stat('Spend', fM(P.spend), true) + stat('Reach', fN(P.reach), true) + stat('Clicks', fN(P.clicks)) +
+      stat('Purchases', fN(P.purchases)) + stat('Conv. value', fM(P.conv)) +
+      `<div><div class="evstat-l">ROAS</div><div class="evstat-v" style="font-size:18px;color:${roasCol(roasOf(P.conv,P.spend))}">${P.spend>0?roasOf(P.conv,P.spend).toFixed(1)+'x':'—'}</div></div>`
+    ) + (eff ? `<div class="td-m" style="margin-top:14px;font-size:12px">${eff}</div>` : '')
+      : '<div class="td-m" style="margin-top:12px">No Influx ads in the paid data yet.</div>'}</div>`;
+
+  // per creator (anyone with organic posts or paid ads)
+  const keys = [...new Set([...Object.keys(org), ...Object.keys(paid)])];
+  const nameOf = h => h === '__other' ? 'Other Influx ads (creator not recognised)' : ((org[h]&&org[h].name) || (paid[h]&&paid[h].name) || '@'+h);
+  keys.sort((a,b) => ((paid[b]?paid[b].spend:0)-(paid[a]?paid[a].spend:0)) || ((org[b]?org[b].reach:0)-(org[a]?org[a].reach:0)));
+  const dash = '<span class="td-m">—</span>';
+  const tr = keys.map(h => {
+    const o = org[h], q = paid[h];
+    const x = q ? roasOf(q.conv, q.spend) : 0;
+    return `<tr><td>${nameOf(h)}</td>
+      <td>${o?o.posts:dash}</td><td>${o?fN(o.reach):dash}</td><td>${o?fN(o.eng):dash}</td>
+      <td>${q?fM(q.spend):dash}</td><td>${q?fN(q.reach):dash}</td><td>${q?fN(q.clicks):dash}</td>
+      <td>${q&&q.purchases>0?fN(q.purchases):dash}</td><td>${q&&q.conv>0?fM(q.conv):dash}</td>
+      <td>${q&&q.spend>0?`<strong style="color:${roasCol(x)}">${x.toFixed(1)}x</strong>`:dash}</td></tr>`;
+  }).join('');
+  const totals = `<tr style="font-weight:700"><td>Total</td><td>${O.posts}</td><td>${fN(O.reach)}</td><td>${fN(O.eng)}</td>
+      <td>${fM(P.spend)}</td><td>${fN(P.reach)}</td><td>${fN(P.clicks)}</td><td>${fN(P.purchases)}</td><td>${fM(P.conv)}</td>
+      <td>${P.spend>0?roasOf(P.conv,P.spend).toFixed(1)+'x':'—'}</td></tr>`;
+
+  lbl.textContent = `${keys.length} creator${keys.length!==1?'s':''}${hasPaid?' · '+fM(P.spend)+' spent':''}`;
+  box.innerHTML = `<div class="g2e">${orgCard}${paidCard}</div>
+    <div class="g2e" style="margin-top:16px"><div class="cc" style="grid-column:1/-1">
+      <div class="cc-title">By creator</div><div class="cc-head">Reach: organic vs paid</div>
+      <div style="height:240px"><canvas id="ch-${k}-ovp"></canvas></div>
+      <div class="td-m" style="font-size:11px;margin-top:8px">Paid reach is the sum of each day's reach, so the same person can be counted on more than one day. Organic reach is per post.</div></div></div>
+    <div class="tw" style="margin-top:16px"><table>
+      <thead><tr><th>Creator</th><th>Posts</th><th>Organic reach</th><th>Engagement</th><th>Spend</th><th>Paid reach</th><th>Clicks</th><th>Purchases</th><th>Conv. value</th><th>ROAS</th></tr></thead>
+      <tbody>${tr}${totals}</tbody></table></div>`;
+
+  charts[k+'-ovp'] = new Chart(el('ch-'+k+'-ovp'), {
+    type:'bar',
+    data:{labels:keys.map(nameOf), datasets:[
+      {label:'Organic reach', data:keys.map(h=>org[h]?org[h].reach:0),  backgroundColor:'rgba(184,240,0,0.3)',  borderColor:'#b8f000', borderWidth:1.5, borderRadius:3},
+      {label:'Paid reach',    data:keys.map(h=>paid[h]?paid[h].reach:0), backgroundColor:'rgba(139,92,246,0.3)', borderColor:'#8b5cf6', borderWidth:1.5, borderRadius:3},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:LG},
+      scales:{x:{ticks:TX,grid:{display:false}}, y:{ticks:TX,grid:GR}}}
+  });
+}
+
+function renderCampaignPaid(k, cfg) {
+  const rows = campaignPaidRows(cfg);
   dc(k+'-paid');
   const box = document.getElementById(k+'-paid');
   const lbl = document.getElementById(k+'-paid-lbl');
   if (!rows.length) {
     lbl.textContent = 'no ads yet';
     box.innerHTML = `<div class="evnote"><strong>No Influx ads in the paid data yet.</strong>
-      Influx ads are picked up when <code>Influx</code> is in the ad name (for example
-      <code>c3_Partnership_Influx_Our Berkely Home_...</code>). They need to be in the Ads Manager export
-      saved as <code>Influx-Report.xlsx</code> in the bs-influence folder.</div>`;
+      Influx ads are picked up from the Influencer report whenever <code>Influx</code> is in the ad name
+      (for example <code>c3_Partnership_Influx_Our Berkely Home_...</code>). If you've exported them and they
+      still don't show, the data may not have been pushed to GitHub yet, or the export doesn't include those ads.</div>`;
     return;
   }
   const T = {spend:0, reach:0, clicks:0, purchases:0, conv:0}, per = {}, wk = {}, ads = new Set();
@@ -1459,12 +1546,12 @@ function renderCampaign(k) {
   mkKPIs('kpis-'+k, [
     {label:'Creators posted', value:`${posted.size}/${cfg.handles.length}`, sub: waiting.length ? `${waiting.length} not posted yet` : 'all posted', hi:true},
     {label:'Posts',           value:posts.length, sub:'in this campaign'},
-    {label:'Reach',           value:fN(reach),    sub:'combined'},
-    {label:'Views',           value:fN(views),    sub:'combined'},
+    {label:'Reach',           value:fN(reach),    sub:cfg.paid?'organic · combined':'combined'},
+    {label:'Views',           value:fN(views),    sub:cfg.paid?'organic · combined':'combined'},
     {label:'Engagement',      value:fN(eng),      sub:'likes + comments'},
     {label:'Engagement rate', value:reach>0?(eng/reach*100).toFixed(1)+'%':'—', sub:'engagement / reach'},
     {label:'New followers',   value:hasFollows?fN(follows):'—', sub:hasFollows?'gained on creators\u2019 accounts':'run refresh.bat'},
-  ]);
+  ].concat(cfg.paid ? [{label:'Ad spend', value:fM(campaignPaidRows(cfg).reduce((s,x)=>s+(x.r.spend||0),0)), sub:'Influx ads'}] : []));
 
   const by = {};
   posts.forEach(p => {
@@ -1547,7 +1634,7 @@ function renderCampaign(k) {
     <td>${p.permalink?`<a href="${p.permalink}" target="_blank" style="color:var(--neon);font-size:13px;text-decoration:none">↗</a>`:'<span class="td-m">—</span>'}</td>
   </tr>`).join('') || '<tr><td colspan="10" class="td-m">No posts in the data yet.</td></tr>';
 
-  if (cfg.paid) renderCampaignPaid(k, cfg);
+  if (cfg.paid) { renderCampaignOvP(k, cfg, posts); renderCampaignPaid(k, cfg); }
 
   // website impact — GA4 rows tied to this campaign, split by creator
   //   a row belongs to a creator if its utm_content starts with their handle (e.g. meaux_house),
