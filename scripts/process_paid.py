@@ -75,7 +75,7 @@ def extract_creator(ad_name: str) -> str:
     # obviously "unmapped" on the dashboard rather than silently wrong.
     return name.replace('_', ' ').strip()
 
-INFLUX_FILE = 'Influx-Report.xlsx'   # optional: Ads Manager export of the Influx ads
+INFLUX_FILE = 'Influx-Report.xlsx'   # optional extra file; not needed if Influx ads are already in the main report
 
 def main(input_path: str):
     print(f"Reading {input_path}...")
@@ -92,7 +92,7 @@ def main(input_path: str):
         if before != len(df):
             print(f"  (dropped {before - len(df)} rows that were in both files)")
     else:
-        print(f"  (no {INFLUX_FILE} found — Influx ads not included)")
+        print(f"  (no separate {INFLUX_FILE} — using the Influx ads in {input_path}, if any)")
 
     df['creator_name']  = df['Ad name'].apply(extract_creator)
     df['Day']           = pd.to_datetime(df['Day']).dt.strftime('%Y-%m-%d')

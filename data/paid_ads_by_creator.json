@@ -141,5 +141,38 @@
     "first_date": "2026-01-21",
     "last_date": "2026-01-31",
     "roas": 44.48
+  },
+  {
+    "creator": "Abbey (Our Berkeley Home)",
+    "reach": 8819,
+    "clicks": 352,
+    "purchases": 1.0,
+    "conversion_value": 338.0,
+    "spend": 92.72,
+    "first_date": "2026-10-23",
+    "last_date": "2026-10-25",
+    "roas": 3.65
+  },
+  {
+    "creator": "Holly (Meaux House)",
+    "reach": 4780,
+    "clicks": 153,
+    "purchases": 1.0,
+    "conversion_value": 778.0,
+    "spend": 43.52,
+    "first_date": "2026-10-23",
+    "last_date": "2026-10-25",
+    "roas": 17.88
+  },
+  {
+    "creator": "Emily (Life in the Wolds)",
+    "reach": 3190,
+    "clicks": 107,
+    "purchases": 2.0,
+    "conversion_value": 5911.0,
+    "spend": 34.26,
+    "first_date": "2026-10-23",
+    "last_date": "2026-10-25",
+    "roas": 172.53
   }
 ]
