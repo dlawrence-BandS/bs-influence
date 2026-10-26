@@ -1,40 +1,40 @@
 [
   {
-    "creator": "Bethany Tyson",
-    "reach": 662602,
-    "clicks": 8341,
-    "purchases": 159.0,
-    "conversion_value": 139468.33,
-    "spend": 4909.83,
-    "first_date": "2026-01-01",
-    "last_date": "2026-08-10",
-    "roas": 28.41
+    "creator": "Shannon (Lymington Home)",
+    "reach": 699461,
+    "clicks": 6969,
+    "purchases": 176.0,
+    "conversion_value": 127236.97,
+    "spend": 5156.5,
+    "first_date": "2025-11-28",
+    "last_date": "2026-08-07",
+    "roas": 24.68
   },
   {
-    "creator": "Shannon (Lymington Home)",
-    "reach": 652546,
-    "clicks": 6300,
-    "purchases": 165.0,
-    "conversion_value": 122198.02,
-    "spend": 4843.01,
-    "first_date": "2026-01-01",
-    "last_date": "2026-08-07",
-    "roas": 25.23
+    "creator": "Bethany Tyson",
+    "reach": 715252,
+    "clicks": 8812,
+    "purchases": 176.0,
+    "conversion_value": 158678.03,
+    "spend": 5138.68,
+    "first_date": "2025-11-28",
+    "last_date": "2026-08-10",
+    "roas": 30.88
   },
   {
     "creator": "Sarah Parker",
-    "reach": 567734,
-    "clicks": 24230,
-    "purchases": 70.0,
-    "conversion_value": 49217.37,
-    "spend": 4258.71,
+    "reach": 573138,
+    "clicks": 24316,
+    "purchases": 73.0,
+    "conversion_value": 53488.87,
+    "spend": 4289.93,
     "first_date": "2026-07-02",
-    "last_date": "2026-08-31",
-    "roas": 11.56
+    "last_date": "2026-10-25",
+    "roas": 12.47
   },
   {
     "creator": "Georgia Hetherington",
-    "reach": 562298,
+    "reach": 557161,
     "clicks": 16272,
     "purchases": 61.0,
     "conversion_value": 55470.9,
@@ -44,41 +44,52 @@
     "roas": 13.18
   },
   {
-    "creator": "@ralphs home",
-    "reach": 234090,
-    "clicks": 13683,
-    "purchases": 74.0,
-    "conversion_value": 61072.54,
-    "spend": 3665.02,
+    "creator": "Aisling & Ralph (Victorian Home)",
+    "reach": 236616,
+    "clicks": 14038,
+    "purchases": 75.0,
+    "conversion_value": 63702.54,
+    "spend": 3741.6,
     "first_date": "2026-07-31",
-    "last_date": "2026-10-19",
-    "roas": 16.66
+    "last_date": "2026-10-25",
+    "roas": 17.03
   },
   {
     "creator": "Life At The Lodge",
-    "reach": 299566,
-    "clicks": 11554,
-    "purchases": 44.0,
-    "conversion_value": 33386.54,
-    "spend": 2526.37,
+    "reach": 303367,
+    "clicks": 11775,
+    "purchases": 45.0,
+    "conversion_value": 33584.54,
+    "spend": 2577.14,
     "first_date": "2026-07-02",
-    "last_date": "2026-10-19",
-    "roas": 13.22
+    "last_date": "2026-10-25",
+    "roas": 13.03
   },
   {
-    "creator": "@thehoppyhome",
-    "reach": 173078,
-    "clicks": 7010,
+    "creator": "Imogen (MonkeyMews)",
+    "reach": 354167,
+    "clicks": 9905,
+    "purchases": 139.0,
+    "conversion_value": 96640.17,
+    "spend": 2574.85,
+    "first_date": "2025-11-28",
+    "last_date": "2026-01-17",
+    "roas": 37.53
+  },
+  {
+    "creator": "The Hoppy Home",
+    "reach": 179233,
+    "clicks": 7322,
     "purchases": 34.0,
     "conversion_value": 21960.2,
-    "spend": 1849.55,
+    "spend": 1928.21,
     "first_date": "2026-07-31",
-    "last_date": "2026-10-19",
-    "roas": 11.87
+    "last_date": "2026-10-25",
+    "roas": 11.39
   },
   {
     "creator": "Amelia (Amelia Lucy Home)",
-    "reach": 169358,
+    "reach": 169761,
     "clicks": 5508,
     "purchases": 23.0,
     "conversion_value": 17355.0,
@@ -89,7 +100,7 @@
   },
   {
     "creator": "Kate's Georgian Home",
-    "reach": 149568,
+    "reach": 148973,
     "clicks": 4609,
     "purchases": 35.0,
     "conversion_value": 31077.0,
@@ -99,19 +110,8 @@
     "roas": 23.28
   },
   {
-    "creator": "Imogen (MonkeyMews)",
-    "reach": 179171,
-    "clicks": 5544,
-    "purchases": 73.0,
-    "conversion_value": 47845.36,
-    "spend": 1282.3799999999999,
-    "first_date": "2026-01-01",
-    "last_date": "2026-01-17",
-    "roas": 37.31
-  },
-  {
     "creator": "Bolutife (Miss Fash)",
-    "reach": 146827,
+    "reach": 146725,
     "clicks": 2928,
     "purchases": 25.0,
     "conversion_value": 12865.0,
@@ -122,7 +122,7 @@
   },
   {
     "creator": "Nisha (Behind Num\u00e9ro Deux)",
-    "reach": 73349,
+    "reach": 72099,
     "clicks": 5171,
     "purchases": 21.0,
     "conversion_value": 12096.2,
@@ -133,7 +133,7 @@
   },
   {
     "creator": "Jade (Hector's House)",
-    "reach": 74187,
+    "reach": 74488,
     "clicks": 1977,
     "purchases": 24.0,
     "conversion_value": 24567.0,
@@ -141,16 +141,5 @@
     "first_date": "2026-01-21",
     "last_date": "2026-01-31",
     "roas": 44.48
-  },
-  {
-    "creator": "@sarahinsurre",
-    "reach": 6471,
-    "clicks": 84,
-    "purchases": 3.0,
-    "conversion_value": 4271.5,
-    "spend": 30.45,
-    "first_date": "2026-07-31",
-    "last_date": "2026-10-19",
-    "roas": 140.28
   }
 ]

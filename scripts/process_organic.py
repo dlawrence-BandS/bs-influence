@@ -71,6 +71,14 @@ CREATOR_MAP = {
     'makingitmint':           'Making it Mint',
     'stylingnumber12':        'Styling Number 12',
     'cresta_home':            'Victoria Carr (Cresta Home)',
+    # ── Influx Autumn campaign (first names from the Influx workbook) ──
+    'meaux.house':            'Holly (Meaux House)',
+    'lifeinthewolds':         'Emily (Life in the Wolds)',
+    'overdale_home':          'Claire (Overdale Home)',
+    'sophiejaynehomes':       'Sophie (Sophie Jayne Homes)',
+    'reynoldsresidence':      'Kayla (Reynolds Residence)',
+    'thestylepad_uk':         'Louise (The Style Pad)',
+    'our.home.in.dorset':     'Sarah (Our Home in Dorset)',
 }
 
 # ── Creators who have been in paid campaigns ──
@@ -78,6 +86,7 @@ PAID_CREATORS = {
     'houseofhetheringtons', 'bethanyhome_', 'my.lymingtonhome',
     'amelialucyhome', 'miss_fash', 'no14hectorshouse',
     'monkeymews_', 'behindnumberdeux',
+    'thehoppyhome', 'ralphs_home',   # now running as ads (appear in Ads Manager)
 }
 
 TYPE_MAP = {

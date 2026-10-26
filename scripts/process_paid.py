@@ -33,6 +33,20 @@ CREATOR_MAP = {
     'imogen':               'Imogen (MonkeyMews)',
     'sarah':                'Sarah Parker',
     'lifeatlodge':          'Life At The Lodge',
+    'thehoppyhome':         'The Hoppy Home',
+    'sarahinsurre':         'Sarah Parker',          # ad is named '@sarahinsurre'
+    'ralphs_home':          'Aisling & Ralph (Victorian Home)',
+    # Influx Autumn campaign creators, in case their ads are named by handle
+    'meaux.house':          'Holly (Meaux House)',
+    'lifeinthewolds':       'Emily (Life in the Wolds)',
+    'overdale_home':        'Claire (Overdale Home)',
+    'sophiejaynehomes':     'Sophie (Sophie Jayne Homes)',
+    'reynoldsresidence':    'Kayla (Reynolds Residence)',
+    'thestylepad_uk':       'Louise (The Style Pad)',
+    'east_shore_home':      'Ashley (East Shore Home)',
+    'ourberkelyhome':       'Abbey (Our Berkeley Home)',
+    'our.home.in.dorset':   'Sarah (Our Home in Dorset)',
+    'thestylepad':          'Louise (The Style Pad)',   # Influx ads say 'The Style Pad'
 }
 
 def _normalize(name: str) -> str:
@@ -44,7 +58,15 @@ def _normalize(name: str) -> str:
 
 NORMALIZED_MAP = {_normalize(k): v for k, v in CREATOR_MAP.items()}
 
+# Influx ads are named like  c3_Partnership_Influx_<Creator Name>_<variant>
+INFLUX_RE = re.compile(r'influx[_\s-]+([^_]+)', re.IGNORECASE)
+
 def extract_creator(ad_name: str) -> str:
+    m = INFLUX_RE.search(ad_name)
+    if m:
+        seg = m.group(1).strip()
+        key = _normalize(seg)
+        return NORMALIZED_MAP.get(key, seg)
     name = ad_name.replace('c3_influencer_', '').replace(' – Copy', '').strip()
     key = _normalize(name)
     if key in NORMALIZED_MAP:
@@ -53,9 +75,24 @@ def extract_creator(ad_name: str) -> str:
     # obviously "unmapped" on the dashboard rather than silently wrong.
     return name.replace('_', ' ').strip()
 
+INFLUX_FILE = 'Influx-Report.xlsx'   # optional: Ads Manager export of the Influx ads
+
 def main(input_path: str):
     print(f"Reading {input_path}...")
     df = pd.read_excel(input_path)
+
+    # Influx ads are named differently, so they come from their own export.
+    # Rows that appear in both files are kept once (the Influx file wins).
+    if Path(INFLUX_FILE).exists():
+        print(f"Reading {INFLUX_FILE}...")
+        inf = pd.read_excel(INFLUX_FILE)
+        df = pd.concat([df, inf], ignore_index=True)
+        before = len(df)
+        df = df.drop_duplicates(subset=['Day', 'Campaign name', 'Ad name'], keep='last')
+        if before != len(df):
+            print(f"  (dropped {before - len(df)} rows that were in both files)")
+    else:
+        print(f"  (no {INFLUX_FILE} found — Influx ads not included)")
 
     df['creator_name']  = df['Ad name'].apply(extract_creator)
     df['Day']           = pd.to_datetime(df['Day']).dt.strftime('%Y-%m-%d')
@@ -84,6 +121,10 @@ def main(input_path: str):
     total_spend = sum(r['spend'] for r in records)
     total_rev   = sum(r['conversion_value'] for r in records)
     print(f"  Spend: £{total_spend:,.2f}  |  Conv. value: £{total_rev:,.2f}  |  ROAS: {total_rev/total_spend:.1f}x")
+    inf_rows = [r for r in records if 'influx' in str(r['ad_name']).lower()]
+    if inf_rows:
+        s = sum(r['spend'] for r in inf_rows)
+        print(f"  of which Influx: {len(inf_rows)} rows, £{s:,.2f} spend")
 
     # ── Per-creator totals (used for the Daily Breakdown table default view) ──
     grouped = df.groupby('creator_name').agg(
