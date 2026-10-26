@@ -883,7 +883,7 @@
 // ─────────────────────────────────────
 // STATE
 // ─────────────────────────────────────
-let D = { paid:[], organic:[], ga4:[] };
+let D = { paid:[], paidInflux:[], organic:[], ga4:[] };
 let charts = {};
 let state = { period:'all', creator:'all', activeTab:'overview' };
 let paidSort = { col:'spend', dir:-1 };
@@ -910,7 +910,11 @@ async function loadAll() {
       fetch('data/paid_ads.json').then(r=>r.json()),
     ]);
     D.organic = org;
-    D.paid    = paid.map(r=>({...r, roas: r.spend>0 ? r.conversion_value/r.spend : 0}));
+    // Influx ads (ad name contains 'Influx') are kept apart from the normal influencer ads
+    const allPaid = paid.map(r=>({...r, roas: r.spend>0 ? r.conversion_value/r.spend : 0}));
+    const isInflux = r => /influx/i.test(r.ad_name||'');
+    D.paid       = allPaid.filter(r=>!isInflux(r));
+    D.paidInflux = allPaid.filter(isInflux);
   } catch(e){ console.error('Data load failed',e); }
   try {
     const ga4 = await fetch('data/ga4_influencer.json').then(r=>r.json());
@@ -1313,8 +1317,8 @@ const CAMPAIGNS = {
     handles: ['meaux.house','lifeinthewolds','overdale_home','sophiejaynehomes','reynoldsresidence',
               'thestylepad_uk','east_shore_home','ourberkelyhome','our.home.in.dorset'],
     ga4Extra: ['autumn_collaboration'],   // utm_campaign on every Influx link
-    paid: true,                           // show a Paid Ads section (ads matched by handle in the ad name)
-    paidTags: ['influx'],                 // also catch any ad/campaign with 'influx' in its name
+    paid: true,                           // show a Paid Ads section
+    paidSource: 'influx',                 // uses the ads with 'Influx' in the ad name (D.paidInflux)
   },
 };
 
@@ -1351,34 +1355,36 @@ Object.entries(CAMPAIGNS).forEach(([k,cfg]) => {
   </div>`);
 });
 
-// Paid ads for a campaign's creators: an ad belongs to a creator when the creator's handle
-// appears in the ad name (e.g. c3_influencer_@ourberkelyhome). Ads with a campaign tag
-// (paidTags) but no recognisable creator are shown as "Other".
+// Paid ads for a campaign's creators. Influx ads are named c3_Partnership_Influx_<Creator>_<n>:
+// we match the creator by handle in the ad name, or by the name segment after 'Influx_'.
+// Any Influx ad we can't tie to a creator is shown as "Other".
 function renderCampaignPaid(k, cfg) {
-  const hn   = cfg.handles.map(h => ({h, n: evNorm(h)}));
-  const tags = (cfg.paidTags||[]).map(evNorm);
-  const rows = [];
-  D.paid.forEach(r => {
-    if (r.date < cfg.date) return;
-    const a = evNorm(r.ad_name), c = evNorm(r.campaign);
-    const m = hn.find(x => a.includes(x.n));
-    if (m) rows.push({owner:m.h, r});
-    else if (tags.some(t => a.includes(t) || c.includes(t))) rows.push({owner:'__other', r});
-  });
+  const hn  = cfg.handles.map(h => ({h, n: evNorm(h)}));
+  const src = cfg.paidSource === 'influx' ? D.paidInflux : D.paid;
+  const ownerOf = r => {
+    const a = evNorm(r.ad_name);
+    let m = hn.find(x => a.includes(x.n));
+    if (m) return m.h;
+    const sg = /influx[_\s-]+([^_]+)/i.exec(r.ad_name||'');
+    const s  = sg ? evNorm(sg[1]) : '';
+    if (s.length >= 5) { m = hn.find(x => x.n.startsWith(s) || s.startsWith(x.n)); if (m) return m.h; }
+    return '__other';
+  };
+  const rows = src.filter(r => r.date >= cfg.date).map(r => ({owner: ownerOf(r), r}));
   dc(k+'-paid');
   const box = document.getElementById(k+'-paid');
   const lbl = document.getElementById(k+'-paid-lbl');
   if (!rows.length) {
     lbl.textContent = 'no ads yet';
-    box.innerHTML = `<div class="evnote"><strong>No ads for these creators in the paid data yet.</strong>
-      An ad is picked up when the creator's handle is in the ad name (for example
-      <code>c3_influencer_@ourberkelyhome</code>). If the Influx ads are named differently, or sit in a campaign
-      that isn't in the Ads Manager report, they won't appear here.</div>`;
+    box.innerHTML = `<div class="evnote"><strong>No Influx ads in the paid data yet.</strong>
+      Influx ads are picked up when <code>Influx</code> is in the ad name (for example
+      <code>c3_Partnership_Influx_Our Berkely Home_...</code>). They need to be in the Ads Manager export
+      saved as <code>Influx-Report.xlsx</code> in the bs-influence folder.</div>`;
     return;
   }
   const T = {spend:0, reach:0, clicks:0, purchases:0, conv:0}, per = {}, wk = {}, ads = new Set();
   rows.forEach(({owner, r}) => {
-    const p = per[owner] || (per[owner] = {spend:0, reach:0, clicks:0, purchases:0, conv:0, first:r.date, last:r.date});
+    const p = per[owner] || (per[owner] = {spend:0, reach:0, clicks:0, purchases:0, conv:0, first:r.date, last:r.date, name:r.creator_name});
     p.spend += r.spend||0; p.reach += r.reach||0; p.clicks += r.clicks||0;
     p.purchases += r.purchases||0; p.conv += r.conversion_value||0;
     if (r.date < p.first) p.first = r.date; if (r.date > p.last) p.last = r.date;
@@ -1392,9 +1398,9 @@ function renderCampaignPaid(k, cfg) {
   const roas = (c,s) => s>0 ? c/s : 0;
   const roasCol = x => x>20?'var(--neon)':x>10?'var(--purple)':'var(--text)';
   const nameOf = h => {
-    if (h === '__other') return 'Other Influx ads (no creator in ad name)';
+    if (h === '__other') return 'Other Influx ads (creator not recognised)';
     const p = D.organic.find(p => evH(p) === h);
-    return p ? p.creator : '@'+h;
+    return p ? p.creator : (per[h] && per[h].name) || '@'+h;
   };
   const lines = Object.entries(per).sort((a,b)=>b[1].spend-a[1].spend).map(([h,p]) => {
     const x = roas(p.conv, p.spend);
