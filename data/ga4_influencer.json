@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T11:10:22.131105Z",
+  "updated_at": "2026-10-29T11:56:48.427687Z",
   "lookback_days": 180,
   "rows": [
     {
@@ -149,15 +149,6 @@
     {
       "date": "2026-10-09",
       "creator": "instagram",
-      "campaign": "amelialucyhome",
-      "content": "",
-      "sessions": 1,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-10-09",
-      "creator": "instagram",
       "campaign": "autumn_collaboration",
       "content": "ourberkelyhome",
       "sessions": 1,
@@ -165,10 +156,19 @@
       "revenue": 0.0
     },
     {
-      "date": "2026-10-08",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
+      "date": "2026-10-09",
+      "creator": "instagram",
+      "campaign": "amelialucyhome",
       "content": "",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-08",
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
+      "content": "ourberkelyhome",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -184,9 +184,9 @@
     },
     {
       "date": "2026-10-08",
-      "creator": "instagram",
-      "campaign": "autumn_collaboration",
-      "content": "ourberkelyhome",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "content": "",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -1292,18 +1292,18 @@
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "life_at_the_lodge",
+      "campaign": "amelialucyhome",
       "content": "",
-      "sessions": 4,
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "amelialucyhome",
+      "campaign": "life_at_the_lodge",
       "content": "",
-      "sessions": 1,
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
