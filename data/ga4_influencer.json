@@ -1,7 +1,16 @@
 {
-  "updated_at": "2026-10-26T10:36:31.433119Z",
+  "updated_at": "2026-10-29T11:10:22.131105Z",
   "lookback_days": 180,
   "rows": [
+    {
+      "date": "2026-10-27",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "content": "",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
     {
       "date": "2026-10-25",
       "creator": "social",
@@ -130,19 +139,19 @@
     },
     {
       "date": "2026-10-09",
-      "creator": "instagram",
-      "campaign": "amelialucyhome",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
       "content": "",
-      "sessions": 1,
+      "sessions": 2,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-10-09",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
+      "creator": "instagram",
+      "campaign": "amelialucyhome",
       "content": "",
-      "sessions": 2,
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -1067,7 +1076,7 @@
     {
       "date": "2026-06-24",
       "creator": "social",
-      "campaign": "behindnumberdeux",
+      "campaign": "my.lymingtonhome",
       "content": "",
       "sessions": 1,
       "transactions": 0,
@@ -1076,7 +1085,7 @@
     {
       "date": "2026-06-24",
       "creator": "social",
-      "campaign": "my.lymingtonhome",
+      "campaign": "behindnumberdeux",
       "content": "",
       "sessions": 1,
       "transactions": 0,
@@ -1408,19 +1417,19 @@
     },
     {
       "date": "2026-05-16",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
       "content": "",
-      "sessions": 9,
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-16",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
       "content": "",
-      "sessions": 4,
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -1556,42 +1565,6 @@
       "campaign": "behindnumberdeux",
       "content": "",
       "sessions": 5,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-05-01",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
-      "sessions": 7,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-05-01",
-      "creator": "instagram",
-      "campaign": "houseofhetheringtons",
-      "content": "",
-      "sessions": 9,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-04-30",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
-      "sessions": 9,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-04-29",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
-      "sessions": 279,
       "transactions": 0,
       "revenue": 0.0
     }
