@@ -1,7 +1,79 @@
 {
-  "updated_at": "2026-10-29T11:56:48.427687Z",
+  "updated_at": "2026-11-02T09:06:53.329500Z",
   "lookback_days": 180,
   "rows": [
+    {
+      "date": "2026-10-31",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "content": "",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-30",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "content": "",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-29",
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
+      "content": "east_shore_home",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-29",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "content": "",
+      "sessions": 2,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-29",
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
+      "content": "thestylepad_uk_dining_table",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-28",
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
+      "content": "thestylepad_uk_dining_table",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-28",
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
+      "content": "thestylepad_uk_dining_chair",
+      "sessions": 3,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-28",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "content": "",
+      "sessions": 5,
+      "transactions": 0,
+      "revenue": 0.0
+    },
     {
       "date": "2026-10-27",
       "creator": "social",
@@ -31,18 +103,18 @@
     },
     {
       "date": "2026-10-22",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
+      "content": "east_shore_home",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-10-22",
-      "creator": "instagram",
-      "campaign": "autumn_collaboration",
-      "content": "east_shore_home",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "content": "",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -121,19 +193,19 @@
     },
     {
       "date": "2026-10-12",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
-      "sessions": 1,
+      "creator": "instagram",
+      "campaign": "autumn_collaboration",
+      "content": "ourberkelyhome",
+      "sessions": 0,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-10-12",
-      "creator": "instagram",
-      "campaign": "autumn_collaboration",
-      "content": "ourberkelyhome",
-      "sessions": 0,
+      "creator": "social",
+      "campaign": "behindnumberdeux",
+      "content": "",
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -149,8 +221,8 @@
     {
       "date": "2026-10-09",
       "creator": "instagram",
-      "campaign": "autumn_collaboration",
-      "content": "ourberkelyhome",
+      "campaign": "amelialucyhome",
+      "content": "",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -158,7 +230,16 @@
     {
       "date": "2026-10-09",
       "creator": "instagram",
-      "campaign": "amelialucyhome",
+      "campaign": "autumn_collaboration",
+      "content": "ourberkelyhome",
+      "sessions": 1,
+      "transactions": 0,
+      "revenue": 0.0
+    },
+    {
+      "date": "2026-10-08",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
       "content": "",
       "sessions": 1,
       "transactions": 0,
@@ -178,15 +259,6 @@
       "creator": "instagram",
       "campaign": "autumn_collaboration",
       "content": "meaux_house",
-      "sessions": 1,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-10-08",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
       "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
@@ -1292,18 +1364,18 @@
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "amelialucyhome",
+      "campaign": "life_at_the_lodge",
       "content": "",
-      "sessions": 1,
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-30",
       "creator": "instagram",
-      "campaign": "life_at_the_lodge",
+      "campaign": "amelialucyhome",
       "content": "",
-      "sessions": 4,
+      "sessions": 1,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -1417,19 +1489,19 @@
     },
     {
       "date": "2026-05-16",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
+      "creator": "instagram",
+      "campaign": "life_at_the_lodge",
       "content": "",
-      "sessions": 4,
+      "sessions": 9,
       "transactions": 0,
       "revenue": 0.0
     },
     {
       "date": "2026-05-16",
-      "creator": "instagram",
-      "campaign": "life_at_the_lodge",
+      "creator": "social",
+      "campaign": "behindnumberdeux",
       "content": "",
-      "sessions": 9,
+      "sessions": 4,
       "transactions": 0,
       "revenue": 0.0
     },
@@ -1529,42 +1601,6 @@
       "campaign": "behindnumberdeux",
       "content": "",
       "sessions": 2,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-05-05",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
-      "sessions": 4,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-05-04",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
-      "sessions": 5,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-05-03",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
-      "sessions": 6,
-      "transactions": 0,
-      "revenue": 0.0
-    },
-    {
-      "date": "2026-05-02",
-      "creator": "social",
-      "campaign": "behindnumberdeux",
-      "content": "",
-      "sessions": 5,
       "transactions": 0,
       "revenue": 0.0
     }
