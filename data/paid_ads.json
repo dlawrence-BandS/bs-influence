@@ -1,69 +1,289 @@
 [
   {
+    "date": "2026-11-13",
+    "creator_name": "Life At The Lodge",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_lifeatlodge",
+    "reach": 156,
+    "clicks": 14,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 2.29
+  },
+  {
+    "date": "2026-11-13",
+    "creator_name": "Life At The Lodge",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_lifeatlodge_2",
+    "reach": 50,
+    "clicks": 1,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 0.67
+  },
+  {
+    "date": "2026-11-13",
+    "creator_name": "The Hoppy Home",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@thehoppyhome",
+    "reach": 465,
+    "clicks": 18,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 7.66
+  },
+  {
+    "date": "2026-11-13",
+    "creator_name": "Sarah Parker",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@sarahinsurre",
+    "reach": 27,
+    "clicks": 0,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 0.1
+  },
+  {
+    "date": "2026-11-13",
+    "creator_name": "Aisling & Ralph (Victorian Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@ralphs_home",
+    "reach": 498,
+    "clicks": 41,
+    "purchases": 1.0,
+    "conversion_value": 464.0,
+    "spend": 9.74
+  },
+  {
+    "date": "2026-11-12",
+    "creator_name": "Life At The Lodge",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_lifeatlodge",
+    "reach": 454,
+    "clicks": 13,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 5.49
+  },
+  {
+    "date": "2026-11-12",
+    "creator_name": "Life At The Lodge",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_lifeatlodge_2",
+    "reach": 192,
+    "clicks": 4,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 2.74
+  },
+  {
+    "date": "2026-11-12",
+    "creator_name": "The Hoppy Home",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@thehoppyhome",
+    "reach": 1290,
+    "clicks": 59,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 19.28
+  },
+  {
+    "date": "2026-11-12",
+    "creator_name": "Sarah Parker",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@sarahinsurre",
+    "reach": 98,
+    "clicks": 1,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 0.55
+  },
+  {
+    "date": "2026-11-12",
+    "creator_name": "Aisling & Ralph (Victorian Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@ralphs_home",
+    "reach": 1148,
+    "clicks": 77,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 20.91
+  },
+  {
+    "date": "2026-11-11",
+    "creator_name": "Life At The Lodge",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_lifeatlodge",
+    "reach": 414,
+    "clicks": 22,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 5.7
+  },
+  {
+    "date": "2026-11-11",
+    "creator_name": "Life At The Lodge",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_lifeatlodge_2",
+    "reach": 178,
+    "clicks": 9,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 1.96
+  },
+  {
+    "date": "2026-11-11",
+    "creator_name": "The Hoppy Home",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@thehoppyhome",
+    "reach": 1205,
+    "clicks": 53,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 16.66
+  },
+  {
+    "date": "2026-11-11",
+    "creator_name": "Sarah Parker",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@sarahinsurre",
+    "reach": 88,
+    "clicks": 0,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 0.27
+  },
+  {
+    "date": "2026-11-11",
+    "creator_name": "Aisling & Ralph (Victorian Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@ralphs_home",
+    "reach": 1229,
+    "clicks": 89,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 20.03
+  },
+  {
+    "date": "2026-11-10",
+    "creator_name": "Life At The Lodge",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_lifeatlodge",
+    "reach": 377,
+    "clicks": 19,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 5.49
+  },
+  {
+    "date": "2026-11-10",
+    "creator_name": "Life At The Lodge",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_lifeatlodge_2",
+    "reach": 139,
+    "clicks": 6,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 1.85
+  },
+  {
+    "date": "2026-11-10",
+    "creator_name": "The Hoppy Home",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@thehoppyhome",
+    "reach": 931,
+    "clicks": 42,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 13.33
+  },
+  {
+    "date": "2026-11-10",
+    "creator_name": "Sarah Parker",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@sarahinsurre",
+    "reach": 78,
+    "clicks": 1,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 0.59
+  },
+  {
+    "date": "2026-11-10",
+    "creator_name": "Aisling & Ralph (Victorian Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_influencer_@ralphs_home",
+    "reach": 1100,
+    "clicks": 78,
+    "purchases": 3.0,
+    "conversion_value": 4130.12,
+    "spend": 19.76
+  },
+  {
     "date": "2026-11-09",
     "creator_name": "Life At The Lodge",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_lifeatlodge",
-    "reach": 180,
-    "clicks": 14,
+    "reach": 504,
+    "clicks": 30,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 2.47
+    "spend": 7.01
   },
   {
     "date": "2026-11-09",
     "creator_name": "Life At The Lodge",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_lifeatlodge_2",
-    "reach": 37,
-    "clicks": 2,
+    "reach": 162,
+    "clicks": 7,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 0.56
+    "spend": 1.99
   },
   {
     "date": "2026-11-09",
     "creator_name": "The Hoppy Home",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_@thehoppyhome",
-    "reach": 343,
-    "clicks": 19,
+    "reach": 1162,
+    "clicks": 64,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 4.69
+    "spend": 17.89
   },
   {
     "date": "2026-11-09",
     "creator_name": "Sarah Parker",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_@sarahinsurre",
-    "reach": 21,
-    "clicks": 1,
+    "reach": 87,
+    "clicks": 2,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 0.11
+    "spend": 0.28
   },
   {
     "date": "2026-11-09",
     "creator_name": "Aisling & Ralph (Victorian Home)",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_@ralphs_home",
-    "reach": 359,
-    "clicks": 24,
-    "purchases": 0.0,
+    "reach": 1410,
+    "clicks": 100,
+    "purchases": 1.0,
     "conversion_value": 0.0,
-    "spend": 5.14
+    "spend": 21.99
   },
   {
     "date": "2026-11-08",
     "creator_name": "Life At The Lodge",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_influencer_lifeatlodge",
-    "reach": 639,
-    "clicks": 34,
+    "reach": 640,
+    "clicks": 35,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 8.36
+    "spend": 8.37
   },
   {
     "date": "2026-11-08",
@@ -18876,48 +19096,224 @@
     "spend": 1.64
   },
   {
+    "date": "2026-11-13",
+    "creator_name": "Emily (Life in the Wolds)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Life In the Wolds_23.10.26",
+    "reach": 93,
+    "clicks": 1,
+    "purchases": 1.0,
+    "conversion_value": 0.0,
+    "spend": 1.26
+  },
+  {
+    "date": "2026-11-13",
+    "creator_name": "Ashley (East Shore Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_East Shore Home_23.10.26",
+    "reach": 67,
+    "clicks": 0,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 0.65
+  },
+  {
+    "date": "2026-11-13",
+    "creator_name": "Louise (The Style Pad)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_partnership_influx_thestylepad_uk",
+    "reach": 1120,
+    "clicks": 69,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 26.72
+  },
+  {
+    "date": "2026-11-13",
+    "creator_name": "Kayla @reynoldsresidence",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_partnership_influx_Kayla @reynoldsresidence_03/11",
+    "reach": 913,
+    "clicks": 37,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 14.53
+  },
+  {
+    "date": "2026-11-12",
+    "creator_name": "Emily (Life in the Wolds)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Life In the Wolds_23.10.26",
+    "reach": 275,
+    "clicks": 3,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 2.68
+  },
+  {
+    "date": "2026-11-12",
+    "creator_name": "Ashley (East Shore Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_East Shore Home_23.10.26",
+    "reach": 239,
+    "clicks": 4,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 1.49
+  },
+  {
+    "date": "2026-11-12",
+    "creator_name": "Louise (The Style Pad)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_partnership_influx_thestylepad_uk",
+    "reach": 2726,
+    "clicks": 236,
+    "purchases": 6.0,
+    "conversion_value": 4088.75,
+    "spend": 52.4
+  },
+  {
+    "date": "2026-11-12",
+    "creator_name": "Kayla @reynoldsresidence",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_partnership_influx_Kayla @reynoldsresidence_03/11",
+    "reach": 2601,
+    "clicks": 110,
+    "purchases": 2.0,
+    "conversion_value": 786.0,
+    "spend": 42.89
+  },
+  {
+    "date": "2026-11-11",
+    "creator_name": "Emily (Life in the Wolds)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Life In the Wolds_23.10.26",
+    "reach": 243,
+    "clicks": 9,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 2.21
+  },
+  {
+    "date": "2026-11-11",
+    "creator_name": "Ashley (East Shore Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_East Shore Home_23.10.26",
+    "reach": 242,
+    "clicks": 5,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 1.21
+  },
+  {
+    "date": "2026-11-11",
+    "creator_name": "Louise (The Style Pad)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_partnership_influx_thestylepad_uk",
+    "reach": 2545,
+    "clicks": 179,
+    "purchases": 3.0,
+    "conversion_value": 1836.0,
+    "spend": 47.58
+  },
+  {
+    "date": "2026-11-11",
+    "creator_name": "Kayla @reynoldsresidence",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_partnership_influx_Kayla @reynoldsresidence_03/11",
+    "reach": 2730,
+    "clicks": 135,
+    "purchases": 3.0,
+    "conversion_value": 12323.0,
+    "spend": 40.54
+  },
+  {
+    "date": "2026-11-10",
+    "creator_name": "Emily (Life in the Wolds)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_Life In the Wolds_23.10.26",
+    "reach": 161,
+    "clicks": 3,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 1.62
+  },
+  {
+    "date": "2026-11-10",
+    "creator_name": "Ashley (East Shore Home)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_Partnership_Influx_East Shore Home_23.10.26",
+    "reach": 178,
+    "clicks": 1,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 0.97
+  },
+  {
+    "date": "2026-11-10",
+    "creator_name": "Louise (The Style Pad)",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_partnership_influx_thestylepad_uk",
+    "reach": 1895,
+    "clicks": 121,
+    "purchases": 1.0,
+    "conversion_value": 1757.0,
+    "spend": 34.76
+  },
+  {
+    "date": "2026-11-10",
+    "creator_name": "Kayla @reynoldsresidence",
+    "campaign": "c3_Prospecting_Purchase_BAU",
+    "ad_name": "c3_partnership_influx_Kayla @reynoldsresidence_03/11",
+    "reach": 2626,
+    "clicks": 121,
+    "purchases": 0.0,
+    "conversion_value": 0.0,
+    "spend": 40.39
+  },
+  {
     "date": "2026-11-09",
     "creator_name": "Emily (Life in the Wolds)",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_Partnership_Influx_Life In the Wolds_23.10.26",
-    "reach": 51,
-    "clicks": 1,
-    "purchases": 0.0,
-    "conversion_value": 0.0,
-    "spend": 0.47
+    "reach": 164,
+    "clicks": 3,
+    "purchases": 1.0,
+    "conversion_value": 141.0,
+    "spend": 1.74
   },
   {
     "date": "2026-11-09",
     "creator_name": "Ashley (East Shore Home)",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_Partnership_Influx_East Shore Home_23.10.26",
-    "reach": 48,
-    "clicks": 1,
+    "reach": 189,
+    "clicks": 4,
     "purchases": 0.0,
     "conversion_value": 0.0,
-    "spend": 0.31
+    "spend": 1.26
   },
   {
     "date": "2026-11-09",
     "creator_name": "Louise (The Style Pad)",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_partnership_influx_thestylepad_uk",
-    "reach": 599,
-    "clicks": 32,
-    "purchases": 0.0,
-    "conversion_value": 0.0,
-    "spend": 10.82
+    "reach": 2398,
+    "clicks": 141,
+    "purchases": 1.0,
+    "conversion_value": 571.0,
+    "spend": 45.05
   },
   {
     "date": "2026-11-09",
     "creator_name": "Kayla @reynoldsresidence",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_partnership_influx_Kayla @reynoldsresidence_03/11",
-    "reach": 792,
-    "clicks": 34,
-    "purchases": 0.0,
-    "conversion_value": 0.0,
-    "spend": 12.15
+    "reach": 3150,
+    "clicks": 160,
+    "purchases": 1.0,
+    "conversion_value": 650.0,
+    "spend": 49.33
   },
   {
     "date": "2026-11-08",
@@ -18950,18 +19346,18 @@
     "clicks": 206,
     "purchases": 1.0,
     "conversion_value": 399.0,
-    "spend": 56.58
+    "spend": 56.61
   },
   {
     "date": "2026-11-08",
     "creator_name": "Kayla @reynoldsresidence",
     "campaign": "c3_Prospecting_Purchase_BAU",
     "ad_name": "c3_partnership_influx_Kayla @reynoldsresidence_03/11",
-    "reach": 5755,
+    "reach": 5760,
     "clicks": 290,
     "purchases": 3.0,
     "conversion_value": 2399.0,
-    "spend": 90.08
+    "spend": 90.15
   },
   {
     "date": "2026-11-07",
